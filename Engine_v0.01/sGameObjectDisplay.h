@@ -10,11 +10,9 @@ public:
 	sGameObjectDisplay(sGameObject * object, SDL_Surface * surface);	
 	~sGameObjectDisplay(); 
 
-	SDL_Surface * GetSurface() { return m_surface; }
 	SDL_Texture * GetTexture() { return m_texture; }
 			
 private:
-	SDL_Surface				  * m_surface;
 	SDL_Texture 			  * m_texture;
 	sGameObject				  * m_object;
 
