@@ -1,0 +1,155 @@
+cmake_minimum_required(VERSION 3.13)
+project(GameEngine)
+
+set(DEFAULT_CMAKE_BUILD_TYPE Release)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${DEFAULT_CMAKE_BUILD_TYPE}' as none was specified.")
+  set(CMAKE_BUILD_TYPE ${DEFAULT_CMAKE_BUILD_TYPE}
+      CACHE STRING "Choose the type of build." FORCE)
+
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE
+               PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+endif()
+
+add_executable(GameEngine "")
+
+
+set_property(TARGET GameEngine PROPERTY CXX_STANDARD 17)
+set_property(TARGET GameEngine PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
+
+target_include_directories(GameEngine PRIVATE sources)
+target_include_directories(GameEngine PRIVATE engine)
+
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+
+
+install(TARGETS GameEngine RUNTIME DESTINATION bin)
+
+# Include Game sources
+target_sources(GameEngine PRIVATE
+	sources/Game_sources/main.cpp
+)
+
+target_sources(GameEngine PRIVATE
+	sources/Game_sources/include/GameWindow.h
+)
+
+target_sources(GameEngine PRIVATE
+	sources/Game_sources/src/GameWindow.cpp
+)
+
+# Include Engine
+target_sources(GameEngine PRIVATE
+  	engine/include/Core.h
+  	engine/include/Fps.h
+  	engine/include/MouseInput.h
+  	engine/include/KeyboardInput.h
+	engine/include/Vector2.h
+	engine/include/Vector3.h
+	engine/include/Utils.h
+	engine/include/BoundingBox3.h
+	engine/include/GameObject.h
+)
+
+target_sources(GameEngine PRIVATE
+  	engine/src/MouseInput.cpp
+  	engine/src/KeyboardInput.cpp
+  	engine/src/Vector2.cpp
+  	engine/src/Vector3.cpp
+	engine/src/BoundingBox3.cpp
+	engine/src/GameObject.cpp
+)
+
+# Include lib pugi XML
+target_sources(GameEngine PRIVATE
+	engine/pugixml/pugiconfig.hpp
+	engine/pugixml/pugixml.cpp
+	engine/pugixml/pugixml.hpp
+)
+
+
+###################################################
+###################################################
+###################################################
+
+
+#project(GameEditor)
+
+#set(DEFAULT_CMAKE_BUILD_TYPE Release)
+
+#if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+#  message(STATUS "Setting build type to '${DEFAULT_CMAKE_BUILD_TYPE}' as none was specified.")
+#  set(CMAKE_BUILD_TYPE ${DEFAULT_CMAKE_BUILD_TYPE}
+#      CACHE STRING "Choose the type of build." FORCE)
+
+  # Set the possible values of build type for cmake-gui
+#  set_property(CACHE CMAKE_BUILD_TYPE
+#               PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+#endif()
+
+#add_executable(GameEditor "")
+
+
+#set_property(TARGET GameEditor PROPERTY CXX_STANDARD 17)
+#set_property(TARGET GameEditor PROPERTY CXX_STANDARD_REQUIRED ON)
+#set_property(TARGET GameEditor PROPERTY CXX_EXTENSIONS OFF)
+
+#target_include_directories(GameEditor PRIVATE sources)
+#target_include_directories(GameEditor PRIVATE engine)
+
+#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
+#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
+#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+
+
+#install(TARGETS GameEditor RUNTIME DESTINATION bin)
+
+# Include Editor sources
+#target_sources(GameEditor PRIVATE
+#	sources/Editor_sources/main.cpp
+#)
+
+#target_sources(GameEditor PRIVATE
+#	sources/Editor_sources/include/EditorWindow.h
+#)
+
+#target_sources(GameEditor PRIVATE
+#	sources/Editor_sources/src/EditorWindow.cpp
+#)
+
+# Include Engine
+#target_sources(GameEditor PRIVATE
+#  	engine/include/Core.h
+#	engine/include/sVector2.h
+#	engine/include/sVector3.h
+#	engine/include/Utils.h
+#	engine/include/Geometry.h
+#	engine/include/Property.h
+#	engine/include/sBoundingBox.h
+#	engine/include/sGameObject.h
+#	engine/include/sGameObjectDisplay.h
+#	engine/include/ObjectTree.h
+#)
+
+#target_sources(GameEditor PRIVATE
+#  	engine/src/sVector2.cpp
+#  	engine/src/sVector3.cpp
+#	engine/src/Geometry.cpp
+#	engine/src/Property.cpp
+#	engine/src/sBoundingBox.cpp
+#	engine/src/sGameObject.cpp
+#	engine/src/sGameObjectDisplay.cpp
+#	engine/src/ObjectTree.cpp
+#)
+
+# Include lib pugi XML
+#target_sources(GameEditor PRIVATE
+#	engine/pugixml/pugiconfig.hpp
+#	engine/pugixml/pugixml.cpp
+#	engine/pugixml/pugixml.hpp
+#)
