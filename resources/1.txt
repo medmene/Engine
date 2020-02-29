@@ -1,0 +1,2 @@
+just template file
+this dir for resource files
