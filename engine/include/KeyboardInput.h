@@ -37,5 +37,5 @@ private:
 	vector<int>					m_keyMap;
 	vector<int>					m_keyModMap;
 
-	static KeyboardInput * sm_instance;
+	static KeyboardInput	  * sm_instance;
 };

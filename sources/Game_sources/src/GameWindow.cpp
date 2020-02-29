@@ -1,6 +1,8 @@
 #include "Game_sources/include/GameWindow.h"
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
+#include "include/Camera.h"
+
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
 
@@ -17,6 +19,11 @@ GameWindow::GameWindow()
 		0 //SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN	// flags - see below
 	);
 	m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+	// Init black background
+	auto bg = SDL_CreateRGBSurface(0, m_windowSize.x, m_windowSize.y, 32, 0, 0, 0, 0);
+	SDL_FillRect(bg, NULL, 0);
+	m_bg = SDL_CreateTextureFromSurface(m_renderer, bg);
+	m_bgRect = { 0, 0, (int)m_windowSize.x, (int)m_windowSize.y };
 }
 
 GameWindow::~GameWindow()
@@ -43,6 +50,7 @@ SDL_Window* GameWindow::GetRawWindow()
 
 void GameWindow::Initialize()
 {
+	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y / 2));
 	for (int x = 0; x < 9; ++x)
 	{
 		for (int y = 0; y < 10; ++y)
@@ -62,7 +70,9 @@ void GameWindow::Update()
 		////////////////  FPS     ////////////////
 		FPS.UpdateFPS();
 		cout << FPS.fps << "\n";
+
 		////////////////  Events  ////////////////
+		MouseInput::instance()->ResetDiffs();
 		SDL_Event e;
 		if (SDL_PollEvent(&e))
 		{
@@ -73,11 +83,20 @@ void GameWindow::Update()
 			else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_ESCAPE)
 				break;
 		}
+
+		////////////////  Camera  ////////////////
+		if (MouseInput::instance()->IsPressed(MouseInput::MOUSE_LEFT))
+		{
+			Camera::instance()->UpdatePos(MouseInput::instance()->GetDiff());
+		}
+		Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
+
 		////////////////  Render  ////////////////
+		SDL_RenderCopy(m_renderer, m_bg, nullptr, &m_bgRect);
+
 		for (auto && ground : m_ground)
 		{
 			DrawTexture(ground->GetTexture(), ground->GetRenderRect());
-			//DrawTexture(ground->GetTexture(), ground->GetRenderRect(), ground->GetAngle(), ground->GetCenterPos());
 		}
 		SDL_RenderPresent(m_renderer);
 	}
@@ -85,7 +104,14 @@ void GameWindow::Update()
 
 void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect)
 {
-	SDL_RenderCopy(m_renderer, texture, nullptr, &rect);
+	SDL_Rect localRect = rect;
+	localRect.x += Camera::instance()->GetPosition().x;
+	localRect.y += Camera::instance()->GetPosition().y;
+	localRect.x *= Camera::instance()->GetZoom();
+	localRect.y *= Camera::instance()->GetZoom();
+	localRect.w *= Camera::instance()->GetZoom();
+	localRect.h *= Camera::instance()->GetZoom();
+	SDL_RenderCopy(m_renderer, texture, nullptr, &localRect);
 }
 
 void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect,

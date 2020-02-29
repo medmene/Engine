@@ -24,6 +24,7 @@ void KeyboardInput::Update(SDL_Event * e)
 	{
 		if (!e->key.repeat)
 		{
+			// TODO may be fix up this ?
 			if (e->key.keysym.mod == 4096 || e->key.keysym.sym < 10000)
 			{
 				m_keyMap.emplace_back(e->key.keysym.sym);

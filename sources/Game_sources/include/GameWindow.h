@@ -24,7 +24,10 @@ private:
 	SDL_Renderer										  * m_renderer;
 	Vector2													m_windowSize;
 	_FPS													FPS;
+
 	vector<GameObject*>										m_ground;
+	SDL_Texture											  * m_bg;
+	SDL_Rect												m_bgRect;
 
 	void DrawTexture(SDL_Texture * texture, const SDL_Rect & rect);
 	void DrawTexture(SDL_Texture * texture, const SDL_Rect & rect, double angle, 
