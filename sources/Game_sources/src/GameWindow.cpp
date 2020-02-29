@@ -1,5 +1,6 @@
 #include "Game_sources/include/GameWindow.h"
 #include "include/MouseInput.h"
+#include "include/KeyboardInput.h"
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
 
@@ -66,6 +67,7 @@ void GameWindow::Update()
 		if (SDL_PollEvent(&e))
 		{
 			MouseInput::instance()->Update(&e);
+			KeyboardInput::instance()->Update(&e);
 			if (e.type == SDL_QUIT)
 				break;
 			else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_ESCAPE)

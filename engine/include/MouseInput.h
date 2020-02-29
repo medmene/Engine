@@ -23,7 +23,7 @@ public:
 	};
 
 	MouseInput();
-	~MouseInput();
+	~MouseInput() {}
 	static MouseInput * instance() { return sm_instance; }
 
 	const Vector2 & GetPos() { return m_pos; }
@@ -32,7 +32,6 @@ public:
 	int GetClicks() { return m_clicks; }
 
 	void Update(SDL_Event * e);
-
 private:
 	Button				m_button;
 	State				m_state;

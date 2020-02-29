@@ -26,3 +26,4 @@ using std::cout;
 using std::shared_ptr;
 using std::make_shared;
 using std::weak_ptr;
+using std::find;
