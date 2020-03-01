@@ -10,6 +10,9 @@ public:
 	~GameObject();
 	GameObject(SDL_Renderer * renderer, string src);
 
+	bool IsVisible() { return m_visible; }
+	void SetVisible(bool visible) { m_visible = visible; }
+
 	SDL_Texture * GetTexture() { return m_texture; }
 	const SDL_Rect & GetRenderRect();
 	const SDL_Point & GetCenterPos() { return m_center; }

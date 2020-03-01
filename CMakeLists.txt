@@ -26,6 +26,7 @@ target_include_directories(GameEngine PRIVATE engine)
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_ttf.lib)
 
 
 install(TARGETS GameEngine RUNTIME DESTINATION bin)
@@ -49,6 +50,8 @@ target_sources(GameEngine PRIVATE
   	engine/include/Fps.h
   	engine/include/MouseInput.h
   	engine/include/KeyboardInput.h
+  	engine/include/Camera.h
+  	engine/include/TTFText.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Utils.h
@@ -59,6 +62,8 @@ target_sources(GameEngine PRIVATE
 target_sources(GameEngine PRIVATE
   	engine/src/MouseInput.cpp
   	engine/src/KeyboardInput.cpp
+  	engine/src/Camera.cpp
+  	engine/src/TTFText.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
 	engine/src/BoundingBox3.cpp
@@ -78,78 +83,83 @@ target_sources(GameEngine PRIVATE
 ###################################################
 
 
-#project(GameEditor)
 
-#set(DEFAULT_CMAKE_BUILD_TYPE Release)
+project(GameEditor)
 
-#if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-#  message(STATUS "Setting build type to '${DEFAULT_CMAKE_BUILD_TYPE}' as none was specified.")
-#  set(CMAKE_BUILD_TYPE ${DEFAULT_CMAKE_BUILD_TYPE}
-#      CACHE STRING "Choose the type of build." FORCE)
+set(DEFAULT_CMAKE_BUILD_TYPE Release)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${DEFAULT_CMAKE_BUILD_TYPE}' as none was specified.")
+  set(CMAKE_BUILD_TYPE ${DEFAULT_CMAKE_BUILD_TYPE}
+      CACHE STRING "Choose the type of build." FORCE)
 
   # Set the possible values of build type for cmake-gui
-#  set_property(CACHE CMAKE_BUILD_TYPE
-#               PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
-#endif()
+  set_property(CACHE CMAKE_BUILD_TYPE
+               PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+endif()
 
-#add_executable(GameEditor "")
-
-
-#set_property(TARGET GameEditor PROPERTY CXX_STANDARD 17)
-#set_property(TARGET GameEditor PROPERTY CXX_STANDARD_REQUIRED ON)
-#set_property(TARGET GameEditor PROPERTY CXX_EXTENSIONS OFF)
-
-#target_include_directories(GameEditor PRIVATE sources)
-#target_include_directories(GameEditor PRIVATE engine)
-
-#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
-#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
-#target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+add_executable(GameEditor "")
 
 
-#install(TARGETS GameEditor RUNTIME DESTINATION bin)
+set_property(TARGET GameEditor PROPERTY CXX_STANDARD 17)
+set_property(TARGET GameEditor PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET GameEditor PROPERTY CXX_EXTENSIONS OFF)
+
+target_include_directories(GameEditor PRIVATE sources)
+target_include_directories(GameEditor PRIVATE engine)
+
+target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
+target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
+target_link_libraries(GameEditor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_ttf.lib)
+
+
+install(TARGETS GameEditor RUNTIME DESTINATION bin)
 
 # Include Editor sources
-#target_sources(GameEditor PRIVATE
-#	sources/Editor_sources/main.cpp
-#)
+target_sources(GameEditor PRIVATE
+	sources/Editor_sources/main.cpp
+)
 
-#target_sources(GameEditor PRIVATE
-#	sources/Editor_sources/include/EditorWindow.h
-#)
+target_sources(GameEditor PRIVATE
+	sources/Editor_sources/include/EditorWindow.h
+	sources/Editor_sources/include/SettingsWidget.h
+)
 
-#target_sources(GameEditor PRIVATE
-#	sources/Editor_sources/src/EditorWindow.cpp
-#)
+target_sources(GameEditor PRIVATE
+	sources/Editor_sources/src/EditorWindow.cpp
+	sources/Editor_sources/src/SettingsWidget.cpp
+)
 
 # Include Engine
-#target_sources(GameEditor PRIVATE
-#  	engine/include/Core.h
-#	engine/include/sVector2.h
-#	engine/include/sVector3.h
-#	engine/include/Utils.h
-#	engine/include/Geometry.h
-#	engine/include/Property.h
-#	engine/include/sBoundingBox.h
-#	engine/include/sGameObject.h
-#	engine/include/sGameObjectDisplay.h
-#	engine/include/ObjectTree.h
-#)
+target_sources(GameEditor PRIVATE
+  	engine/include/Core.h
+  	engine/include/Fps.h
+  	engine/include/MouseInput.h
+  	engine/include/KeyboardInput.h
+  	engine/include/Camera.h
+  	engine/include/TTFText.h
+	engine/include/Vector2.h
+	engine/include/Vector3.h
+	engine/include/Utils.h
+	engine/include/BoundingBox3.h
+	engine/include/GameObject.h
+)
 
-#target_sources(GameEditor PRIVATE
-#  	engine/src/sVector2.cpp
-#  	engine/src/sVector3.cpp
-#	engine/src/Geometry.cpp
-#	engine/src/Property.cpp
-#	engine/src/sBoundingBox.cpp
-#	engine/src/sGameObject.cpp
-#	engine/src/sGameObjectDisplay.cpp
-#	engine/src/ObjectTree.cpp
-#)
+target_sources(GameEditor PRIVATE
+  	engine/src/MouseInput.cpp
+  	engine/src/KeyboardInput.cpp
+  	engine/src/Camera.cpp
+  	engine/src/TTFText.cpp
+  	engine/src/Vector2.cpp
+  	engine/src/Vector3.cpp
+	engine/src/BoundingBox3.cpp
+	engine/src/GameObject.cpp
+)
 
 # Include lib pugi XML
-#target_sources(GameEditor PRIVATE
-#	engine/pugixml/pugiconfig.hpp
-#	engine/pugixml/pugixml.cpp
-#	engine/pugixml/pugixml.hpp
-#)
+target_sources(GameEditor PRIVATE
+	engine/pugixml/pugiconfig.hpp
+	engine/pugixml/pugixml.cpp
+	engine/pugixml/pugixml.hpp
+)

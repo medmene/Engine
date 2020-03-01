@@ -24,6 +24,7 @@ GameWindow::GameWindow()
 	SDL_FillRect(bg, NULL, 0);
 	m_bg = SDL_CreateTextureFromSurface(m_renderer, bg);
 	m_bgRect = { 0, 0, (int)m_windowSize.x, (int)m_windowSize.y };
+	SDL_FreeSurface(bg);
 }
 
 GameWindow::~GameWindow()
@@ -105,12 +106,13 @@ void GameWindow::Update()
 void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect)
 {
 	SDL_Rect localRect = rect;
-	localRect.x += Camera::instance()->GetPosition().x;
-	localRect.y += Camera::instance()->GetPosition().y;
 	localRect.x *= Camera::instance()->GetZoom();
 	localRect.y *= Camera::instance()->GetZoom();
 	localRect.w *= Camera::instance()->GetZoom();
 	localRect.h *= Camera::instance()->GetZoom();
+
+	localRect.x += Camera::instance()->GetPosition().x;
+	localRect.y += Camera::instance()->GetPosition().y;
 	SDL_RenderCopy(m_renderer, texture, nullptr, &localRect);
 }
 
