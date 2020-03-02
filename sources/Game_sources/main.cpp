@@ -4,6 +4,6 @@ int main()
 {
 	GameWindow::instance()->Initialize();
 	GameWindow::instance()->Update();
-	//delete GameWindow::instance();
+	delete GameWindow::instance();
 	return 1;
 }

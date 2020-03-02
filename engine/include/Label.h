@@ -9,8 +9,11 @@ public:
 	Label();
 	~Label();
 
-	void Init(SDL_Renderer * renderer, Vector2 pos = Vector2(), string font = "Sans.ttf",
-		int fontSize = 14, SDL_Color color = { 0,0,0,0 });
+	void Init(SDL_Renderer * renderer, const string & text, Vector2 pos = Vector2(), string font = "times.ttf",
+		int fontSize = 24, SDL_Color color = { 255, 255, 255, 0 });
+
+	bool IsVisible() { return m_visible; }
+	void SetVisible(bool visible) { m_visible = visible; }
 
 	void SetText(const string & text);
 	void SetFont(const string & font);
@@ -27,6 +30,7 @@ private:
 	SDL_Texture						  * m_texture;
 	SDL_Rect							m_rect;
 	Vector2								m_position;
+	bool								m_visible;
 
 	int									m_fontSize;
 	string								m_fontName;
@@ -35,5 +39,5 @@ private:
 
 	SDL_Renderer					  * m_renderer;
 
-	void CreateTexture();
+	void CreateTexture(bool firstTime = false);
 };

@@ -4,10 +4,10 @@
 
 
 Label::Label()
-	: m_fontSize(14)
-	, m_color({ 0, 0, 0, 0 })
-	, m_fontName("Sans.ttf")
-	, m_text("")
+	: m_fontSize(24)
+	, m_color({ 255, 255, 255, 0 })
+	, m_fontName("times.ttf")
+	, m_text("_")
 	, m_position(0,0)
 {
 }
@@ -20,14 +20,15 @@ Label::~Label()
 	}
 }
 
-void Label::Init(SDL_Renderer * renderer, Vector2 pos, string font, int fontSize, SDL_Color color)
+void Label::Init(SDL_Renderer * renderer, const string & text, Vector2 pos, string font, int fontSize, SDL_Color color)
 {
 	m_renderer = renderer;
 	m_fontSize = fontSize;
 	m_fontName = font;
 	m_color = color;
 	m_position = pos;
-	CreateTexture();
+	m_text = text;
+	CreateTexture(true);
 }
 
 void Label::SetText(const string & text)
@@ -61,26 +62,33 @@ void Label::UpdatePos(const Vector2 & pos)
 	m_rect.y = m_position.y;
 }
 
-void Label::CreateTexture()
+void Label::CreateTexture(bool firstTime)
 {
 	if (m_renderer)
 	{
-		TTF_Font* font = TTF_OpenFont(m_fontName.c_str(), m_fontSize);
-		SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, m_text.c_str(), m_color);
-
-		if (m_texture)
+		string some = std::filesystem::current_path().generic_string() + "/../resources/fonts/" + m_fontName;
+		TTF_Font* font = TTF_OpenFont((some).c_str(), m_fontSize);
+		if (font) 
 		{
-			SDL_DestroyTexture(m_texture);
-		}
-		m_texture = SDL_CreateTextureFromSurface(m_renderer, surfaceMessage);
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, m_text.c_str(), m_color);
+			if (surfaceMessage)
+			{
+				if (m_texture && !firstTime)
+				{ 
+					SDL_DestroyTexture(m_texture); 
+				}
 
-		m_rect.x = m_position.x;
-		m_rect.y = m_position.y;
-		m_rect.w = surfaceMessage->w;
-		m_rect.h = surfaceMessage->h;
-		if (surfaceMessage)
-		{
-			SDL_FreeSurface(surfaceMessage);
+				m_texture = SDL_CreateTextureFromSurface(m_renderer, surfaceMessage);
+
+				m_rect.x = m_position.x;
+				m_rect.y = m_position.y;
+				m_rect.w = surfaceMessage->w;
+				m_rect.h = surfaceMessage->h;
+				if (surfaceMessage)
+				{
+					SDL_FreeSurface(surfaceMessage);
+				}
+			}
 		}
 	}
 }

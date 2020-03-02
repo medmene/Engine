@@ -4,6 +4,9 @@
 #include "include/GameObject.h"
 #include "include/Fps.h"
 
+
+class Label;
+
 class GameWindow
 {
 public:
@@ -29,8 +32,20 @@ private:
 	SDL_Texture											  * m_bg;
 	SDL_Rect												m_bgRect;
 
+	Label												  * m_someText;
+
+	template <typename T> void DrawObject(T * object);
 	void DrawTexture(SDL_Texture * texture, const SDL_Rect & rect);
 	void DrawTexture(SDL_Texture * texture, const SDL_Rect & rect, double angle, 
 		const SDL_Point & center, SDL_RendererFlip flip = SDL_RendererFlip::SDL_FLIP_HORIZONTAL);
 	static GameWindow * sm_instance;
 };
+
+template<typename T>
+inline void GameWindow::DrawObject(T * object)
+{
+	if (object->IsVisible())
+	{
+		DrawTexture(object->GetTexture(), object->GetRenderRect());
+	}
+}
