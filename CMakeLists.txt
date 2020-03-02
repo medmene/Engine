@@ -54,6 +54,7 @@ target_sources(GameEngine PRIVATE
   	engine/include/Label.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
+	engine/include/Color.h
 	engine/include/Utils.h
 	engine/include/BoundingBox3.h
 	engine/include/GameObject.h
@@ -66,6 +67,7 @@ target_sources(GameEngine PRIVATE
   	engine/src/Label.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
+  	engine/src/Color.cpp
 	engine/src/BoundingBox3.cpp
 	engine/src/GameObject.cpp
 )
@@ -141,6 +143,7 @@ target_sources(GameEditor PRIVATE
   	engine/include/Label.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
+	engine/include/Color.h
 	engine/include/Utils.h
 	engine/include/BoundingBox3.h
 	engine/include/GameObject.h
@@ -153,6 +156,7 @@ target_sources(GameEditor PRIVATE
   	engine/src/Label.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
+  	engine/src/Color.cpp
 	engine/src/BoundingBox3.cpp
 	engine/src/GameObject.cpp
 )

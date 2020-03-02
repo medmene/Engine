@@ -143,7 +143,7 @@ Vector3& Vector3::operator-=(float other)
 	return  *this;
 }
 
-Vector3& Vector3::operator/(int other)
+Vector3& Vector3::operator/=(int other)
 {
 	this->x /= other;
 	this->y /= other;
@@ -151,7 +151,7 @@ Vector3& Vector3::operator/(int other)
 	return  *this;
 }
 
-Vector3& Vector3::operator/(float other)
+Vector3& Vector3::operator/=(float other)
 {
 	this->x /= other;
 	this->y /= other;

@@ -26,6 +26,6 @@ public:
 	Vector2& operator-=(const Vector2& other);
 	Vector2& operator-=(int other);
 	Vector2& operator-=(float other);
-	Vector2& operator/(int other);
-	Vector2& operator/(float other);
+	Vector2& operator/=(int other);
+	Vector2& operator/=(float other);
 };

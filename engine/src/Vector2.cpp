@@ -101,14 +101,14 @@ Vector2& Vector2::operator-=(float other)
 	return  *this;
 }
 
-Vector2& Vector2::operator/(int other)
+Vector2& Vector2::operator/=(int other)
 {
 	this->x /= other;
 	this->y /= other;
 	return  *this;
 }
 
-Vector2& Vector2::operator/(float other)
+Vector2& Vector2::operator/=(float other)
 {
 	this->x /= other;
 	this->y /= other;
