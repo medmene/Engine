@@ -34,9 +34,7 @@ GameWindow::~GameWindow()
 		delete gr;
 	}
 	m_ground.clear();
-	//delete Camera::instance();
-	//delete MouseInput::instance();
-	//delete KeyboardInput::instance();
+
 	if (m_renderer)
 	{
 		SDL_DestroyRenderer(m_renderer);
@@ -45,6 +43,14 @@ GameWindow::~GameWindow()
 	{
 		SDL_DestroyWindow(m_window);
 	}
+	if (m_bg)
+	{
+		SDL_DestroyTexture(m_bg);
+	}
+
+	//delete Camera::instance();
+	//delete MouseInput::instance();
+	//delete KeyboardInput::instance();
 }
 
 SDL_Window* GameWindow::GetRawWindow()
