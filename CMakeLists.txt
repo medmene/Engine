@@ -51,7 +51,7 @@ target_sources(GameEngine PRIVATE
   	engine/include/MouseInput.h
   	engine/include/KeyboardInput.h
   	engine/include/Camera.h
-  	engine/include/TTFText.h
+  	engine/include/Label.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Utils.h
@@ -63,7 +63,7 @@ target_sources(GameEngine PRIVATE
   	engine/src/MouseInput.cpp
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
-  	engine/src/TTFText.cpp
+  	engine/src/Label.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
 	engine/src/BoundingBox3.cpp
@@ -138,7 +138,7 @@ target_sources(GameEditor PRIVATE
   	engine/include/MouseInput.h
   	engine/include/KeyboardInput.h
   	engine/include/Camera.h
-  	engine/include/TTFText.h
+  	engine/include/Label.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Utils.h
@@ -150,7 +150,7 @@ target_sources(GameEditor PRIVATE
   	engine/src/MouseInput.cpp
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
-  	engine/src/TTFText.cpp
+  	engine/src/Label.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
 	engine/src/BoundingBox3.cpp
