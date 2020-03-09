@@ -20,7 +20,7 @@ Label::~Label()
 	}
 }
 
-void Label::Init(SDL_Renderer * renderer, const string & text, Vector2 pos, string font, int fontSize, SDL_Color color)
+void Label::Init(SDL_Renderer * renderer, const string & text, Vector2 pos, string font, int fontSize, Color color)
 {
 	m_renderer = renderer;
 	m_fontSize = fontSize;
@@ -49,7 +49,7 @@ void Label::SetFontSize(int fontSize)
 	CreateTexture();
 }
 
-void Label::SetColor(const SDL_Color & color)
+void Label::SetColor(const Color & color)
 {
 	m_color = color;
 	CreateTexture();
@@ -70,7 +70,8 @@ void Label::CreateTexture(bool firstTime)
 		TTF_Font* font = TTF_OpenFont((some).c_str(), m_fontSize);
 		if (font) 
 		{
-			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, m_text.c_str(), m_color);
+			SDL_Color clr = { m_color.GetR(), m_color.GetG(), m_color.GetB() };
+			SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, m_text.c_str(), clr);
 			if (surfaceMessage)
 			{
 				if (m_texture && !firstTime)
@@ -88,6 +89,9 @@ void Label::CreateTexture(bool firstTime)
 				{
 					SDL_FreeSurface(surfaceMessage);
 				}
+
+				SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+				SDL_SetTextureAlphaMod(m_texture, m_color.GetA());
 			}
 		}
 	}

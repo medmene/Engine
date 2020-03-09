@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "Vector2.h"
-
+#include "Color.h"
 
 class GameObject
 {
@@ -18,7 +18,9 @@ public:
 	const SDL_Point & GetCenterPos() { return m_center; }
 	const Vector2 & GetPosition() { return m_position; }
 	double GetAngle() { return m_angle; }
+	const Color & GetColor() { return m_color; }
 
+	void UpdateColor(const Color & clr);
 	void UpdateSize(const Vector2 & size);
 	void UpdatePos(const Vector2 & pos);
 	void UpdateAngle(double angle) { m_angle = angle; }
@@ -28,6 +30,7 @@ private:
 	double						m_angle;
 	string						m_resourceName;
 	SDL_Point					m_center;
+	Color						m_color;
 
 	Vector2						m_position;
 	Vector2						m_size;

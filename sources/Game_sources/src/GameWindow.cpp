@@ -22,7 +22,7 @@ GameWindow::GameWindow()
 		m_windowSize.y,								// height, in pixels
 		0 //SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN	// flags - see below
 	);
-	m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 	// Init black background
 	auto bg = SDL_CreateRGBSurface(0, m_windowSize.x, m_windowSize.y, 32, 0, 0, 0, 0);
 	SDL_FillRect(bg, NULL, 0);
@@ -79,11 +79,13 @@ void GameWindow::Initialize()
 			GameObject * obj = new GameObject(m_renderer, "ground.png");
 			obj->UpdateSize(Vector2(100, 60));
 			obj->UpdatePos(Vector2(x * 101, y * 61));
+			obj->UpdateColor(Color(255, 255, 255, 255));
 			m_ground.emplace_back(obj);
 		}
 	}
 	m_someText = new Label();
-	m_someText->Init(m_renderer, "Just chill",Vector2(10, 10));
+	m_someText->Init(m_renderer, "Just chill", Vector2(10, 10));
+	m_someText->SetColor(Color(255, 0, 0, 255));
 }
 
 void GameWindow::Update()

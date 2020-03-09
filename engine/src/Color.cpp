@@ -14,6 +14,7 @@ Color::Color(const Color & other)
 	, b(other.b)
 	, a(other.a)
 {
+	fixupColor();
 }
 
 Color::Color(int _r, int _g, int _b, int _a)
@@ -22,6 +23,7 @@ Color::Color(int _r, int _g, int _b, int _a)
 	, b(_b)
 	, a(_a)
 {
+	fixupColor();
 }
 
 Color & Color::operator=(const Color & other)
@@ -30,6 +32,7 @@ Color & Color::operator=(const Color & other)
 	g = other.g;
 	b = other.b;
 	a = other.a;
+	fixupColor();
 	return *this;
 }
 

@@ -6,6 +6,7 @@ GameObject::GameObject()
 	, m_position(0, 0)
 	, m_angle(0)
 	, m_rect({ 0, 0, 0, 0 })
+	, m_color({ 255, 255, 255, 255 })
 {
 }
 
@@ -31,6 +32,7 @@ GameObject::GameObject(SDL_Renderer	* renderer, string src)
 		m_size = { m_rect.w, m_rect.h };
 		m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
 		m_texture = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
 		SDL_FreeSurface(surface);
 	}
 }
@@ -38,6 +40,16 @@ GameObject::GameObject(SDL_Renderer	* renderer, string src)
 const SDL_Rect & GameObject::GetRenderRect()
 {
 	return m_rect;
+}
+
+void GameObject::UpdateColor(const Color & clr)
+{
+	m_color = clr;
+	if (m_texture)
+	{
+		SDL_SetTextureColorMod(m_texture, m_color.GetR(), m_color.GetG(), m_color.GetB());
+		SDL_SetTextureAlphaMod(m_texture, m_color.GetA());
+	}
 }
 
 void GameObject::UpdateSize(const Vector2 & size)
