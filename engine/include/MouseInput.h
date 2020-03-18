@@ -35,7 +35,11 @@ public:
 	const State & GetState() { return m_state; }
 	int GetClicks() { return m_clicks; }
 
-	void ResetDiffs() { m_diff.x = 0; m_diff.y = 0; m_wheel = 0; }
+	void ResetDiffs() 
+	{
+		m_diff.x = 0; m_diff.y = 0; 
+		m_wheel = 0; m_state = MOUSE_BUTTON_UNDEFINED;
+	}
 
 	void Update(SDL_Event * e);
 private:

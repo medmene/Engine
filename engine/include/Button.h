@@ -3,43 +3,44 @@
 #include "Vector2.h"
 #include "Color.h"
 
+class Label;
 
-class Label
+class Button
 {
 public:
-	Label();
-	~Label();
+	Button();
+	~Button();
 
-	void Init(SDL_Renderer * renderer, const string & text, Vector2 pos = Vector2(), string font = "times.ttf",
-		int fontSize = 24, Color color = Color( 255, 255, 255, 255 ));
+	void Init(SDL_Renderer * renderer, string src = "",
+		shared_ptr<Label> lbl = nullptr, Color color = Color(255, 255, 255, 255));
 
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
 
-	void SetText(const string & text);
-	void SetFont(const string & font);
-	void SetFontSize(int fontSize);
+	void SetLabel(shared_ptr<Label> lbl) { m_label = lbl; }
 
-	SDL_Texture * GetTexture() { return m_texture; }
+	SDL_Texture * GetTexture();
 	const SDL_Rect & GetRenderRect() { return m_rect; }
 	const Vector2 & GetPos() { return m_position; }
 	const Color & GetColor() { return m_color; }
+	shared_ptr<Label> GetText() { return m_label; }
 
 	void UpdatePos(const Vector2 & pos);
 	void UpdateColor(const Color & color);
-
+	void UpdateSize(const Vector2 & size);
+	void Update();
 private:
-	SDL_Texture						  * m_texture;
+	SDL_Texture						  * m_textureP;
+	SDL_Texture						  * m_textureN;
 	SDL_Rect							m_rect;
+	SDL_Point							m_center;
 	Vector2								m_position;
+	Vector2								m_size;
 	bool								m_visible;
+	bool								m_pressed;
 
-	int									m_fontSize;
-	string								m_fontName;
+	shared_ptr<Label>					m_label;
 	Color 								m_color;
-	string								m_text;
 
 	SDL_Renderer					  * m_renderer;
-
-	void CreateTexture(bool firstTime = false);
 };

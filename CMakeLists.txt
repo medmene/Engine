@@ -52,6 +52,7 @@ target_sources(GameEngine PRIVATE
   	engine/include/KeyboardInput.h
   	engine/include/Camera.h
   	engine/include/Label.h
+  	engine/include/Button.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Color.h
@@ -64,6 +65,7 @@ target_sources(GameEngine PRIVATE
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
   	engine/src/Label.cpp
+  	engine/src/Button.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
   	engine/src/Color.cpp
@@ -139,6 +141,7 @@ target_sources(GameEditor PRIVATE
   	engine/include/KeyboardInput.h
   	engine/include/Camera.h
   	engine/include/Label.h
+  	engine/include/Button.h
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Color.h
@@ -151,6 +154,7 @@ target_sources(GameEditor PRIVATE
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
   	engine/src/Label.cpp
+  	engine/src/Button.cpp
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
   	engine/src/Color.cpp

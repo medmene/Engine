@@ -8,7 +8,7 @@ class GameObject
 public:
 	explicit GameObject();
 	~GameObject();
-	GameObject(SDL_Renderer * renderer, string src);
+	GameObject(SDL_Renderer * renderer, const string & src);
 
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }

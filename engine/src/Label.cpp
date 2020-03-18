@@ -5,10 +5,11 @@
 
 Label::Label()
 	: m_fontSize(24)
-	, m_color({ 255, 255, 255, 0 })
+	, m_color({ 255, 255, 255, 255 })
 	, m_fontName("times.ttf")
 	, m_text("_")
 	, m_position(0,0)
+	, m_visible(true)
 {
 }
 
@@ -49,7 +50,7 @@ void Label::SetFontSize(int fontSize)
 	CreateTexture();
 }
 
-void Label::SetColor(const Color & color)
+void Label::UpdateColor(const Color & color)
 {
 	m_color = color;
 	CreateTexture();

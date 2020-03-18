@@ -3,6 +3,7 @@
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
 #include "include/Label.h"
+#include "include/Button.h"
 
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
@@ -85,7 +86,13 @@ void GameWindow::Initialize()
 	}
 	m_someText = new Label();
 	m_someText->Init(m_renderer, "Just chill", Vector2(10, 10));
-	m_someText->SetColor(Color(255, 0, 0, 255));
+	m_someText->UpdateColor(Color(255, 0, 0, 255));
+
+	m_someBtn = new Button();
+	m_someBtn->Init(m_renderer);
+	m_someBtn->UpdatePos(Vector2(200, 200));
+	m_someBtn->UpdateSize(Vector2(50, 50));
+
 }
 
 void GameWindow::Update()
@@ -124,6 +131,7 @@ void GameWindow::Update()
 			DrawObject<GameObject>(ground);
 		}
 		DrawObject<Label>(m_someText);
+		DrawObject<Button>(m_someBtn);
 
 		SDL_RenderPresent(m_renderer);
 	}

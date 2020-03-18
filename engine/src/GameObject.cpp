@@ -18,7 +18,7 @@ GameObject::~GameObject()
 	}
 }
 
-GameObject::GameObject(SDL_Renderer	* renderer, string src)
+GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
 	: m_visible(true)
 	, m_enabled(true)
 	, m_position(0, 0)

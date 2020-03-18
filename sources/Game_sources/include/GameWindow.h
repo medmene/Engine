@@ -6,6 +6,7 @@
 
 
 class Label;
+class Button;
 
 class GameWindow
 {
@@ -33,6 +34,7 @@ private:
 	SDL_Rect												m_bgRect;
 
 	Label												  * m_someText;
+	Button												  * m_someBtn;
 
 	template <typename T> void DrawObject(T * object);
 	void DrawTexture(SDL_Texture * texture, const SDL_Rect & rect);
