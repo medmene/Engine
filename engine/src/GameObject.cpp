@@ -30,10 +30,14 @@ GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
 		m_resourceName = src;
 		m_rect = surface->clip_rect;
 		m_size = { m_rect.w, m_rect.h };
-		m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
+		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
 		m_texture = SDL_CreateTextureFromSurface(renderer, surface);
 		SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
 		SDL_FreeSurface(surface);
+	}
+	else
+	{
+		throw std::exception();
 	}
 }
 
@@ -56,12 +60,12 @@ void GameObject::UpdateSize(const Vector2 & size)
 {
 	m_size = size;
 	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
+	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
 }
 
 void GameObject::UpdatePos(const Vector2 & pos)
 {
 	m_position = pos;
 	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
+	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
 }

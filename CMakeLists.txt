@@ -38,10 +38,12 @@ target_sources(GameEngine PRIVATE
 
 target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameWindow.h
+	sources/Game_sources/include/Level1.h
 )
 
 target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameWindow.cpp
+	sources/Game_sources/src/Level1.cpp
 )
 
 # Include Engine
@@ -56,6 +58,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Color.h
+	engine/include/Player.h
 	engine/include/Utils.h
 	engine/include/GameObject.h
 )
@@ -69,6 +72,7 @@ target_sources(GameEngine PRIVATE
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
   	engine/src/Color.cpp
+  	engine/src/Player.cpp
 	engine/src/GameObject.cpp
 )
 
@@ -145,6 +149,7 @@ target_sources(GameEditor PRIVATE
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Color.h
+	engine/include/Player.h
 	engine/include/Utils.h
 	engine/include/GameObject.h
 )
@@ -158,6 +163,7 @@ target_sources(GameEditor PRIVATE
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
   	engine/src/Color.cpp
+  	engine/src/Player.cpp
 	engine/src/GameObject.cpp
 )
 

@@ -6,7 +6,7 @@ Camera * Camera::sm_instance = new Camera();
 
 Camera::Camera()
 	: m_position(0, 0)
-	, m_diff(0, 0)
+	, m_posInWindow(0, 0)
 	, m_zoom(1.f)
 	, m_zoomBorders(0.1f, 3.f)
 {

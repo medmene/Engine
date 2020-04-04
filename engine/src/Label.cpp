@@ -93,7 +93,9 @@ void Label::CreateTexture(bool firstTime)
 
 				SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
 				SDL_SetTextureAlphaMod(m_texture, m_color.GetA());
+				return;
 			}
 		}
 	}
+	throw std::exception();
 }

@@ -10,6 +10,7 @@
 #include <conio.h>
 #include <cstdio>
 #include <filesystem>
+#include <thread>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"

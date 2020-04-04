@@ -15,8 +15,9 @@ public:
 
 	SDL_Texture * GetTexture() { return m_texture; }
 	const SDL_Rect & GetRenderRect();
-	const SDL_Point & GetCenterPos() { return m_center; }
+	const Vector2 & GetCenterPos() { return m_center; }
 	const Vector2 & GetPosition() { return m_position; }
+	const Vector2 & GetSize() { return m_size; }
 	double GetAngle() { return m_angle; }
 	const Color & GetColor() { return m_color; }
 
@@ -29,7 +30,7 @@ private:
 	SDL_Rect					m_rect;
 	double						m_angle;
 	string						m_resourceName;
-	SDL_Point					m_center;
+	Vector2						m_center;
 	Color						m_color;
 
 	Vector2						m_position;
