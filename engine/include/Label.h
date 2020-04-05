@@ -27,8 +27,11 @@ public:
 
 	void UpdatePos(const Vector2 & pos);
 	void UpdateColor(const Color & color);
+	void Update() {}
 
+	void Draw();
 private:
+	SDL_Renderer					  * m_renderer;
 	SDL_Texture						  * m_texture;
 	SDL_Rect							m_rect;
 	Vector2								m_position;
@@ -38,8 +41,6 @@ private:
 	string								m_fontName;
 	Color 								m_color;
 	string								m_text;
-
-	SDL_Renderer					  * m_renderer;
 
 	void CreateTexture(bool firstTime = false);
 };

@@ -1,4 +1,8 @@
-#include "include\GameObject.h"
+#include "include/GameObject.h"
+#include "include/Camera.h"
+
+
+
 
 GameObject::GameObject()
 	: m_visible(true)
@@ -25,6 +29,7 @@ GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
 	, m_angle(0)
 {
 	auto surface = IMG_Load((std::filesystem::current_path().generic_string() + "/../resources/" + src).c_str());
+	m_renderer = renderer;
 	if (surface)
 	{
 		m_resourceName = src;
@@ -39,11 +44,6 @@ GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
 	{
 		throw std::exception();
 	}
-}
-
-const SDL_Rect & GameObject::GetRenderRect()
-{
-	return m_rect;
 }
 
 void GameObject::UpdateColor(const Color & clr)
@@ -68,4 +68,22 @@ void GameObject::UpdatePos(const Vector2 & pos)
 	m_position = pos;
 	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
 	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+}
+
+void GameObject::Draw()
+{
+	if (IsVisible()) 
+	{
+		SDL_Rect localRect = GetRenderRect();
+
+		localRect.x = localRect.x + Camera::instance()->GetDiff().x;
+		localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+
+		localRect.x *= Camera::instance()->GetZoom();
+		localRect.y *= Camera::instance()->GetZoom();
+		localRect.w *= Camera::instance()->GetZoom();
+		localRect.h *= Camera::instance()->GetZoom();
+
+		SDL_RenderCopy(m_renderer, m_texture, nullptr, &localRect);
+	}
 }

@@ -14,7 +14,7 @@ public:
 	void SetVisible(bool visible) { m_visible = visible; }
 
 	SDL_Texture * GetTexture() { return m_texture; }
-	const SDL_Rect & GetRenderRect();
+	const SDL_Rect & GetRenderRect() { return m_rect; } 
 	const Vector2 & GetCenterPos() { return m_center; }
 	const Vector2 & GetPosition() { return m_position; }
 	const Vector2 & GetSize() { return m_size; }
@@ -25,7 +25,11 @@ public:
 	void UpdateSize(const Vector2 & size);
 	void UpdatePos(const Vector2 & pos);
 	void UpdateAngle(double angle) { m_angle = angle; }
+	void Update(){}
+
+	void Draw();
 private:
+	SDL_Renderer			  * m_renderer;
 	SDL_Texture 			  * m_texture;
 	SDL_Rect					m_rect;
 	double						m_angle;

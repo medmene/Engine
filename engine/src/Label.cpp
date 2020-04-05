@@ -1,4 +1,5 @@
 #include "include/Label.h"
+#include "include/Camera.h"
 
 
 
@@ -61,6 +62,24 @@ void Label::UpdatePos(const Vector2 & pos)
 	m_position = pos;
 	m_rect.x = m_position.x;
 	m_rect.y = m_position.y;
+}
+
+void Label::Draw()
+{
+	if (IsVisible())
+	{
+		SDL_Rect localRect = GetRenderRect();
+
+		localRect.x = localRect.x + Camera::instance()->GetDiff().x;
+		localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+
+		localRect.x *= Camera::instance()->GetZoom();
+		localRect.y *= Camera::instance()->GetZoom();
+		localRect.w *= Camera::instance()->GetZoom();
+		localRect.h *= Camera::instance()->GetZoom();
+
+		SDL_RenderCopy(m_renderer, m_texture, nullptr, &localRect);
+	}
 }
 
 void Label::CreateTexture(bool firstTime)

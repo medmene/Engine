@@ -98,38 +98,22 @@ void GameWindow::Update()
 		SDL_RenderClear(m_renderer);
 
 		m_level1->Draw();
-		DrawObject<GameObject>(m_player->GetGameObject());
+		m_player->GetGameObject()->Draw();
 
 		SDL_RenderPresent(m_renderer);
 	}
 }
 
-void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect)
-{
-	if (texture) 
-	{
-		SDL_Rect localRect = rect;
-		localRect.x *= Camera::instance()->GetZoom();
-		localRect.y *= Camera::instance()->GetZoom();
-		localRect.w *= Camera::instance()->GetZoom();
-		localRect.h *= Camera::instance()->GetZoom();
-
-		localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-		localRect.y = localRect.y + Camera::instance()->GetDiff().y;
-		SDL_RenderCopy(m_renderer, texture, nullptr, &localRect);
-	}
-}
-
-void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect,
-	double angle, const SDL_Point & center, SDL_RendererFlip flip)
-{
-	SDL_RenderCopyEx(m_renderer, texture, nullptr, &rect, angle, &center, flip);
-
-	/*SDL_RenderCopyEx(SDL_Renderer*          renderer,
-			SDL_Texture*           texture,
-			const SDL_Rect*        srcrect,
-			const SDL_Rect*        dstrect,
-			const double           angle,
-			const SDL_Point*       center,
-			const SDL_RendererFlip flip)*/
-}
+//void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect,
+//	double angle, const SDL_Point & center, SDL_RendererFlip flip)
+//{
+//	SDL_RenderCopyEx(m_renderer, texture, nullptr, &rect, angle, &center, flip);
+//
+//	/*SDL_RenderCopyEx(SDL_Renderer*          renderer,
+//			SDL_Texture*           texture,
+//			const SDL_Rect*        srcrect,
+//			const SDL_Rect*        dstrect,
+//			const double           angle,
+//			const SDL_Point*       center,
+//			const SDL_RendererFlip flip)*/
+//}

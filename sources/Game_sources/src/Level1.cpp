@@ -39,12 +39,12 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 void Level1::Draw()
 {
-	for (auto & background : m_backgrounds)
+	for (auto && background : m_backgrounds)
 	{
-		GameWindow::instance()->DrawObject<GameObject>(background);
+		background->Draw();
 	}
-	for (auto & ground : m_grounds)
+	for (auto && ground : m_grounds)
 	{
-		GameWindow::instance()->DrawObject<GameObject>(ground);
+		ground->Draw();
 	}
 }
