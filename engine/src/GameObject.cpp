@@ -9,6 +9,9 @@ GameObject::GameObject()
 	, m_enabled(true)
 	, m_position(0, 0)
 	, m_angle(0)
+	, m_animationCount(1)
+	, m_animationIndex(0)
+	, m_animationFrameTime(0.2f)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
 {
@@ -22,11 +25,13 @@ GameObject::~GameObject()
 	}
 }
 
-GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
+GameObject::GameObject(SDL_Renderer	* renderer, const string & src, Vector2 size)
 	: m_visible(true)
 	, m_enabled(true)
 	, m_position(0, 0)
 	, m_angle(0)
+	, m_animationIndex(0)
+	, m_animationFrameTime(0.2f)
 {
 	auto surface = IMG_Load((std::filesystem::current_path().generic_string() + "/../resources/" + src).c_str());
 	m_renderer = renderer;
@@ -34,7 +39,9 @@ GameObject::GameObject(SDL_Renderer	* renderer, const string & src)
 	{
 		m_resourceName = src;
 		m_rect = surface->clip_rect;
-		m_size = { m_rect.w, m_rect.h };
+		m_size = size;
+		//m_size = { m_rect.w, m_rect.h };
+		//m_animationCount =  // TODO place this
 		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
 		m_texture = SDL_CreateTextureFromSurface(renderer, surface);
 		SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
@@ -70,6 +77,20 @@ void GameObject::UpdatePos(const Vector2 & pos)
 	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
 }
 
+void GameObject::Update(float dt)
+{
+	m_counter += dt;
+	if (m_counter > m_animationFrameTime)
+	{
+		m_animationIndex++;
+		m_counter = 0;
+	}
+	if (m_animationIndex >= m_animationCount)
+	{
+		m_animationIndex = 0;
+	}
+}
+
 void GameObject::Draw()
 {
 	if (IsVisible()) 
@@ -83,6 +104,9 @@ void GameObject::Draw()
 		localRect.y *= Camera::instance()->GetZoom();
 		localRect.w *= Camera::instance()->GetZoom();
 		localRect.h *= Camera::instance()->GetZoom();
+
+		SDL_Rect animRect;
+
 
 		SDL_RenderCopy(m_renderer, m_texture, nullptr, &localRect);
 	}

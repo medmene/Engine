@@ -8,7 +8,7 @@ class GameObject
 public:
 	explicit GameObject();
 	~GameObject();
-	GameObject(SDL_Renderer * renderer, const string & src);
+	GameObject(SDL_Renderer * renderer, const string & src, Vector2 size = Vector2(0,0));
 
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
@@ -25,7 +25,7 @@ public:
 	void UpdateSize(const Vector2 & size);
 	void UpdatePos(const Vector2 & pos);
 	void UpdateAngle(double angle) { m_angle = angle; }
-	void Update(){}
+	void Update(float dt);
 
 	void Draw();
 private:
@@ -41,4 +41,9 @@ private:
 	Vector2						m_size;
 	bool						m_visible;
 	bool						m_enabled;
+
+	int							m_animationIndex = 0;
+	int							m_animationCount;
+	float						m_animationFrameTime;
+	float						m_counter;
 };
