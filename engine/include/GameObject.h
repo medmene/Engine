@@ -2,13 +2,14 @@
 #include "Core.h"
 #include "Vector2.h"
 #include "Color.h"
+#include "ResourceManager.h"
 
 class GameObject
 {
 public:
 	explicit GameObject();
 	~GameObject();
-	GameObject(SDL_Renderer * renderer, const string & src, Vector2 size = Vector2(0,0));
+	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
@@ -29,11 +30,11 @@ public:
 
 	void Draw();
 private:
+	Resource				  * m_resource;
 	SDL_Renderer			  * m_renderer;
 	SDL_Texture 			  * m_texture;
 	SDL_Rect					m_rect;
 	double						m_angle;
-	string						m_resourceName;
 	Vector2						m_center;
 	Color						m_color;
 

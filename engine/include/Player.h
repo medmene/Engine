@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "Vector2.h"
+#include "include/ResourceManager.h"
 
 class GameObject;
 
@@ -9,7 +10,7 @@ class Player
 public:
 	Player();
 	~Player();
-	void Init(SDL_Renderer * renderer, const string & objPath);
+	void Init(SDL_Renderer * renderer, const string & resName, ResourceManager::Type type);
 
 	GameObject * GetGameObject() { return m_playerObject; }
 

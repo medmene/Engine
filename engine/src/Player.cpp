@@ -17,10 +17,10 @@ Player::~Player()
 	}
 }
 
-void Player::Init(SDL_Renderer * renderer, const string & objPath)
+void Player::Init(SDL_Renderer * renderer, const string & resName, ResourceManager::Type type)
 {
 	m_renderer = renderer;
-	m_playerObject = new GameObject(m_renderer, objPath);
+	m_playerObject = new GameObject(m_renderer, resName, type);
 }
 
 void Player::Update(float dt)

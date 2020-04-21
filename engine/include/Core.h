@@ -11,6 +11,7 @@
 #include <cstdio>
 #include <filesystem>
 #include <thread>
+#include <map>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
@@ -25,6 +26,7 @@
 #define endl "\n"
 
 using std::string;
+using std::map;
 using std::vector;
 using std::cout;
 using std::shared_ptr;

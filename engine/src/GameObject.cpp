@@ -25,7 +25,7 @@ GameObject::~GameObject()
 	}
 }
 
-GameObject::GameObject(SDL_Renderer	* renderer, const string & src, Vector2 size)
+GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
 	: m_visible(true)
 	, m_enabled(true)
 	, m_position(0, 0)
@@ -33,24 +33,26 @@ GameObject::GameObject(SDL_Renderer	* renderer, const string & src, Vector2 size
 	, m_animationIndex(0)
 	, m_animationFrameTime(0.2f)
 {
-	auto surface = IMG_Load((std::filesystem::current_path().generic_string() + "/../resources/" + src).c_str());
 	m_renderer = renderer;
-	if (surface)
+	m_resource = ResourceManager::instance()->GetResource(src, type);
+	
+	if (m_resource)
 	{
-		m_resourceName = src;
-		m_rect = surface->clip_rect;
-		m_size = size;
-		//m_size = { m_rect.w, m_rect.h };
-		//m_animationCount =  // TODO place this
-		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
-		m_texture = SDL_CreateTextureFromSurface(renderer, surface);
-		SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
-		SDL_FreeSurface(surface);
+		auto surface = IMG_Load(m_resource->GetPath().c_str());
+		
+		if (surface)
+		{
+			m_rect = surface->clip_rect;
+			m_size = { m_rect.w, m_rect.h };
+			//m_animationCount =  // TODO made this
+			m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+			m_texture = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+			SDL_FreeSurface(surface);
+			return;
+		}
 	}
-	else
-	{
-		throw std::exception();
-	}
+	throw std::exception();
 }
 
 void GameObject::UpdateColor(const Color & clr)

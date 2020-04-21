@@ -6,6 +6,7 @@
 #include "include/Player.h"
 #include "include/GameObject.h"
 #include "Game_sources/include/Level1.h"
+#include "include/ResourceManager.h"
 
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
@@ -52,7 +53,7 @@ void GameWindow::Initialize()
 	m_level1->Init(m_renderer, m_windowSize);
 
 	m_player = new Player();
-	m_player->Init(m_renderer, "char1.png");
+	m_player->Init(m_renderer, "char1", ResourceManager::PNG);
 	m_player->GetGameObject()->UpdateSize(Vector2(164, 120));
 	m_player->GetGameObject()->UpdatePos(Vector2(960 / 2 - m_player->GetGameObject()->GetSize().x / 2
 		, 320 - m_player->GetGameObject()->GetSize().y / 2));
@@ -85,7 +86,7 @@ void GameWindow::Update()
 		//////////////////////////////////////////
 
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
-
+		m_level1->Update(FPS.dt);
 		m_player->Update(FPS.dt);
 		Camera::instance()->SetPos(m_player->GetGameObject()->GetCenterPos());
 

@@ -20,14 +20,14 @@ public:
 	void Initialize();
 	void Update();
 private:
-	SDL_Window											  * m_window;
-	SDL_DisplayMode											m_displayMode;
-	SDL_Renderer										  * m_renderer;
-	Vector2													m_windowSize;
-	_FPS													FPS;
+	SDL_Window					  * m_window;
+	SDL_DisplayMode					m_displayMode;
+	SDL_Renderer				  * m_renderer;
+	Vector2							m_windowSize;
+	_FPS							FPS;
 
-	Level1												  * m_level1;
-	Player												  * m_player;
+	Level1						  * m_level1;
+	Player						  * m_player;
 
-	static GameWindow * sm_instance;
+	static GameWindow			  * sm_instance;
 };
