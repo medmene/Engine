@@ -1,6 +1,9 @@
 #include "include/Player.h"
 #include "include/GameObject.h"
 #include "include/KeyboardInput.h"
+#include "include/ResourceManager.h"
+
+
 
 Player::Player()
 	: m_playerName("player")
@@ -17,10 +20,14 @@ Player::~Player()
 	}
 }
 
-void Player::Init(SDL_Renderer * renderer, const string & resName, ResourceManager::Type type)
+void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 {
 	m_renderer = renderer;
-	m_playerObject = new GameObject(m_renderer, resName, type);
+	m_winSize = wSize;
+	m_playerObject = new GameObject(m_renderer, "char1", ResourceManager::PNG);
+	m_playerObject->UpdateSize(Vector2(164, 120));
+	m_playerObject->UpdatePos(Vector2(m_winSize.x / 2 - m_playerObject->GetSize().x / 2
+		, 320 - m_playerObject->GetSize().y / 2));
 }
 
 void Player::Update(float dt)

@@ -20,12 +20,13 @@ GameWindow::GameWindow()
 	m_windowSize = Vector2(960, 640);
 	m_window = SDL_CreateWindow(
 		"Window",									// window title
-		SDL_WINDOWPOS_UNDEFINED,					// initial x position
-		SDL_WINDOWPOS_UNDEFINED,					// initial y position
+		SDL_WINDOWPOS_UNDEFINED,						// initial x position
+		SDL_WINDOWPOS_UNDEFINED,						// initial y position
 		m_windowSize.x,								// width, in pixels
 		m_windowSize.y,								// height, in pixels
 		0 //SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN	// flags - see below
 	);
+	
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 }
 
@@ -35,6 +36,7 @@ GameWindow::~GameWindow()
 	{
 		SDL_DestroyRenderer(m_renderer);
 	}
+	
 	if (m_window)
 	{
 		SDL_DestroyWindow(m_window);
@@ -47,16 +49,13 @@ GameWindow::~GameWindow()
 
 void GameWindow::Initialize()
 {
-	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, 500));
+	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 
 	m_level1 = new Level1();
 	m_level1->Init(m_renderer, m_windowSize);
 
 	m_player = new Player();
-	m_player->Init(m_renderer, "char1", ResourceManager::PNG);
-	m_player->GetGameObject()->UpdateSize(Vector2(164, 120));
-	m_player->GetGameObject()->UpdatePos(Vector2(960 / 2 - m_player->GetGameObject()->GetSize().x / 2
-		, 320 - m_player->GetGameObject()->GetSize().y / 2));
+	m_player->Init(m_renderer, m_windowSize);
 }
 
 void GameWindow::Update()
@@ -74,6 +73,7 @@ void GameWindow::Update()
 		{
 			MouseInput::instance()->Update(e);
 			KeyboardInput::instance()->Update(e);
+			
 			if (e->type == SDL_QUIT)
 				break;
 			else if (e->type == SDL_KEYUP && e->key.keysym.sym == SDLK_ESCAPE)
@@ -88,6 +88,7 @@ void GameWindow::Update()
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 		m_level1->Update(FPS.dt);
 		m_player->Update(FPS.dt);
+		
 		Camera::instance()->SetPos(m_player->GetGameObject()->GetCenterPos());
 
 		//////////////////////////////////////////

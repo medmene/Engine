@@ -5,6 +5,8 @@ using namespace std::filesystem;
 
 ResourceManager * ResourceManager::sm_instance = new ResourceManager();
 
+// ----------------------------------------------------------------------------------------- //
+
 Resource* Resource::FindResource(const string& resource, ResourceManager::Type type)
 {
 	if (!resource.empty())
@@ -41,9 +43,21 @@ Resource::Resource(const string & path, const string & name, ResourceManager::Ty
 {
 }
 
+// ----------------------------------------------------------------------------------------- //
+
 ResourceManager::ResourceManager()
 {
 	RegisterTypes();
+}
+
+ResourceManager::~ResourceManager()
+{
+	for (auto && res : m_resources)
+	{
+		delete res;
+	}
+	
+	m_resources.clear();
 }
 
 Resource* ResourceManager::GetResource(const string& name, Type type)

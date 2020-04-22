@@ -14,6 +14,7 @@ public:
 	};
 
 	ResourceManager();
+	~ResourceManager();
 
 	Resource * GetResource(const string & name, Type type);
 	const string & GetType(Type type);
@@ -33,7 +34,7 @@ class Resource
 public:
 	static Resource * FindResource(const string & resource, ResourceManager::Type type);
 	
-	Resource(/*const string & resource, ResourceManager::Type type*/);
+	Resource();
 	Resource(const string & path, const string & name, ResourceManager::Type type);
 	const string GetPath() { return m_path; }
 	const string GetName() { return m_resName; }
