@@ -9,6 +9,7 @@ class Player
 public:
 	Player();
 	~Player();
+	
 	void Init(SDL_Renderer * renderer, const Vector2 & wSize);
 
 	GameObject * GetGameObject() { return m_playerObject; }

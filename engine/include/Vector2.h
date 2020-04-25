@@ -20,6 +20,7 @@ public:
 	bool operator!=(const Vector2& other) const;
 	friend Vector2 operator+(const Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator-(const Vector2& lhs, const Vector2& rhs);
+	friend Vector2 operator*(const Vector2& lhs, const Vector2& rhs);
 	Vector2& operator+=(const Vector2& other);
 	Vector2& operator+=(int other);
 	Vector2& operator+=(float other);

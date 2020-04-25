@@ -45,6 +45,7 @@ GameWindow::~GameWindow()
 	delete Camera::instance();
 	delete MouseInput::instance();
 	delete KeyboardInput::instance();
+	delete ResourceManager::instance();
 }
 
 void GameWindow::Initialize()
@@ -99,8 +100,8 @@ void GameWindow::Update()
 		////////////////  Render  ////////////////
 		SDL_RenderClear(m_renderer);
 
-		m_level1->Draw();
-		m_player->GetGameObject()->Draw();
+		m_level1->Render();
+		m_player->GetGameObject()->Render();
 
 		SDL_RenderPresent(m_renderer);
 	}

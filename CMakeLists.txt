@@ -62,6 +62,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/Utils.h
 	engine/include/GameObject.h
 	engine/include/ResourceManager.h
+	engine/include/Animator.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -76,6 +77,7 @@ target_sources(GameEngine PRIVATE
   	engine/src/Player.cpp
 	engine/src/GameObject.cpp
 	engine/src/ResourceManager.cpp
+	engine/src/Animator.cpp
 )
 
 # Include lib pugi XML

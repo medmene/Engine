@@ -52,14 +52,14 @@ void Level1::Update(float dt)
 	}
 }
 
-void Level1::Draw()
+void Level1::Render()
 {
 	for (auto && background : m_backgrounds)
 	{
-		background->Draw();
+		background->Render();
 	}
 	for (auto && ground : m_grounds)
 	{
-		ground->Draw();
+		ground->Render();
 	}
 }

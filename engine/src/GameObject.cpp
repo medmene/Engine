@@ -40,8 +40,8 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 		if (surface)
 		{
 			m_rect = surface->clip_rect;
-			m_sourceRect = surface->clip_rect;
 			m_size = { m_rect.w, m_rect.h };
+			m_sizeCoef = { 1,1 };
 			
 			m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
 			m_texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -53,19 +53,24 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 	throw std::exception();
 }
 
-void GameObject::SetAnimationEnable(bool anim, const Vector2& size)
+void GameObject::SetAnimationEnable(bool anim, int animCount)
 {
+	if (m_animationEnabled == anim || animCount < 1)
+	{
+		return;
+	}
+	
 	m_animationEnabled = anim;
 	m_animationIndex = 0;
 	
 	if (m_animationEnabled)
 	{
-		m_size = size;
-		m_animationCount = m_sourceRect.w / m_size.x;
+		m_size.y = static_cast<int>(m_rect.w / animCount);
+		m_animationCount = animCount;
 	}
 	else
 	{
-		m_size =  { m_sourceRect.w, m_sourceRect.h };
+		m_size = { m_rect.w, m_rect.h };
 		m_animationCount = 1;
 	}
 }
@@ -82,18 +87,27 @@ void GameObject::UpdateColor(const Color & clr)
 
 void GameObject::UpdateSize(const Vector2 & size)
 {
-	// TODO do smth with animation
-	// now its wrong incorrect with resize
-	m_size = size;
-	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+	if (m_rect.w != size.x && m_rect.h != size.y)
+	{
+		m_size = size;
+		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
+		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+
+		if (m_animationEnabled)
+		{
+			m_size.y = static_cast<int>(m_rect.w / m_animationCount);
+		}
+	}
 }
 
 void GameObject::UpdatePos(const Vector2 & pos)
 {
-	m_position = pos;
-	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+	if (m_position != pos)
+	{
+		m_position = pos;
+		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
+		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+	}
 }
 
 void GameObject::Update(float dt)
@@ -113,15 +127,17 @@ void GameObject::Update(float dt)
 	}
 }
 
-void GameObject::Draw()
+void GameObject::Render()
 {
 	if (IsVisible()) 
 	{
-		SDL_Rect localRect = GetRenderRect();
+		SDL_Rect localRect = m_rect;
 
+		// Apply camera moving
 		localRect.x = localRect.x + Camera::instance()->GetDiff().x;
 		localRect.y = localRect.y + Camera::instance()->GetDiff().y;
 
+		// Apply zoom
 		localRect.x *= Camera::instance()->GetZoom();
 		localRect.y *= Camera::instance()->GetZoom();
 		localRect.w *= Camera::instance()->GetZoom();

@@ -12,7 +12,7 @@ struct Level1
 
 	void Init(SDL_Renderer * renderer, const Vector2 & winSize);
 	void Update(float dt);
-	void Draw();
+	void Render();
 
 //---------------------------------------------------------------//
 

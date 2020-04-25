@@ -8,6 +8,7 @@ Camera::Camera()
 	: m_position(0, 0)
 	, m_posInWindow(0, 0)
 	, m_zoom(1.f)
+	, m_zoomEnabled(false)
 	, m_zoomBorders(0.1f, 3.f)
 {
 }
@@ -15,10 +16,12 @@ Camera::Camera()
 void Camera::UpdateZoom(int zoomDir)
 {
 	m_zoom += 0.1f * zoomDir;
+	
 	if (m_zoom < m_zoomBorders.x)
 	{
 		m_zoom = m_zoomBorders.x;
 	}
+	
 	if (m_zoom > m_zoomBorders.y)
 	{
 		m_zoom = m_zoomBorders.y;

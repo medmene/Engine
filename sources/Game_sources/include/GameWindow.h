@@ -19,6 +19,7 @@ public:
 
 	void Initialize();
 	void Update();
+	
 private:
 	SDL_Window					  * m_window = nullptr;
 	SDL_DisplayMode					m_displayMode;
