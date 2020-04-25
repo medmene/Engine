@@ -30,8 +30,8 @@ public:
 	void UpdateSize(const Vector2 & size);
 	void Update();
 private:
-	SDL_Texture						  * m_textureP;
-	SDL_Texture						  * m_textureN;
+	SDL_Texture						  * m_textureP = nullptr;
+	SDL_Texture						  * m_textureN = nullptr;
 	SDL_Rect							m_rect;
 	SDL_Point							m_center;
 	Vector2								m_position;
@@ -42,5 +42,5 @@ private:
 	shared_ptr<Label>					m_label;
 	Color 								m_color;
 
-	SDL_Renderer					  * m_renderer;
+	SDL_Renderer					  * m_renderer = nullptr;
 };

@@ -15,8 +15,8 @@ public:
 
 	void Update(float dt);
 private:
-	SDL_Renderer				  * m_renderer;
-	GameObject					  * m_playerObject;
+	SDL_Renderer				  * m_renderer = nullptr;
+	GameObject					  * m_playerObject = nullptr;
 	string							m_playerName;
 
 	Vector2							m_speed;

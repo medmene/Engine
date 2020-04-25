@@ -9,11 +9,9 @@ GameObject::GameObject()
 	, m_enabled(true)
 	, m_position(0, 0)
 	, m_angle(0)
-	, m_animationCount(1)
-	, m_animationIndex(0)
-	, m_animationFrameTime(0.2f)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
+	, m_animationEnabled(false)
 {
 }
 
@@ -30,8 +28,7 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 	, m_enabled(true)
 	, m_position(0, 0)
 	, m_angle(0)
-	, m_animationIndex(0)
-	, m_animationFrameTime(0.2f)
+	, m_animationEnabled(false)
 {
 	m_renderer = renderer;
 	m_resource = ResourceManager::instance()->GetResource(src, type);
@@ -43,9 +40,10 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 		if (surface)
 		{
 			m_rect = surface->clip_rect;
+			m_sourceRect = surface->clip_rect;
 			m_size = { m_rect.w, m_rect.h };
-			//m_animationCount =  // TODO made this
-			m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+			
+			m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
 			m_texture = SDL_CreateTextureFromSurface(renderer, surface);
 			SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
 			SDL_FreeSurface(surface);
@@ -53,6 +51,23 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 		}
 	}
 	throw std::exception();
+}
+
+void GameObject::SetAnimationEnable(bool anim, const Vector2& size)
+{
+	m_animationEnabled = anim;
+	m_animationIndex = 0;
+	
+	if (m_animationEnabled)
+	{
+		m_size = size;
+		m_animationCount = m_sourceRect.w / m_size.x;
+	}
+	else
+	{
+		m_size =  { m_sourceRect.w, m_sourceRect.h };
+		m_animationCount = 1;
+	}
 }
 
 void GameObject::UpdateColor(const Color & clr)
@@ -67,6 +82,8 @@ void GameObject::UpdateColor(const Color & clr)
 
 void GameObject::UpdateSize(const Vector2 & size)
 {
+	// TODO do smth with animation
+	// now its wrong incorrect with resize
 	m_size = size;
 	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
 	m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
@@ -81,15 +98,18 @@ void GameObject::UpdatePos(const Vector2 & pos)
 
 void GameObject::Update(float dt)
 {
-	m_counter += dt;
-	if (m_counter > m_animationFrameTime)
+	if (m_animationEnabled)
 	{
-		m_animationIndex++;
-		m_counter = 0;
-	}
-	if (m_animationIndex >= m_animationCount)
-	{
-		m_animationIndex = 0;
+		m_counter += dt;
+		if (m_counter > m_animationFrameTime)
+		{
+			m_animationIndex++;
+			m_counter = 0;
+		}
+		if (m_animationIndex >= m_animationCount)
+		{
+			m_animationIndex = 0;
+		}
 	}
 }
 
@@ -107,9 +127,16 @@ void GameObject::Draw()
 		localRect.w *= Camera::instance()->GetZoom();
 		localRect.h *= Camera::instance()->GetZoom();
 
-		SDL_Rect animRect;
+		SDL_Rect * animRect = nullptr;
+		
+		if (m_animationEnabled)
+		{
+			animRect->x = m_size.x * m_animationIndex;
+			animRect->y = 0;
+			animRect->w = m_size.x;
+			animRect->h = m_size.y;
+		}
 
-
-		SDL_RenderCopy(m_renderer, m_texture, nullptr, &localRect);
+		SDL_RenderCopy(m_renderer, m_texture, animRect, &localRect);
 	}
 }

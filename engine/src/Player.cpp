@@ -24,6 +24,7 @@ void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 {
 	m_renderer = renderer;
 	m_winSize = wSize;
+	
 	m_playerObject = new GameObject(m_renderer, "char1", ResourceManager::PNG);
 	m_playerObject->UpdateSize(Vector2(164, 120));
 	m_playerObject->UpdatePos(Vector2(m_winSize.x / 2 - m_playerObject->GetSize().x / 2
