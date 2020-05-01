@@ -7,6 +7,8 @@
 #include "include/GameObject.h"
 #include "Game_sources/include/Level1.h"
 #include "include/ResourceManager.h"
+#include "include/PassabilityMap.h"
+#include <iostream>
 
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
@@ -45,6 +47,7 @@ GameWindow::~GameWindow()
 	delete Camera::instance();
 	delete MouseInput::instance();
 	delete KeyboardInput::instance();
+	delete PassabilityMap::instance();
 	delete ResourceManager::instance();
 }
 
@@ -57,6 +60,8 @@ void GameWindow::Initialize()
 
 	m_player = new Player();
 	m_player->Init(m_renderer, m_windowSize);
+
+	PassabilityMap::instance()->Init(m_renderer, "passability", ResourceManager::PMAP);
 }
 
 void GameWindow::Update()
@@ -69,6 +74,7 @@ void GameWindow::Update()
 
 		////////////////  Events  ////////////////SDL_KEYUP
 		MouseInput::instance()->ResetDiffs();
+		KeyboardInput::instance()->Reset();
 		SDL_Event * e = new SDL_Event();
 		if (SDL_PollEvent(e))
 		{
@@ -89,6 +95,7 @@ void GameWindow::Update()
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 		m_level1->Update(FPS.dt);
 		m_player->Update(FPS.dt);
+		PassabilityMap::instance()->Update();
 		
 		Camera::instance()->SetPos(m_player->GetGameObject()->GetCenterPos());
 
@@ -102,6 +109,7 @@ void GameWindow::Update()
 
 		m_level1->Render();
 		m_player->Render();
+		PassabilityMap::instance()->Render();
 
 		SDL_RenderPresent(m_renderer);
 	}

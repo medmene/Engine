@@ -64,6 +64,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/ResourceManager.h
 	engine/include/Animator.h
 	engine/include/Physics.h
+	engine/include/PassabilityMap.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -80,6 +81,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/ResourceManager.cpp
 	engine/src/Animator.cpp
 	engine/src/Physics.cpp
+	engine/src/PassabilityMap.cpp
 )
 
 # Include lib pugi XML

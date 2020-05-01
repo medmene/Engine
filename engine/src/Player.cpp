@@ -10,7 +10,7 @@ Player::Player()
 	: m_playerName("player")
 	, m_speed(0, 0)
 	, m_jumping(false)
-	, m_speedConst(0.16f, 0.16f)
+	, m_speedConst(1.16f, 1.16f)
 {
 }
 
@@ -68,7 +68,6 @@ void Player::Update(float dt)
 		}
 	}
 
-	
 	m_speed.x = 0;
 	m_speed.y = 0;
 	if (KeyboardInput::instance()->GetKeyMap().empty()) 
@@ -86,7 +85,7 @@ void Player::Update(float dt)
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("going_left");
 			}
-			Jump(400);
+			m_speed.y = -m_speedConst.y;
 			break;
 		case KeyboardInput::A:
 			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_left"))
@@ -107,8 +106,10 @@ void Player::Update(float dt)
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("going_right");
 			}
+			m_speed.y = m_speedConst.y;
 			break;
 		}
+		
 		auto oldPos = GetGameObject()->GetPosition();
 		oldPos += m_speed;
 		GetGameObject()->UpdatePos(oldPos);

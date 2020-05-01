@@ -11,6 +11,7 @@ public:
 		PNG = 10,
 		JPG,
 		GOBJECT,
+		PMAP,
 		UNDEFINED = 1337
 	};
 

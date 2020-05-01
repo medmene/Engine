@@ -7,13 +7,13 @@ KeyboardInput * KeyboardInput::sm_instance = new KeyboardInput();
 bool KeyboardInput::IsKeyPressed(int key)
 {
 	auto it = find(m_keyMap.begin(), m_keyMap.end(), key);
-	return it == m_keyMap.end();
+	return it != m_keyMap.end();
 }
 
 bool KeyboardInput::IsModActive(int mod)
 {
 	auto it = find(m_keyModMap.begin(), m_keyModMap.end(), mod);
-	return it == m_keyModMap.end();
+	return it != m_keyModMap.end();
 }
 
 void KeyboardInput::Update(SDL_Event * e)
@@ -34,6 +34,8 @@ void KeyboardInput::Update(SDL_Event * e)
 				m_keyModMap.emplace_back(e->key.keysym.scancode);
 			}
 		}
+		m_state = KEY_DOWN;
+		m_key = (Key)e->key.keysym.sym;
 		break;
 	}
 	case SDL_KEYUP:
@@ -51,6 +53,8 @@ void KeyboardInput::Update(SDL_Event * e)
 				m_keyMap.erase(it);
 			}
 		}
+		m_state = KEY_UP;
+		m_key = (Key)e->key.keysym.sym;
 		break;
 	}
 	case SDL_TEXTEDITING:

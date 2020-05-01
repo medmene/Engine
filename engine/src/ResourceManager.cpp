@@ -122,4 +122,5 @@ void ResourceManager::RegisterTypes()
 	m_types.emplace(std::pair<int, string>(PNG, ".png"));
 	m_types.emplace(std::pair<int, string>(JPG, ".jpg"));
 	m_types.emplace(std::pair<int, string>(GOBJECT, ".gobj"));
+	m_types.emplace(std::pair<int, string>(PMAP, ".pmap"));
 }

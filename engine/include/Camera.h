@@ -15,6 +15,8 @@ public:
 	void SetPos(const Vector2 & pos) { m_position = pos; }
 	
 	Vector2 GetDiff() { return m_posInWindow - m_position; }
+	Vector2 GetPosInWnd() { return m_posInWindow; }
+	Vector2 GetPos() { return m_position; }
 	float GetZoom() { return m_zoom; }
 	const Vector2 & GetPositionInWindow() { return m_posInWindow; }
 
