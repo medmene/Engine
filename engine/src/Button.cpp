@@ -1,5 +1,9 @@
 #include "include/Button.h"
 #include "include/Label.h"
+#include "pugixml/pugixml.hpp"
+#include "include/Animator.h"
+#include "include\Camera.h"
+#include "include\MouseInput.h"
 
 
 Button::Button()
@@ -26,87 +30,70 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	, m_color({ 255, 255, 255, 255 })
 	, m_animationEnabled(true)
 {
-	// m_renderer = renderer;
-	// m_resource = ResourceManager::instance()->GetResource(src, type);
-	//
-	// if (m_resource)
-	// {
-	// 	auto surface = IMG_Load(m_resource->GetPath().c_str());
-	// 	
-	// 	if (surface)
-	// 	{
-	// 		m_rect = surface->clip_rect;
-	// 		
-	// 		if (m_rect.w % m_rect.h == 0)
-	// 		{
-	// 			m_size = { m_rect.w, m_rect.h };
-	//
-	// 			m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
-	// 			m_texture = SDL_CreateTextureFromSurface(renderer, surface);
-	// 			SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
-	// 			SDL_FreeSurface(surface);
-	// 			return;
-	// 		}
-	// 	}
-	// }
-	// throw std::exception();
-}
+	m_renderer = renderer;
+	m_resource = ResourceManager::instance()->GetResource(src, type);
+	
+	if (type == ResourceManager::GOBJECT)
+	{
+		if (m_resource)
+		{
+			pugi::xml_document doc;
+			doc.load_file(m_resource->GetPath().c_str());
+			auto rootNode = doc.child("object");
 
-// void Button::Init(SDL_Renderer * renderer, string src, shared_ptr<Label> lbl, Color color)
-// {
-// 	m_renderer = renderer;
-// 	m_color = color;
-// 	if (m_renderer)
-// 	{
-// 		string normal;
-// 		string pressed;
-// 		if (src.empty())
-// 		{
-// 			normal = std::filesystem::current_path().generic_string() + "/../resources/button/def_button.png";
-// 			pressed = std::filesystem::current_path().generic_string() + "/../resources/button/p_def_button.png";
-// 		}
-// 		else
-// 		{
-// 			normal = std::filesystem::current_path().generic_string() + "/../resources/fonts/" + src;
-// 			pressed = std::filesystem::current_path().generic_string() + "/../resources/fonts/p_" + src;
-// 		}
-// 	
-// 		auto surfaceNor = IMG_Load((normal).c_str());
-// 		auto surfacePrs = IMG_Load((pressed).c_str());
-// 	
-// 		if (surfaceNor && surfacePrs)
-// 		{
-// 			m_rect = surfaceNor->clip_rect;
-// 			m_size = { m_rect.w, m_rect.h };
-// 			m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
-// 			m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-// 			m_textureP = SDL_CreateTextureFromSurface(renderer, surfacePrs);
-// 			m_textureN = SDL_CreateTextureFromSurface(renderer, surfaceNor);
-// 			SDL_SetTextureBlendMode(m_textureP, SDL_BLENDMODE_BLEND);
-// 			SDL_SetTextureBlendMode(m_textureN, SDL_BLENDMODE_BLEND);
-// 			SDL_FreeSurface(surfaceNor);
-// 			SDL_FreeSurface(surfacePrs);
-// 		}
-// 	}
-// }
+			auto sizeNode = rootNode.child("size");
+			m_size.x = std::stoi(sizeNode.attribute("x").value());
+			m_size.y = std::stoi(sizeNode.attribute("y").value());
+
+			auto sourceNode = rootNode.child("source");
+			m_resourceTexture = ResourceManager::instance()->GetResource(sourceNode.attribute("name").value());
+
+			if (m_resourceTexture)
+			{
+				m_animator = new Animator(&doc, this);
+
+				auto surface = IMG_Load(m_resourceTexture->GetPath().c_str());
+
+				if (surface)
+				{
+					m_rect = { 0,0, (int)m_size.x, (int)m_size.y };
+
+					m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
+					m_texture = SDL_CreateTextureFromSurface(renderer, surface);
+					SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+					SDL_FreeSurface(surface);
+					//m_animator->GetActiveAnimation()->Stop();
+					return;
+				}
+			}
+		}
+	}
+	throw std::exception();
+}
 
 void Button::UpdatePos(const Vector2 & pos)
 {
-	// m_position = pos;
-	// m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	// m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
+	m_position = pos;
+	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
+	m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
 }
 
 void Button::UpdateSize(const Vector2 & size)
 {
-	// m_size = size;
-	// m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
-	// m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
+	m_size = size;
+	m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
+	m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
 }
 
-void Button::Update()
+void Button::Update(float dt)
 {
-
+	if (IsMouseInside())
+	{
+		if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
+			m_isPressed = true;
+		else if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_UP)
+			m_isPressed = false;
+	}
 }
 
 void Button::UpdateColor(const Color & clr)
@@ -120,7 +107,36 @@ void Button::UpdateColor(const Color & clr)
 	// }
 }
 
+bool Button::IsMouseInside() 
+{
+	Vector2 mpousePos = MouseInput::instance()->GetPos();
+	return m_rect.x <= mpousePos.x && (m_rect.x + m_rect.w) >= mpousePos.x && m_rect.y <= mpousePos.y && (m_rect.y + m_rect.h) >= mpousePos.y;
+}
+
 void Button::Render()
 {
-	
+	if (IsVisible())
+	{
+		SDL_Rect localRect = m_rect;
+
+		// Apply camera moving
+		if (!m_staticObject)
+		{
+			localRect.x = localRect.x + Camera::instance()->GetDiff().x;
+			localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+		}
+
+		// Apply zoom
+		localRect.x *= Camera::instance()->GetZoom();
+		localRect.y *= Camera::instance()->GetZoom();
+		localRect.w *= Camera::instance()->GetZoom();
+		localRect.h *= Camera::instance()->GetZoom();
+		
+		if (m_isPressed)
+			m_animator->GetActiveAnimation()->SetState(1);
+		else
+			m_animator->GetActiveAnimation()->SetState(0);
+		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
+		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
+	}
 }

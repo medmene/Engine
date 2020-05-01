@@ -1,6 +1,7 @@
 #include "include/Animator.h"
 #include "pugixml/pugixml.hpp"
 #include "include/GameObject.h"
+#include "include/Button.h"
 
 
 
@@ -84,6 +85,40 @@ void Animation::Update(float dt)
 // ------------------------------------------------------------------------------------------ //
 
 Animator::Animator(pugi::xml_document * doc, GameObject * object)
+	: m_object(object)
+{
+	auto rootNode = doc->child("object");
+	auto sizeNode = rootNode.child("size");
+	
+	m_objectSize.x = std::stoi(sizeNode.attribute("x").value());
+	m_objectSize.y = std::stoi(sizeNode.attribute("y").value());
+
+	for (pugi::xml_node anim : rootNode.children("animation"))
+	{
+		m_animations.emplace_back(new Animation(this, anim.attribute("name").value(), m_objectSize));
+
+		auto count = std::stoi(anim.attribute("count").value());
+		auto row = std::stoi(anim.attribute("row").value());
+		string loop = anim.attribute("loop").value();
+
+		m_animations.back()->SetStates(row, count);
+		m_animations.back()->SetLooped(loop == "true" ? true : false);
+		m_animations.back()->SetFrameTime(std::stoi(anim.attribute("speed").value()));
+	}
+	
+	for (pugi::xml_node anim : rootNode.children("animation"))
+	{
+		auto nextState = anim.attribute("next_state").value();
+		auto curName = anim.attribute("name").value();
+
+		GetAnimation(curName)->SetNextAnimation(GetAnimation(nextState));
+	}
+
+	m_activeAnimation = m_animations.front();
+	m_prevAnimation = m_activeAnimation;
+}
+
+Animator::Animator(pugi::xml_document * doc, Button * object)
 	: m_object(object)
 {
 	auto rootNode = doc->child("object");
