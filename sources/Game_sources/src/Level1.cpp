@@ -23,9 +23,13 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	// m_grounds.back()->UpdatePos(Vector2(0, -160)); // for non static
 	m_grounds.back()->UpdatePos(Vector2(0, 0)); // for non static
 
-	m_objects.emplace_back(new GameObject(m_renderer, "platform1", ResourceManager::PNG));
-	m_objects.back()->UpdateSize(Vector2(200, 30));
-	m_objects.back()->UpdatePos(Vector2(400, 200));
+	 m_objects.emplace_back(new GameObject(m_renderer, "platform1", ResourceManager::PNG));
+	 m_objects.back()->UpdateSize(Vector2(200, 30));
+	 m_objects.back()->UpdatePos(Vector2(400, 200));
+
+	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
+	m_buttons.back()->UpdateSize(Vector2(20, 20));
+	m_buttons.back()->UpdatePos(Vector2(300, 100));
 }
 
 Level1::~Level1()
@@ -65,6 +69,11 @@ void Level1::Update(float dt)
 	{
 		object->Update(dt);
 	}
+
+	for (auto && object : m_buttons)
+	{
+		object->Update(dt);
+	}
 }
 
 void Level1::Render()
@@ -80,6 +89,11 @@ void Level1::Render()
 	}
 
 	for (auto && object : m_objects)
+	{
+		object->Render();
+	}
+
+	for (auto&& object : m_buttons)
 	{
 		object->Render();
 	}

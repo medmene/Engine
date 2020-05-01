@@ -2,11 +2,15 @@
 #include "Core.h"
 #include "Vector2.h"
 #include "Color.h"
+#include "Label.h"
+#include "GameObject.h"
 #include "ResourceManager.h"
 
+class Animator;
 class Label;
+class GameObject;
 
-class Button
+class Button : public GameObject
 {
 public:
 	explicit Button();
@@ -19,31 +23,36 @@ public:
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
 
-	void SetAnimationEnable(bool anim, int animCount);
+	//void SetAnimationEnable(bool anim, int animCount);
 
 	const Vector2 & GetPos() { return m_position; }
 	const Color & GetColor() { return m_color; }
-	shared_ptr<Label> GetLabel() { return m_label; }
+	const Label & GetLabel() { return m_label; }
 
 	void UpdatePos(const Vector2 & pos);
 	void UpdateColor(const Color & color);
 	void UpdateSize(const Vector2 & size);
-	void Update();
+	void Update(double dt);
+	bool IsMouseInside();
 
 	void Render();
 	
 private:
-	SDL_Renderer					  * m_renderer = nullptr;
+	Resource						  * m_resourceTexture = nullptr;
 	Resource						  * m_resource = nullptr;
+	SDL_Renderer					  * m_renderer = nullptr;
 	SDL_Texture						  * m_texture = nullptr;
 	SDL_Rect							m_rect;
 	Vector2								m_center;
 	Vector2								m_position;
 	Vector2								m_size;
 	bool								m_visible;
+	bool								m_staticObject;
+	bool								m_isPressed = false;
 	Color 								m_color;
-
-	shared_ptr<Label>					m_label;
+	Label							    m_label;
+	
+	Animator				  		  * m_animator;
 
 	vector<SDL_Rect>					m_state;
 	int									m_stateIndex = 0;

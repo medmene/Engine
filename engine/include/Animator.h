@@ -6,6 +6,7 @@
 
 class Animation;
 class GameObject;
+class Button;
 
 namespace pugi
 {
@@ -16,6 +17,7 @@ class Animator
 {
 public:
 	explicit Animator(pugi::xml_document * doc, GameObject * object);
+	explicit Animator(pugi::xml_document * doc, Button * object);
 	explicit Animator(GameObject * object);
 	~Animator();
 
@@ -45,6 +47,7 @@ private:
 	Animation						  * m_activeAnimation = nullptr;
 	Animation						  * m_prevAnimation = nullptr;
 	GameObject						  * m_object;
+	Button							  * m_objectButton;
 	bool								m_animationsEnabled = false;
 
 	void StopAllAnimations();
