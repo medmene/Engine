@@ -62,7 +62,6 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 					m_texture = SDL_CreateTextureFromSurface(renderer, surface);
 					SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
 					SDL_FreeSurface(surface);
-					//m_animator->GetActiveAnimation()->Stop();
 					return;
 				}
 			}

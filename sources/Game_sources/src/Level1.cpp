@@ -1,6 +1,7 @@
 #include "Game_sources/include/Level1.h"
 #include "include/Label.h"
 #include "include/GameObject.h"
+#include "include/Animator.h"
 #include "include/ResourceManager.h"
 
 
@@ -11,25 +12,27 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_winSize = winSize;
 	m_renderer = renderer;
 
-	m_backgrounds.emplace_back(new GameObject(m_renderer, "grass2", ResourceManager::PNG));
-	m_backgrounds.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y / 2));
-	m_backgrounds.back()->SetStaticObject(true);
-	// m_backgrounds.back()->UpdatePos(Vector2(0, 160)); // for non static
-	m_backgrounds.back()->UpdatePos(Vector2(0, 320)); // for static
+	float scale = 3, scaleDoor = 2;
 
-	m_grounds.emplace_back(new GameObject(m_renderer, "sky", ResourceManager::JPG));
-	m_grounds.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y / 2));
-	m_grounds.back()->SetStaticObject(true);
-	// m_grounds.back()->UpdatePos(Vector2(0, -160)); // for non static
-	m_grounds.back()->UpdatePos(Vector2(0, 0)); // for non static
+	m_backgrounds.emplace_back(new GameObject(m_renderer, "lvl_1", ResourceManager::PNG));
+	m_backgrounds.back()->UpdateSize(Vector2(scale * m_winSize.x, scale * m_winSize.y));
+	//m_backgrounds.back()->SetStaticObject(true);
+	m_backgrounds.back()->UpdatePos(Vector2(0, 0)); // for non static
 
-	 m_objects.emplace_back(new GameObject(m_renderer, "platform1", ResourceManager::PNG));
-	 m_objects.back()->UpdateSize(Vector2(200, 30));
-	 m_objects.back()->UpdatePos(Vector2(400, 200));
+	/*m_objects.emplace_back(new GameObject(m_renderer, "platform1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(200, 30));
+	m_objects.back()->UpdatePos(Vector2(400, 200));*/
 
 	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
+	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(20, 20));
 	m_buttons.back()->UpdatePos(Vector2(300, 100));
+
+	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
+	m_objects.back()->UpdateSize(Vector2(scaleDoor * 70, scaleDoor * 70));
+	m_objects.back()->UpdatePos(Vector2(scale * 240, scale * 245));
+	m_objects.back()->SetAnimationEnable(true);
+	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
 }
 
 Level1::~Level1()
@@ -51,6 +54,12 @@ Level1::~Level1()
 		delete obj;
 	}
 	m_objects.clear();
+
+	for (auto&& obj : m_buttons)
+	{
+		delete obj;
+	}
+	m_buttons.clear();
 }
 
 void Level1::Update(float dt)

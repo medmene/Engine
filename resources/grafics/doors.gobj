@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object>
+	<source name="doors anim.png" />
+	<size x="70" y="70" />
+	<animation name="open" row="0" count="3" loop="true" speed="100" next_state="" />
+</object>
