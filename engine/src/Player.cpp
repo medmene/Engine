@@ -2,7 +2,7 @@
 #include "include/GameObject.h"
 #include "include/KeyboardInput.h"
 #include "include/ResourceManager.h"
-
+#include "include/Animator.h"
 
 
 Player::Player()
@@ -25,14 +25,17 @@ void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 	m_renderer = renderer;
 	m_winSize = wSize;
 	
-	m_playerObject = new GameObject(m_renderer, "char1", ResourceManager::PNG);
-	m_playerObject->UpdateSize(Vector2(164, 120));
+	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
+	m_playerObject->SetAnimationEnable(true);
+	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
 	m_playerObject->UpdatePos(Vector2(m_winSize.x / 2 - m_playerObject->GetSize().x / 2
 		, 320 - m_playerObject->GetSize().y / 2));
 }
 
 void Player::Update(float dt)
 {
+	m_playerObject->Update(dt);
+	
 	m_speed.x = 0;
 	m_speed.y = 0;
 	if (KeyboardInput::instance()->GetKeyMap().empty()) 
@@ -49,9 +52,17 @@ void Player::Update(float dt)
 			m_speed.y = -m_speedConst.y;
 			break;
 		case KeyboardInput::A:
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_left"))
+			{
+				m_playerObject->GetAnimator()->PlayAnimation("idle_left");
+			}
 			m_speed.x = -m_speedConst.x;
 			break;
 		case KeyboardInput::D:
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_right"))
+			{
+				m_playerObject->GetAnimator()->PlayAnimation("idle_right");
+			}
 			m_speed.x = m_speedConst.x;
 			break;
 		case KeyboardInput::S:
@@ -62,4 +73,9 @@ void Player::Update(float dt)
 		oldPos += m_speed;
 		GetGameObject()->UpdatePos(oldPos);
 	}
+}
+
+void Player::Render()
+{
+	m_playerObject->Render();
 }

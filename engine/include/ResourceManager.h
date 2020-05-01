@@ -10,6 +10,7 @@ public:
 	{
 		PNG = 10,
 		JPG,
+		GOBJECT,
 		UNDEFINED = 1337
 	};
 
@@ -17,6 +18,7 @@ public:
 	~ResourceManager();
 
 	Resource * GetResource(const string & name, Type type);
+	Resource * GetResource(const string & src);
 	const string & GetType(Type type);
 
 	static ResourceManager * instance() { return sm_instance; }

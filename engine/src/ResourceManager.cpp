@@ -85,6 +85,26 @@ Resource* ResourceManager::GetResource(const string& name, Type type)
 	return nullptr;
 }
 
+Resource* ResourceManager::GetResource(const string& src)
+{
+	auto pos = src.find('.');
+
+	if (pos != string::npos)
+	{
+		string type = src.substr(pos);
+		string name = src.substr(0, pos);
+		
+		for (auto && typeName : m_types)
+		{
+			if (typeName.second == type)
+			{
+				return GetResource(name, (Type)typeName.first);
+			}
+		}
+	}
+	return nullptr;
+}
+
 const string& ResourceManager::GetType(Type type)
 {
 	auto it = m_types.find(type);
@@ -101,4 +121,5 @@ void ResourceManager::RegisterTypes()
 {
 	m_types.emplace(std::pair<int, string>(PNG, ".png"));
 	m_types.emplace(std::pair<int, string>(JPG, ".jpg"));
+	m_types.emplace(std::pair<int, string>(GOBJECT, ".gobj"));
 }

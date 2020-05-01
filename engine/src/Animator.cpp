@@ -1,4 +1,8 @@
 #include "include/Animator.h"
+#include "pugixml/pugixml.hpp"
+#include "include/GameObject.h"
+
+
 
 
 Animation::Animation(Animator * animator, const string& name, const Vector2& objSize)
@@ -6,6 +10,7 @@ Animation::Animation(Animator * animator, const string& name, const Vector2& obj
 	, m_name(name)
 	, m_playing(false)
 	, m_looped(false)
+	, m_index(0)
 	, m_animator(animator)
 {
 }
@@ -16,10 +21,11 @@ inline void Animation::Stop()
 	m_index = 0;
 	m_counter = 0.f;
 	
-	if (m_next)
-	{
-		m_animator->PlayAnimation(m_next);
-	}
+	// TODO made this later
+	// if (m_next)
+	// {
+	// 	m_animator->PlayAnimation(m_next);
+	// }
 }
 
 inline void Animation::Play()
@@ -29,13 +35,23 @@ inline void Animation::Play()
 	m_counter = 0.f;
 }
 
-void Animation::SetState(int state)
+inline void Animation::SetState(int state)
 {
 	if (state > -1 && state < m_state.size())
 	{
 		m_playing = false;
 		m_index = state;
 		m_counter = 0.f;
+	}
+}
+
+void Animation::SetStates(int row, int count)
+{
+	for (int i = 0; i < count; ++i)
+	{
+		SDL_Rect r = { i * (int)m_objectSize.x,row * (int)m_objectSize.y,
+			(int)m_objectSize.x, (int)m_objectSize.y };
+		m_state.emplace_back(r);
 	}
 }
 
@@ -65,10 +81,54 @@ void Animation::Update(float dt)
 	}
 }
 
-Animator::Animator(const Vector2& objSize, const Vector2 & textureSize)
-	: m_objectSize(objSize)
-	, m_textureSize(textureSize)
+// ------------------------------------------------------------------------------------------ //
+
+Animator::Animator(pugi::xml_document * doc, GameObject * object)
+	: m_object(object)
 {
+	auto rootNode = doc->child("object");
+	auto sizeNode = rootNode.child("size");
+	
+	m_objectSize.x = std::stoi(sizeNode.attribute("x").value());
+	m_objectSize.y = std::stoi(sizeNode.attribute("y").value());
+
+	for (pugi::xml_node anim : rootNode.children("animation"))
+	{
+		m_animations.emplace_back(new Animation(this, anim.attribute("name").value(), m_objectSize));
+
+		auto count = std::stoi(anim.attribute("count").value());
+		auto row = std::stoi(anim.attribute("row").value());
+		string loop = anim.attribute("loop").value();
+
+		m_animations.back()->SetStates(row, count);
+		m_animations.back()->SetLooped(loop == "true" ? true : false);
+		m_animations.back()->SetFrameTime(std::stoi(anim.attribute("speed").value()));
+	}
+	
+	for (pugi::xml_node anim : rootNode.children("animation"))
+	{
+		auto nextState = anim.attribute("next_state").value();
+		auto curName = anim.attribute("name").value();
+
+		GetAnimation(curName)->SetNextAnimation(GetAnimation(nextState));
+	}
+
+	m_activeAnimation = m_animations.front();
+	m_prevAnimation = m_activeAnimation;
+}
+
+Animator::Animator(GameObject* object)
+	: m_object(object)
+{
+	m_objectSize = object->GetSize();
+	m_animations.emplace_back(new Animation(this, "default", m_objectSize));
+	m_animations.back()->SetStates(0, 1);
+	m_animations.back()->SetLooped(true);
+	m_animations.back()->SetFrameTime(100.f);
+	m_animations.back()->SetNextAnimation(m_animations.front());
+
+	m_activeAnimation = m_animations.front();
+	m_prevAnimation = m_activeAnimation;
 }
 
 Animator::~Animator()
@@ -78,10 +138,6 @@ Animator::~Animator()
 		delete anim;
 	}
 	m_animations.clear();
-}
-
-Animation * Animator::AddAnimation(const string& name, int count, const Vector2& startPos)
-{
 }
 
 void Animator::SetAnimationFrameTime(const string& name, float frameTime)
@@ -104,8 +160,24 @@ void Animator::PlayAnimation(const string& name)
 {
 	if (auto anim = GetAnimation(name))
 	{
+		// if (m_prevAnimation)
+		// {
+		// 	m_prevAnimation->Stop();
+		// }
+
+		StopAllAnimations();
+		
 		anim->Play();
+		m_prevAnimation = m_activeAnimation;
 		m_activeAnimation = anim;
+	}
+}
+
+void Animator::StopAllAnimations()
+{
+	for (auto && anim : m_animations)
+	{
+		anim->Stop();
 	}
 }
 
@@ -183,8 +255,11 @@ int Animator::GetAnimationStateCount(const string& name)
 
 void Animator::Update(float dt)
 {
-	for (auto && anim : m_animations)
+	if (m_animationsEnabled)
 	{
-		anim->Update(dt);
+		for (auto && anim : m_animations)
+		{
+			anim->Update(dt);
+		}
 	}
 }

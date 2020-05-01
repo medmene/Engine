@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object>
+	<source name="char2.png" />
+	<size x="100" y="100" />
+	<animation name="idle_right" row="0" count="6" loop="true" speed="100" next_state="" />
+	<animation name="idle_left" row="1" count="6" loop="true" speed="100" next_state="" />
+	<animation name="going_right" row="2" count="6" loop="true" speed="100" next_state="idle_right" />
+	<animation name="going_left" row="3" count="6" loop="true" speed="100" next_state="idle_left" />
+</object>

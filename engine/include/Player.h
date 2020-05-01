@@ -15,6 +15,7 @@ public:
 	GameObject * GetGameObject() { return m_playerObject; }
 
 	void Update(float dt);
+	void Render();
 private:
 	SDL_Renderer				  * m_renderer = nullptr;
 	GameObject					  * m_playerObject = nullptr;

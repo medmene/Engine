@@ -101,22 +101,8 @@ void GameWindow::Update()
 		SDL_RenderClear(m_renderer);
 
 		m_level1->Render();
-		m_player->GetGameObject()->Render();
+		m_player->Render();
 
 		SDL_RenderPresent(m_renderer);
 	}
 }
-
-//void GameWindow::DrawTexture(SDL_Texture * texture, const SDL_Rect & rect,
-//	double angle, const SDL_Point & center, SDL_RendererFlip flip)
-//{
-//	SDL_RenderCopyEx(m_renderer, texture, nullptr, &rect, angle, &center, flip);
-//
-//	/*SDL_RenderCopyEx(SDL_Renderer*          renderer,
-//			SDL_Texture*           texture,
-//			const SDL_Rect*        srcrect,
-//			const SDL_Rect*        dstrect,
-//			const double           angle,
-//			const SDL_Point*       center,
-//			const SDL_RendererFlip flip)*/
-//}
