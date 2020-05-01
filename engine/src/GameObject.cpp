@@ -8,7 +8,7 @@
 GameObject::GameObject()
 	: m_visible(true)
 	, m_enabled(true)
-	, m_isStaticObject(false)
+	, m_staticObject(false)
 	, m_position(0, 0)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
@@ -26,7 +26,7 @@ GameObject::~GameObject()
 GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
 	: m_visible(true)
 	, m_enabled(true)
-	, m_isStaticObject(false)
+	, m_staticObject(false)
 	, m_position(0, 0)
 {
 	m_renderer = renderer;
@@ -141,6 +141,11 @@ void GameObject::UpdatePos(const Vector2 & pos)
 void GameObject::Update(float dt)
 {
 	m_animator->Update(dt);
+	
+	if (m_gravity)
+	{
+		UpdatePos(Vector2(m_position.x, m_position.y + m_gravityConst));
+	}
 }
 
 void GameObject::Render()
@@ -150,7 +155,7 @@ void GameObject::Render()
 		SDL_Rect localRect = m_rect;
 
 		// Apply camera moving
-		if (!m_isBgObject)
+		if (!m_staticObject)
 		{
 			localRect.x = localRect.x + Camera::instance()->GetDiff().x;
 			localRect.y = localRect.y + Camera::instance()->GetDiff().y;

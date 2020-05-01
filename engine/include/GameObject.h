@@ -15,11 +15,13 @@ public:
 	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 
 	bool IsVisible() { return m_visible; }
-	bool IsStaticObject() { return m_isStaticObject; }
+	bool IsStaticObject() { return m_staticObject; }
+	bool IsGravityEnabled() { return m_gravity; }
 	bool IsAnimationEnabled();
 	
 	void SetVisible(bool visible) { m_visible = visible; }
-	void SetStaticObject(bool stObj) { m_isStaticObject = stObj; }
+	void SetGravity(bool gravity) { m_gravity = gravity; }
+	void SetStaticObject(bool stObj) { m_staticObject = stObj; }
 	void SetAnimationEnable(bool anim);
 
 	SDL_Texture * GetTexture() { return m_texture; }
@@ -51,5 +53,8 @@ private:
 	Vector2						m_size;
 	bool						m_visible;
 	bool						m_enabled;
-	bool						m_isStaticObject;
+	bool						m_staticObject;
+	
+	bool						m_gravity = false;
+	float						m_gravityConst = 0.6f;
 };

@@ -33,11 +33,13 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	m_backgrounds.emplace_back(new GameObject(m_renderer, "grass2", ResourceManager::PNG));
 	m_backgrounds.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y / 2));
-	m_backgrounds.back()->UpdatePos(Vector2(0, 320));
+	// m_backgrounds.back()->SetStaticObject(true);
+	m_backgrounds.back()->UpdatePos(Vector2(0, 160));
 
 	m_grounds.emplace_back(new GameObject(m_renderer, "sky", ResourceManager::JPG));
 	m_grounds.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y / 2));
-	m_grounds.back()->UpdatePos(Vector2(0, 0));
+	// m_grounds.back()->SetStaticObject(true);
+	m_grounds.back()->UpdatePos(Vector2(0, -160));
 }
 
 void Level1::Update(float dt)
