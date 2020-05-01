@@ -105,6 +105,8 @@ void GameWindow::Update()
 
 
 		////////////////  Render  ////////////////
+		SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 		SDL_RenderClear(m_renderer);
 
 		m_level1->Render();
