@@ -1,5 +1,5 @@
 #include "include/Vector2.h"
-
+#include  <cmath>
 
 
 
@@ -46,6 +46,13 @@ void Vector2::scale(float scale)
 {
 	this->x *= scale;
 	this->y *= scale;
+}
+
+float Vector2::length(const Vector2 other)
+{
+	float tmpX = other.x - x;
+	float tmpY = other.y - y;
+	return sqrt(tmpX * tmpX + tmpY * tmpY);
 }
 
 Vector2 & Vector2::operator=(const Vector2 & other)

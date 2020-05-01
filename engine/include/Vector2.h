@@ -17,6 +17,8 @@ public:
 	Vector2(float xPos, int yPos);
 
 	void scale(float scale);
+
+	float length(const Vector2 other);
 	
 	Vector2& operator=(const Vector2& other);
 	bool operator==(const Vector2& other) const;

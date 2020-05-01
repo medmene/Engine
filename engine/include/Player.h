@@ -3,6 +3,7 @@
 #include "Vector2.h"
 
 class GameObject;
+class PassabilityArea;
 
 class Player
 {
@@ -16,6 +17,7 @@ public:
 
 	void Update(float dt);
 	void Render();
+	
 private:
 	SDL_Renderer				  * m_renderer = nullptr;
 	GameObject					  * m_playerObject = nullptr;
@@ -25,6 +27,10 @@ private:
 	Vector2							m_speedConst;
 	Vector2							m_winSize;
 
+	PassabilityArea				  * m_passabilityArea = nullptr;
+	bool							m_drawPassability = false;
+
+// ----------------------------------------------------- //
 	bool							m_jumping = false;
 	float							m_timer = 0.f;
 	float							m_currDistance = 0.f;

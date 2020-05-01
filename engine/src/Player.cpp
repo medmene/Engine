@@ -3,13 +3,13 @@
 #include "include/KeyboardInput.h"
 #include "include/ResourceManager.h"
 #include "include/Animator.h"
-#include "include/Physics.h"
+#include "include/PassabilityMap.h"
+#include "include/Camera.h"
 
 
 Player::Player()
 	: m_playerName("player")
 	, m_speed(0, 0)
-	, m_jumping(false)
 	, m_speedConst(1.16f, 1.16f)
 {
 }
@@ -33,10 +33,22 @@ void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
 	m_playerObject->UpdatePos(Vector2(m_winSize.x / 2 - m_playerObject->GetSize().x / 2
 		, 320 - m_playerObject->GetSize().y / 2));
+
+	Vector2 pos = m_playerObject->GetCenterPos();
+	pos.y += m_playerObject->GetSize().y / 3;
+	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
 }
 
 void Player::Update(float dt)
 {
+	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	{
+		if (KeyboardInput::instance()->GetKey() == KeyboardInput::P)
+		{
+			m_drawPassability = !m_drawPassability;
+		}
+	}
+	
 	m_playerObject->Update(dt);
 
 	if (m_jumping)
@@ -70,6 +82,7 @@ void Player::Update(float dt)
 
 	m_speed.x = 0;
 	m_speed.y = 0;
+	
 	if (KeyboardInput::instance()->GetKeyMap().empty()) 
 	{
 		m_speed.x = 0;
@@ -114,11 +127,25 @@ void Player::Update(float dt)
 		oldPos += m_speed;
 		GetGameObject()->UpdatePos(oldPos);
 	}
+	
+	Vector2 pos = m_playerObject->GetCenterPos();
+	pos.y += m_playerObject->GetSize().y / 3;
+	m_passabilityArea->UpdatePos(pos);
 }
 
 void Player::Render()
 {
 	m_playerObject->Render();
+
+	if (m_drawPassability)
+	{
+		Vector2 localPos = m_passabilityArea->m_pos;
+
+		localPos.x = localPos.x + Camera::instance()->GetDiff().x;
+		localPos.y = localPos.y + Camera::instance()->GetDiff().y;
+		
+		SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->m_radius);
+	}
 }
 
 void Player::Jump(float duration)
