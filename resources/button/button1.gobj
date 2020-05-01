@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object>
+	<source name="button1.png" />
+	<size x="512" y="512" />
+	<animation name="idle" row="0" count="2" loop="false" speed="100" next_state="" />
+</object>

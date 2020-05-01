@@ -1,6 +1,7 @@
 #pragma once
 #include "include/Core.h"
 #include "include/Vector2.h"
+#include "include/Button.h"
 
 
 class GameObject;
@@ -19,6 +20,7 @@ struct Level1
 	vector<GameObject*>			m_backgrounds;
 	vector<GameObject*>			m_grounds;
 	vector<GameObject*>			m_objects;
+	vector<Button*> 			m_buttons;
 
 	Vector2						m_winSize;
 	SDL_Renderer			  * m_renderer;
