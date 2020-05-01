@@ -6,6 +6,9 @@ public:
 	float x;
 	float y;
 
+	static Vector2 uno;
+	static Vector2 zero;
+
 	Vector2();
 	Vector2(const Vector2 & other);
 	Vector2(int xPos, int yPos);

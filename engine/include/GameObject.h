@@ -3,6 +3,7 @@
 #include "Vector2.h"
 #include "Color.h"
 #include "ResourceManager.h"
+#include "Physics.h"
 
 
 class Animator;
@@ -15,8 +16,8 @@ public:
 	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 
 	bool IsVisible() { return m_visible; }
-	bool IsStaticObject() { return m_staticObject; }
 	bool IsGravityEnabled() { return m_gravity; }
+	bool IsStaticObject() { return m_staticObject; }
 	bool IsAnimationEnabled();
 	
 	void SetVisible(bool visible) { m_visible = visible; }
@@ -52,9 +53,8 @@ private:
 	Vector2						m_position;
 	Vector2						m_size;
 	bool						m_visible;
-	bool						m_enabled;
 	bool						m_staticObject;
 	
 	bool						m_gravity = false;
-	float						m_gravityConst = 0.6f;
+	Vector2						m_gravityValue;
 };

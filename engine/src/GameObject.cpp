@@ -7,27 +7,19 @@
 
 GameObject::GameObject()
 	: m_visible(true)
-	, m_enabled(true)
 	, m_staticObject(false)
 	, m_position(0, 0)
+	, m_gravityValue(0, 0.1f)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
 {
 }
 
-GameObject::~GameObject()
-{
-	if (m_texture) 
-	{
-		SDL_DestroyTexture(m_texture);
-	}
-}
-
 GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
 	: m_visible(true)
-	, m_enabled(true)
 	, m_staticObject(false)
 	, m_position(0, 0)
+	, m_gravityValue(0, 0.1f)
 {
 	m_renderer = renderer;
 	if (type == ResourceManager::GOBJECT)
@@ -93,6 +85,14 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 	throw std::exception();
 }
 
+GameObject::~GameObject()
+{
+	if (m_texture)
+	{
+		SDL_DestroyTexture(m_texture);
+	}
+}
+
 bool GameObject::IsAnimationEnabled()
 {
 	return m_animator->IsAnimationsEnabled();
@@ -142,10 +142,10 @@ void GameObject::Update(float dt)
 {
 	m_animator->Update(dt);
 	
-	if (m_gravity)
-	{
-		UpdatePos(Vector2(m_position.x, m_position.y + m_gravityConst));
-	}
+	// if (m_gravity)
+	// {
+	// 	UpdatePos(m_position + m_gravityValue);
+	// }
 }
 
 void GameObject::Render()

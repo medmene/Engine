@@ -24,5 +24,13 @@ private:
 	Vector2							m_speed;
 	Vector2							m_speedConst;
 	Vector2							m_winSize;
-	//Vector2						m_acceleration;
+
+	bool							m_jumping = false;
+	float							m_timer = 0.f;
+	float							m_currDistance = 0.f;
+	float							m_jumpDuration = 0.f;
+	bool							m_oldGravity = false;
+	float							m_jumpHeight = 40.f;
+	
+	void Jump(float duration);
 };
