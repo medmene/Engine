@@ -32,7 +32,7 @@ public:
 	void UpdatePos(const Vector2 & pos);
 	void UpdateColor(const Color & color);
 	void UpdateSize(const Vector2 & size);
-	void Update(double dt);
+	void Update(float dt);
 	bool IsMouseInside();
 
 	void Render();

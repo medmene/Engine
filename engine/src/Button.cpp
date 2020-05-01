@@ -85,7 +85,7 @@ void Button::UpdateSize(const Vector2 & size)
 	m_center = { (int)(m_rect.w - m_rect.x) / 2, (int)(m_rect.h - m_rect.y) / 2 };
 }
 
-void Button::Update(double dt)
+void Button::Update(float dt)
 {
 	if (IsMouseInside())
 	{
