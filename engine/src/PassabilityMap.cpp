@@ -180,6 +180,20 @@ void PassabilityMap::SetMap(const string& src, ResourceManager::Type type)
 	throw std::exception("Can't load passability resource");
 }
 
+Vector2 PassabilityMap::WorldToNodeIndex(const Vector2& pos)
+{
+	int x = pos.x / m_nodeSize.x + m_indexOffset.x;
+	int y = pos.y / m_nodeSize.y + m_indexOffset.y;
+	return Vector2(x, y);
+}
+
+Vector2 PassabilityMap::NodeIndexToWorld(const Vector2& pos)
+{
+	auto nd = m_nodes[pos.x][pos.y];
+	return Vector2(nd->m_pos.x + nd->m_size.x / 2,
+		nd->m_pos.y + nd->m_size.y / 2);
+}
+
 bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 {
 	//				higher
@@ -299,8 +313,7 @@ void PassabilityMap::Update()
 	
 	if (m_editMode && MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
 	{
-		auto pos = MouseInput::instance()->GetPos();
-		pos = pos + Camera::instance()->GetPos() - Camera::instance()->GetPosInWnd();
+		auto pos = MouseInput::instance()->GetPosInMap();
 
 
 		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;

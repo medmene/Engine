@@ -66,6 +66,8 @@ target_sources(GameEngine PRIVATE
 	engine/include/PassabilityMap.h
 	engine/include/Character.h
 	engine/include/NPC.h
+	engine/include/PathFinder.h
+	engine/include/MovingController.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -83,6 +85,8 @@ target_sources(GameEngine PRIVATE
 	engine/src/Animator.cpp
 	engine/src/PassabilityMap.cpp
 	engine/src/NPC.cpp
+	engine/src/PathFinder.cpp
+	engine/src/MovingController.cpp
 )
 
 # Include lib pugi XML

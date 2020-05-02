@@ -15,7 +15,8 @@ public:
 
 	bool IsVisible() override;
 	void SetVisible(bool visible) override;
-	GameObject * GetGameObject() { return m_playerObject; }
+	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
+	GameObject * GetGameObject() override { return m_playerObject; }
 
 	void Update(float dt) override;
 	void Render() override;
@@ -30,6 +31,7 @@ private:
 
 	PassabilityArea				  * m_passabilityArea = nullptr;
 	bool							m_drawPassability = false;
+	float							m_passOffsetCoef = 0.33f;
 };
 
 

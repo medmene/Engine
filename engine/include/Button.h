@@ -47,7 +47,7 @@ private:
 	Vector2								m_position;
 	Vector2								m_size;
 	bool								m_visible;
-	bool								m_staticObject;
+	bool								m_staticObject = false;
 	bool								m_isPressed = false;
 	Color 								m_color;
 	Label							    m_label;

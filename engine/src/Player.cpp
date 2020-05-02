@@ -33,7 +33,7 @@ void Player::Init(SDL_Renderer * renderer)
 	m_playerObject->UpdatePos(Vector2(500, 1400));
 
 	Vector2 pos = m_playerObject->GetCenterPos();
-	pos.y += m_playerObject->GetSize().y / 3;
+	pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
 	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
 }
 
@@ -106,7 +106,7 @@ void Player::Update(float dt)
 		{
 			Vector2 pos = m_playerObject->GetCenterPos();
 			Vector2 oldPos = m_passabilityArea->m_pos;
-			pos.y += m_playerObject->GetSize().y / 3;
+			pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
 			m_passabilityArea->m_pos = pos + m_speed;
 
 			if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))

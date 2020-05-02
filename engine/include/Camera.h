@@ -16,7 +16,7 @@ public:
 	void SetFollowingObject(GameObject * obj) { m_followingObject = obj; }
 	
 	Vector2 GetDiff() { return m_posInWindow - m_position; }
-	const Vector2 & GetPosInWnd() { return m_posInWindow; }
+	Vector2 GetPosInWnd() { return m_posInWindow; }
 	Vector2 GetPos() { return m_position; }
 	float GetZoom() { return m_zoom; }
 

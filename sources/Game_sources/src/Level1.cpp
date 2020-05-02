@@ -26,10 +26,10 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_objects.back()->UpdateSize(Vector2(200, 30));
 	m_objects.back()->UpdatePos(Vector2(400, 200));*/
 
-	// m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
-	// m_buttons.back()->SetStaticObject(true);
-	// m_buttons.back()->UpdateSize(Vector2(20, 20));
-	// m_buttons.back()->UpdatePos(Vector2(300, 100));
+	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
+	m_buttons.back()->SetStaticObject(false);
+	m_buttons.back()->UpdateSize(Vector2(20, 20));
+	m_buttons.back()->UpdatePos(Vector2(700, 1000));
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
 	m_objects.back()->UpdateSize(Vector2(scaleDoor * 70, scaleDoor * 70));

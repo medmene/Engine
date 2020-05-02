@@ -36,6 +36,7 @@ public:
 	bool IsAnimationsEnabled() { return m_animationsEnabled; }
 
 	Animation * GetAnimation(const string & name);
+	vector<Animation *> GetAllAnimations() { return m_animations; }
 	int GetAnimationStateCount(const string & name);
 	Animation * GetActiveAnimation() { return m_activeAnimation; }
 	Animation * GetPreviousAnimation() { return m_prevAnimation; }
