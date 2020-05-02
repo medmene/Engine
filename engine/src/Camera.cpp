@@ -1,5 +1,5 @@
 #include "include/Camera.h"
-
+#include "include/GameObject.h"
 
 
 Camera * Camera::sm_instance = new Camera();
@@ -26,4 +26,9 @@ void Camera::UpdateZoom(int zoomDir)
 	{
 		m_zoom = m_zoomBorders.y;
 	}
+}
+
+void Camera::Update(float dt)
+{
+	m_position = m_followingObject->GetCenterPos();
 }

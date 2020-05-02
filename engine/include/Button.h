@@ -53,8 +53,4 @@ private:
 	Label							    m_label;
 	
 	Animator				  		  * m_animator;
-
-	vector<SDL_Rect>					m_state;
-	int									m_stateIndex = 0;
-	bool								m_animationEnabled;
 };

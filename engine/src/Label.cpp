@@ -101,8 +101,9 @@ void Label::Draw()
 	{
 		SDL_Rect localRect = GetRenderRect();
 
-		localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-		localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+		auto diff = Camera::instance()->GetDiff();
+		localRect.x = localRect.x + diff.x;
+		localRect.y = localRect.y + diff.y;
 
 		localRect.x *= Camera::instance()->GetZoom();
 		localRect.y *= Camera::instance()->GetZoom();

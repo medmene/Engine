@@ -11,7 +11,6 @@ Button::Button()
 	, m_position(0, 0)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
-	, m_animationEnabled(true)
 {
 }
 
@@ -28,7 +27,6 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	, m_position(0, 0)
 	, m_rect({ 0, 0, 0, 0 })
 	, m_color({ 255, 255, 255, 255 })
-	, m_animationEnabled(true)
 {
 	m_renderer = renderer;
 	m_resource = ResourceManager::instance()->GetResource(src, type);
@@ -121,8 +119,9 @@ void Button::Render()
 		// Apply camera moving
 		if (!m_staticObject)
 		{
-			localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-			localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+			auto diff = Camera::instance()->GetDiff();
+			localRect.x = localRect.x + diff.x;
+			localRect.y = localRect.y + diff.y;
 		}
 
 		// Apply zoom
@@ -132,9 +131,14 @@ void Button::Render()
 		localRect.h *= Camera::instance()->GetZoom();
 		
 		if (m_isPressed)
+		{
 			m_animator->GetActiveAnimation()->SetState(1);
+		}
 		else
+		{
 			m_animator->GetActiveAnimation()->SetState(0);
+		}
+		
 		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
 		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
 	}

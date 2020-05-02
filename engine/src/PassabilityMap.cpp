@@ -343,7 +343,6 @@ void PassabilityMap::Render()
 				localRect.x = localRect.x + Camera::instance()->GetDiff().x;
 				localRect.y = localRect.y + Camera::instance()->GetDiff().y;
 
-				SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 				SDL_RenderDrawRect(m_renderer, &localRect);
 
@@ -372,7 +371,6 @@ void SDL_DrawCircle(SDL_Renderer* renderer, const Vector2& centre, int32_t radiu
 	int32_t ty = 1;
 	int32_t error = (tx - diameter);
 
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 250, 0, 0, 255);
 	while (x >= y)
 	{

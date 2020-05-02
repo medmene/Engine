@@ -8,6 +8,7 @@ class Label;
 class Button;
 class GameObject;
 class Player;
+class NPC;
 struct Level1;
 
 class GameWindow
@@ -29,6 +30,7 @@ private:
 
 	Level1						  * m_level1 = nullptr;
 	Player						  * m_player = nullptr;
+	NPC							  * m_npc = nullptr;
 
 	static GameWindow			  * sm_instance;
 };

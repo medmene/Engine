@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object>
+	<source name="npc1_texture.png" />
+	<size x="128" y="128" />
+	<animation name="going_left" row="0" count="8" loop="true" speed="100" next_state="" />
+	<animation name="going_top" row="1" count="8" loop="true" speed="100" next_state="" />
+	<animation name="going_right" row="2" count="8" loop="true" speed="100" next_state="" />
+	<animation name="going_bottom" row="3" count="8" loop="true" speed="100" next_state="" />
+</object>

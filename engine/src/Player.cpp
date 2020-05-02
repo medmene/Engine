@@ -10,7 +10,7 @@
 Player::Player()
 	: m_playerName("player")
 	, m_speed(0, 0)
-	, m_speedConst(1.16f, 1.16f)
+	, m_speedConst(0.16f, 0.12f)
 {
 }
 
@@ -22,10 +22,9 @@ Player::~Player()
 	}
 }
 
-void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
+void Player::Init(SDL_Renderer * renderer)
 {
 	m_renderer = renderer;
-	m_winSize = wSize;
 	
 	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_playerObject->SetAnimationEnable(true);
@@ -36,6 +35,16 @@ void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 	Vector2 pos = m_playerObject->GetCenterPos();
 	pos.y += m_playerObject->GetSize().y / 3;
 	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
+}
+
+bool Player::IsVisible()
+{
+	return m_playerObject->IsVisible();
+}
+
+void Player::SetVisible(bool visible)
+{
+	m_playerObject->SetVisible(visible);
 }
 
 void Player::Update(float dt)
@@ -49,35 +58,6 @@ void Player::Update(float dt)
 	}
 	
 	m_playerObject->Update(dt);
-
-	if (m_jumping)
-	{
-		m_timer += dt;
-		auto oldPos = m_playerObject->GetPosition();
-		float coef;
-		
-		if (m_timer <= m_jumpDuration / 2)
-		{
-			coef = m_timer / m_jumpDuration * 2;
-		}
-		else
-		{
-			coef = 1 - (m_timer - m_jumpDuration * .5f) / m_jumpDuration * 2;
-		}
-
-		oldPos.y -= m_currDistance;
-		m_currDistance = coef * m_jumpHeight;
-		oldPos.y += m_currDistance;
-		
-		m_playerObject->UpdatePos(oldPos);
-		
-		if (m_timer >= m_jumpDuration)
-		{
-			m_timer = 0.f;
-			m_jumping = false;
-			m_playerObject->SetGravity(m_oldGravity);
-		}
-	}
 
 	m_speed.x = 0;
 	m_speed.y = 0;
@@ -150,23 +130,58 @@ void Player::Render()
 	if (m_drawPassability)
 	{
 		Vector2 localPos = m_passabilityArea->m_pos;
-
-		localPos.x = localPos.x + Camera::instance()->GetDiff().x;
-		localPos.y = localPos.y + Camera::instance()->GetDiff().y;
+		
+		auto diff = Camera::instance()->GetDiff();
+		localPos.x = localPos.x + diff.x;
+		localPos.y = localPos.y + diff.y;
 		
 		SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->m_radius);
 	}
 }
 
-void Player::Jump(float duration)
-{
-	if (!m_jumping)
-	{
-		m_timer = 0.f;
-		m_currDistance = 0.f;
-		m_jumping = true;
-		m_jumpDuration = duration;
-		m_oldGravity = m_playerObject->IsGravityEnabled();
-		m_playerObject->SetGravity(false);
-	}
-}
+
+//
+// if (m_jumping)
+// {
+// 	m_timer += dt;
+// 	auto oldPos = m_playerObject->GetPosition();
+// 	float coef;
+//
+// 	if (m_timer <= m_jumpDuration / 2)
+// 	{
+// 		coef = m_timer / m_jumpDuration * 2;
+// 	}
+// 	else
+// 	{
+// 		coef = 1 - (m_timer - m_jumpDuration * .5f) / m_jumpDuration * 2;
+// 	}
+//
+// 	oldPos.y -= m_currDistance;
+// 	m_currDistance = coef * m_jumpHeight;
+// 	oldPos.y += m_currDistance;
+//
+// 	m_playerObject->UpdatePos(oldPos);
+//
+// 	if (m_timer >= m_jumpDuration)
+// 	{
+// 		m_timer = 0.f;
+// 		m_jumping = false;
+// 		m_playerObject->SetGravity(m_oldGravity);
+// 	}
+// }
+//
+//
+//
+//
+// void Player::Jump(float duration)
+// {
+// 	if (!m_jumping)
+// 	{
+// 		m_timer = 0.f;
+// 		m_currDistance = 0.f;
+// 		m_jumping = true;
+// 		m_jumpDuration = duration;
+// 		m_oldGravity = m_playerObject->IsGravityEnabled();
+// 		m_playerObject->SetGravity(false);
+// 	}
+// }

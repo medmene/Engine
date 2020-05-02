@@ -157,8 +157,9 @@ void GameObject::Render()
 		// Apply camera moving
 		if (!m_staticObject)
 		{
-			localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-			localRect.y = localRect.y + Camera::instance()->GetDiff().y;
+			auto diff = Camera::instance()->GetDiff();
+			localRect.x = localRect.x + diff.x;
+			localRect.y = localRect.y + diff.y;
 		}
 		
 		// Apply zoom

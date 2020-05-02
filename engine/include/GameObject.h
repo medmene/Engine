@@ -3,7 +3,6 @@
 #include "Vector2.h"
 #include "Color.h"
 #include "ResourceManager.h"
-#include "Physics.h"
 
 
 class Animator;

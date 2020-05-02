@@ -4,6 +4,7 @@
 #include "include/Camera.h"
 #include "include/Label.h"
 #include "include/Player.h"
+#include "include/NPC.h"
 #include "include/GameObject.h"
 #include "Game_sources/include/Level1.h"
 #include "include/ResourceManager.h"
@@ -30,6 +31,7 @@ GameWindow::GameWindow()
 	);
 	
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
+	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 }
 
 GameWindow::~GameWindow()
@@ -60,7 +62,12 @@ void GameWindow::Initialize()
 	m_level1->Init(m_renderer, m_windowSize);
 
 	m_player = new Player();
-	m_player->Init(m_renderer, m_windowSize);
+	m_player->Init(m_renderer);
+	
+	m_npc = new NPC();
+	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
+	
+	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
 void GameWindow::Update()
@@ -94,9 +101,9 @@ void GameWindow::Update()
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 		m_level1->Update(FPS.dt);
 		m_player->Update(FPS.dt);
+		m_npc->Update(FPS.dt);
 		PassabilityMap::instance()->Update();
-		
-		Camera::instance()->SetPos(m_player->GetGameObject()->GetCenterPos());
+		Camera::instance()->Update(FPS.dt);
 
 		//////////////////////////////////////////
 		//////////////////////////////////////////
@@ -104,12 +111,12 @@ void GameWindow::Update()
 
 
 		////////////////  Render  ////////////////
-		SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 		SDL_RenderClear(m_renderer);
 
 		m_level1->Render();
 		m_player->Render();
+		m_npc->Render();
 		PassabilityMap::instance()->Render();
 
 		SDL_RenderPresent(m_renderer);

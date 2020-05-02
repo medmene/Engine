@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector2.h"
 
+class GameObject;
 
 class Camera 
 {
@@ -12,17 +13,17 @@ public:
 	static Camera * instance() { return sm_instance; }
 
 	bool IsZoomEnabled() { return m_zoomEnabled; }
-	void SetPos(const Vector2 & pos) { m_position = pos; }
+	void SetFollowingObject(GameObject * obj) { m_followingObject = obj; }
 	
 	Vector2 GetDiff() { return m_posInWindow - m_position; }
-	Vector2 GetPosInWnd() { return m_posInWindow; }
+	const Vector2 & GetPosInWnd() { return m_posInWindow; }
 	Vector2 GetPos() { return m_position; }
 	float GetZoom() { return m_zoom; }
-	const Vector2 & GetPositionInWindow() { return m_posInWindow; }
 
-	void UpdatePos(const Vector2 & diff) { m_position += diff; }
 	void UpdateZoom(int zoomDir);
+	void Update(float dt);
 private:
+	GameObject				  * m_followingObject = nullptr;
 	Vector2						m_position;
 	Vector2						m_posInWindow;
 
