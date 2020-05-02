@@ -39,7 +39,7 @@ public:
 
 	void Render();
 
-	void Subscribe(Event *e, void(*callback)(GameObject*,Event*));
+	void Subscribe(Event *e, function<void(GameObject*,Event*)> callback);
 	
 private:
 	Resource				  * m_resourceSettings = nullptr;

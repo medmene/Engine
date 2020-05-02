@@ -175,7 +175,7 @@ void GameObject::Render()
 	}
 }
 
-void GameObject::Subscribe(Event* e, void(*callback)(GameObject*, Event*))
+void GameObject::Subscribe(Event* e, function<void(GameObject*,Event*)> callback)
 {
 	EventManager::instance()->RegisterEvent(e, new Reaction(this, callback));
 }

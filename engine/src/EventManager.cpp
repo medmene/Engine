@@ -1,15 +1,15 @@
 #include "include/EventManager.h"
 
-EventManager* EventManager::em_instance = 0;
+EventManager* EventManager::sm_instance = 0;
 
 EventManager* EventManager::instance()
 {
-    if(!em_instance)
+    if(!sm_instance)
     {
-        em_instance = new EventManager();
-        em_instance->events = vector<pair<Event*, Reaction*>>();
+        sm_instance = new EventManager();
+        sm_instance->events = vector<pair<Event*, Reaction*>>();
     }
-    return em_instance;
+    return sm_instance;
 }
 
 void EventManager::Update()

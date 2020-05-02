@@ -14,5 +14,5 @@ private:
     EventManager( const EventManager& );  
     EventManager& operator=( EventManager& );
     vector<pair<Event*, Reaction*>> events;
-	static EventManager			  * em_instance;
+	static EventManager			  * sm_instance;
 };
