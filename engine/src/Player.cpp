@@ -31,8 +31,7 @@ void Player::Init(SDL_Renderer * renderer, const Vector2 & wSize)
 	m_playerObject->SetAnimationEnable(true);
 	m_playerObject->SetGravity(true);
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
-	m_playerObject->UpdatePos(Vector2(m_winSize.x / 2 - m_playerObject->GetSize().x / 2
-		, 320 - m_playerObject->GetSize().y / 2));
+	m_playerObject->UpdatePos(Vector2(500, 1400));
 
 	Vector2 pos = m_playerObject->GetCenterPos();
 	pos.y += m_playerObject->GetSize().y / 3;
@@ -122,15 +121,26 @@ void Player::Update(float dt)
 			m_speed.y = m_speedConst.y;
 			break;
 		}
-		
-		auto oldPos = GetGameObject()->GetPosition();
-		oldPos += m_speed;
-		GetGameObject()->UpdatePos(oldPos);
+
+		if (m_speed != Vector2::zero)
+		{
+			Vector2 pos = m_playerObject->GetCenterPos();
+			Vector2 oldPos = m_passabilityArea->m_pos;
+			pos.y += m_playerObject->GetSize().y / 3;
+			m_passabilityArea->m_pos = pos + m_speed;
+
+			if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))
+			{
+				auto oldPos = GetGameObject()->GetPosition();
+				oldPos += m_speed;
+				GetGameObject()->UpdatePos(oldPos);
+			}
+			else
+			{
+				m_passabilityArea->m_pos = oldPos;
+			}
+		}
 	}
-	
-	Vector2 pos = m_playerObject->GetCenterPos();
-	pos.y += m_playerObject->GetSize().y / 3;
-	m_passabilityArea->UpdatePos(pos);
 }
 
 void Player::Render()

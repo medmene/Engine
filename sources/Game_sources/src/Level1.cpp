@@ -3,12 +3,15 @@
 #include "include/GameObject.h"
 #include "include/Animator.h"
 #include "include/ResourceManager.h"
+#include "include/PassabilityMap.h"
 
 
 
 
 void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
+	PassabilityMap::instance()->SetMap("passability", ResourceManager::PMAP);
+	
 	m_winSize = winSize;
 	m_renderer = renderer;
 

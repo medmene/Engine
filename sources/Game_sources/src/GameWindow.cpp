@@ -54,14 +54,13 @@ GameWindow::~GameWindow()
 void GameWindow::Initialize()
 {
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
+	PassabilityMap::instance()->Init(m_renderer);
 
 	m_level1 = new Level1();
 	m_level1->Init(m_renderer, m_windowSize);
 
 	m_player = new Player();
 	m_player->Init(m_renderer, m_windowSize);
-
-	PassabilityMap::instance()->Init(m_renderer, "passability", ResourceManager::PMAP);
 }
 
 void GameWindow::Update()

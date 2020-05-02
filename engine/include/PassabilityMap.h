@@ -22,8 +22,6 @@ struct PassabilityArea
 	
 	PassabilityArea();
 	PassabilityArea(const Vector2 & pos, float rad);
-
-	void UpdatePos(const Vector2 & pos) { m_pos = pos; }
 };
 
 class PassabilityMap
@@ -33,18 +31,26 @@ public:
 	~PassabilityMap();
 
 	static PassabilityMap * instance() { return sm_instance; }
-	void Init(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
-	void SaveMap();
+	void Init(SDL_Renderer * renderer);
+	void SetMap(const string & src, ResourceManager::Type type);
 
 	bool IsAreaPossible(PassabilityArea * area);
 	
 	void Update();
 	void Render();
+	
 private:
+	bool inline IsInMap(int x, int y);
+	bool SaveMap();
+	bool LoadMap();
+	
 	Resource						  * m_resource = nullptr;
 	SDL_Renderer					  * m_renderer = nullptr;
 	bool								m_editMode = false;
 	Vector2								m_mapSize;
+	Vector2								m_nodeSize;
+	Vector2								m_indexOffset;
+	
 
 	vector<vector<PassabilityNode *>>	m_nodes;
 	

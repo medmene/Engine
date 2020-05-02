@@ -44,6 +44,8 @@ PassabilityArea::PassabilityArea(const Vector2& pos, float rad)
 
 PassabilityMap::PassabilityMap()
 	: m_mapSize(Vector2(200, 200))
+	, m_nodeSize(Vector2(30, 25))
+	, m_indexOffset(Vector2((int)m_mapSize.x / 2, (int)m_mapSize.y / 2))
 {
 	// m_nodes.resize(200);
 	// Vector2 size(30, 25);
@@ -64,8 +66,9 @@ PassabilityMap::PassabilityMap()
 
 PassabilityMap::~PassabilityMap()
 {
-	int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-	int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
+	int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
+	int stPosY = -m_indexOffset.x, endPosY = m_indexOffset.y;
+	
 	for (int x = stPosX; x < endPosX; ++x)
 	{
 		for (int y = stPosY; y < endPosY; ++y)
@@ -78,54 +81,12 @@ PassabilityMap::~PassabilityMap()
 	m_nodes.clear();
 }
 
-void PassabilityMap::Init(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
+void PassabilityMap::Init(SDL_Renderer * renderer)
 {
 	m_renderer = renderer;
-	m_resource = ResourceManager::instance()->GetResource(src, type);
-
-	if (m_resource)
-	{
-		std::ifstream in;
-		in.open(m_resource->GetPath());
-		
-		if (in.is_open())
-		{
-			float tx = 0, ty = 0, sx = 0, sy = 0, p = 0;
-			in >> tx >> ty; // map size
-		
-			m_mapSize = Vector2(tx, ty);
-			
-			int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-			int stPosY = -((int)m_mapSize.y / 2);
-		
-			// mem set
-			m_nodes.resize(m_mapSize.x);
-			for (int x = stPosX; x < endPosX; ++x)
-			{
-				m_nodes[x + endPosX].resize(m_mapSize.y);
-			}
-			
-			while (!in.eof())
-			{
-				in >> tx >> ty;
-				in >> sx >> sy;
-				m_nodes[tx][ty] = new PassabilityNode(Vector2((tx + stPosX) * sx, (ty + stPosY) * sy),
-					Vector2(sx,sy), true);
-		
-				in >> p;
-				m_nodes[tx][ty]->m_passible = p == 1 ? true : false;
-				m_nodes[tx][ty]->UpdateRect();
-			}
-		
-			in.close();
-		}
-		
-		return;
-	}
-	throw std::exception("Can't load passability resource");
 }
 
-void PassabilityMap::SaveMap()
+bool PassabilityMap::SaveMap()
 {
 	if (m_resource)
 	{
@@ -136,8 +97,8 @@ void PassabilityMap::SaveMap()
 		{
 			out << m_mapSize.x << " " << m_mapSize.y << "\n";
 			
-			int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-			int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
+			int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
+			int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
 			
 			for (int x = stPosX; x < endPosX; ++x)
 			{
@@ -150,41 +111,170 @@ void PassabilityMap::SaveMap()
 					out << "\n";
 				}
 			}
+
+			out.close();
+			return true;
 		}
-		
-		out.close();
 	}
+	return false;
+}
+
+bool PassabilityMap::LoadMap()
+{
+	if (m_resource)
+	{
+		std::ifstream in;
+		in.open(m_resource->GetPath());
+
+		if (in.is_open())
+		{
+			float tx = 0, ty = 0, sx = 0, sy = 0, p = 0;
+			in >> tx >> ty; // map size
+
+			m_mapSize = Vector2(tx, ty);
+			m_indexOffset = Vector2((int)m_mapSize.x / 2, (int)m_mapSize.y / 2);
+
+			int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
+			int stPosY = -m_indexOffset.y;
+
+			// mem set
+			m_nodes.resize(m_mapSize.x);
+			for (int x = stPosX; x < endPosX; ++x)
+			{
+				m_nodes[x + endPosX].resize(m_mapSize.y);
+			}
+
+			while (!in.eof())
+			{
+				in >> tx >> ty;
+				in >> sx >> sy;
+				m_nodes[tx][ty] = new PassabilityNode(Vector2((tx + stPosX) * sx, (ty + stPosY) * sy),
+					Vector2(sx, sy), true);
+
+				in >> p;
+				m_nodes[tx][ty]->m_passible = p == 1 ? true : false;
+				m_nodes[tx][ty]->UpdateRect();
+			}
+
+			m_nodeSize = Vector2(m_nodes[0][0]->m_size.x, m_nodes[0][0]->m_size.y);
+
+			in.close();
+
+			return true;
+		}
+	}
+	return false;
+}
+
+void PassabilityMap::SetMap(const string& src, ResourceManager::Type type)
+{
+	m_resource = ResourceManager::instance()->GetResource(src, type);
+
+	if (m_resource)
+	{
+		if (LoadMap())
+		{
+			return;
+		}
+	}
+	throw std::exception("Can't load passability resource");
 }
 
 bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 {
 	//				higher
-	//				*
+	//		   *	*	 *
 	//			*		*
 	//	  left *	*	 * right
 	//			*		*
-	//				*
+	//		   *	*	 *
 	//				lower
 	//
 	//
 
-	// auto checkInMap = [this](int x, int y)
-	// {
-	// 	return x >= 0 && x < m_mapSize.x
-	// 		&& y >= 0 && y <= m_mapSize.y;
-	// };
-	//
-	// auto size = m_nodes[0][0]->m_size;
-	// int indXLeft = (int)((area->m_pos.x - area->m_radius) / size.x) + m_mapSize.x / 2;
-	// int indYLeft = (int)(area->m_pos.y / size.y) + m_mapSize.y / 2;
-	//
-	// if (!checkInMap(indXLeft, indYLeft) || !checkInMap(indXLeft + 1, indYLeft + 1))
-	// {
-	// 	return false;
-	// }
-	//
-	// m_nodes[indXLeft][indYLeft];
+	const int cornerOffset = (int)sqrt(area->m_radius*area->m_radius / 2);
+	
+	Vector2 posLeft = area->m_pos; posLeft.x -= area->m_radius;
+	Vector2 posTopLeft = area->m_pos; posTopLeft.x -= cornerOffset; posTopLeft.y -= cornerOffset;
+	Vector2 posTop = area->m_pos; posTop.y -= area->m_radius;
+	Vector2 posTopRight = area->m_pos; posTopRight.x += cornerOffset; posTopRight.y -= cornerOffset;
+	Vector2 posRight = area->m_pos; posRight.x += area->m_radius;
+	Vector2 posBottomRight = area->m_pos; posBottomRight.x += cornerOffset; posBottomRight.y += cornerOffset;
+	Vector2 posBottom = area->m_pos; posBottom.y += area->m_radius;
+	Vector2 posBottomLeft = area->m_pos; posBottomLeft.x -= cornerOffset; posBottomLeft.y += cornerOffset;
+	
+	int xLeft = (int)((area->m_pos.x - area->m_radius) / m_nodeSize.x) + m_indexOffset.x;
+	int yLeft = (int)(area->m_pos.y / m_nodeSize.y) + m_indexOffset.y;
 
+	int xTopLeft = (int)((area->m_pos.x - cornerOffset) / m_nodeSize.x) + m_indexOffset.x;
+	int yTopLeft = (int)((area->m_pos.y - cornerOffset) / m_nodeSize.y) + m_indexOffset.y;
+	
+	int xTop = (int)(area->m_pos.x / m_nodeSize.x) + m_indexOffset.x;
+	int yTop = (int)((area->m_pos.y - area->m_radius) / m_nodeSize.y) + m_indexOffset.y;
+
+	int xTopRight = (int)((area->m_pos.x + cornerOffset) / m_nodeSize.x) + m_indexOffset.x;
+	int yTopRight = (int)((area->m_pos.y - cornerOffset) / m_nodeSize.y) + m_indexOffset.y;
+
+	int xRight = (int)((area->m_pos.x + area->m_radius) / m_nodeSize.x) + m_indexOffset.x;
+	int yRight = (int)(area->m_pos.y / m_nodeSize.y) + m_indexOffset.y;
+
+	int xBottomRight = (int)((area->m_pos.x + cornerOffset) / m_nodeSize.x) + m_indexOffset.x;
+	int yBottomRight = (int)((area->m_pos.y + cornerOffset) / m_nodeSize.y) + m_indexOffset.y;
+	
+	int xBottom = (int)(area->m_pos.x / m_nodeSize.x) + m_indexOffset.x;
+	int yBottom = (int)((area->m_pos.y + area->m_radius) / m_nodeSize.y) + m_indexOffset.y;
+
+	int xBottomLeft = (int)((area->m_pos.x - cornerOffset) / m_nodeSize.x) + m_indexOffset.x;
+	int yBottomLeft = (int)((area->m_pos.y + cornerOffset) / m_nodeSize.y) + m_indexOffset.y;
+	
+	if (!IsInMap(xLeft, yLeft) || !IsInMap(xTop, yTop) ||
+		!IsInMap(xTopLeft, yTopLeft) || !IsInMap(xTopRight, yTopRight) ||
+		!IsInMap(xBottomRight, yBottomRight) || !IsInMap(xBottomLeft, yBottomLeft) ||
+		!IsInMap(xRight, yRight) || !IsInMap(xBottom, yBottom))
+	{
+		return false;
+	}
+
+	PassabilityNode * ndLeft =			m_nodes[xLeft][yLeft];
+	PassabilityNode * ndTopLeft =		m_nodes[xTopLeft][yTopLeft];
+	PassabilityNode * ndTop =			m_nodes[xTop][yTop];
+	PassabilityNode * ndTopRight =		m_nodes[xTopRight][yTopRight];
+	PassabilityNode * ndRight =			m_nodes[xRight][yRight];
+	PassabilityNode * ndBottomRight =	m_nodes[xBottomRight][yBottomRight];
+	PassabilityNode * ndBottom =		m_nodes[xBottom][yBottom];
+	PassabilityNode * ndBottomLeft =	m_nodes[xBottomLeft][yBottomLeft];
+
+	bool s = ndLeft->IsInside(posLeft);
+	bool s2 = ndTop->IsInside(posTop);
+	bool s3 = ndTop->IsInside(posTop);
+	bool s4 = ndTopLeft->IsInside(posTopLeft);
+	bool s5 = ndTopRight->IsInside(posTopRight);
+	bool s6 = ndBottomRight->IsInside(posBottomRight);
+	bool s7 = ndBottomLeft->IsInside(posBottomLeft);
+	bool s8 = ndRight->IsInside(posRight);
+	bool s9 = ndBottom->IsInside(posBottom);
+	
+	if (ndLeft->IsInside(posLeft) &&
+		ndTop->IsInside(posTop) &&
+		ndTopLeft->IsInside(posTopLeft) &&
+		ndTopRight->IsInside(posTopRight) &&
+		ndBottomRight->IsInside(posBottomRight) &&
+		ndBottomLeft->IsInside(posBottomLeft) &&
+		ndRight->IsInside(posRight) &&
+		ndBottom->IsInside(posBottom))
+	{
+		if (ndLeft->m_passible &&
+			ndTop->m_passible &&
+			ndRight->m_passible &&
+			ndTopLeft->m_passible &&
+			ndTopRight->m_passible &&
+			ndBottomRight->m_passible &&
+			ndBottomLeft->m_passible &&
+			ndBottom->m_passible)
+		{
+			return true;
+		}
+	}
 
 	return false;
 }
@@ -213,8 +303,8 @@ void PassabilityMap::Update()
 		pos = pos + Camera::instance()->GetPos() - Camera::instance()->GetPosInWnd();
 
 
-		int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-		int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
+		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
+		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
 
 		for (int x = stPosX; x < endPosX; ++x)
 		{
@@ -240,8 +330,8 @@ void PassabilityMap::Render()
 {
 	if (m_editMode)
 	{
-		int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-		int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
+		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
+		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
 		
 		for (int x = stPosX; x < endPosX; ++x)
 		{
@@ -264,6 +354,12 @@ void PassabilityMap::Render()
 			}
 		}
 	}
+}
+
+bool inline PassabilityMap::IsInMap(int x, int y)
+{
+	return x >= 0 && x < m_mapSize.x
+		&& y >= 0 && y <= m_mapSize.y;
 }
 
 void SDL_DrawCircle(SDL_Renderer* renderer, const Vector2& centre, int32_t radius)
