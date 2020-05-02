@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Event.h"
 
 class Reaction
 {

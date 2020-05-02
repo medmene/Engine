@@ -5,5 +5,5 @@ class Event
 public:
 	Event();
 
-	bool CheckEvent();
+	virtual bool CheckEvent();
 };

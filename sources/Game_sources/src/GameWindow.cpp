@@ -9,6 +9,7 @@
 #include "Game_sources/include/Level1.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
+#include "include/EventManager.h"
 #include <iostream>
 
 
@@ -51,6 +52,7 @@ GameWindow::~GameWindow()
 	delete KeyboardInput::instance();
 	delete PassabilityMap::instance();
 	delete ResourceManager::instance();
+	delete EventManager::instance();
 }
 
 void GameWindow::Initialize()
@@ -104,6 +106,7 @@ void GameWindow::Update()
 		m_npc->Update(FPS.dt);
 		PassabilityMap::instance()->Update();
 		Camera::instance()->Update(FPS.dt);
+		EventManager::instance()->Update();
 
 		//////////////////////////////////////////
 		//////////////////////////////////////////
