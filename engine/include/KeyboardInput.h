@@ -22,7 +22,8 @@ public:
 		SPACE = 32,
 		L = 108,
 		O = 111,
-		P = 112
+		P = 112,
+		I = 105
 	};
 	
 	enum Mod

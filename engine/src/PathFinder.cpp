@@ -95,7 +95,6 @@ string PathFinder::pathFind(const int& xStart, const int& yStart, const int& xFi
 			{
 				m_resultPath.emplace_back(Vector2(x,y));
 				j = dir_map[x][y];
-				m_directions.emplace_back(j);
 				c = '0' + (j + dir / 2) % dir;
 				path = c + path;
 				x += dx[j];
@@ -176,6 +175,12 @@ PathFinder::PathFinder()
 	, m_working(false)
 {
 	ResetPassabilityMap();
+}
+
+void PathFinder::GetResult(vector<Vector2>& path)
+{
+	std::reverse(std::begin(m_resultPath), std::end(m_resultPath));
+	path = m_resultPath;
 }
 
 void PathFinder::StartFinding(const Vector2& startPos, const Vector2& endPos)

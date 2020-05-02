@@ -40,6 +40,7 @@ public:
 	bool IsAreaPossible(PassabilityArea * area);
 	auto GetAllNodes() { return m_nodes; }
 	auto GetMapSize() { return m_mapSize; }
+	auto GetNodeSize() { return m_nodeSize; }
 	
 	void Update();
 	void Render();

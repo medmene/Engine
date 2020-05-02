@@ -257,16 +257,6 @@ bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 	PassabilityNode * ndBottomRight =	m_nodes[xBottomRight][yBottomRight];
 	PassabilityNode * ndBottom =		m_nodes[xBottom][yBottom];
 	PassabilityNode * ndBottomLeft =	m_nodes[xBottomLeft][yBottomLeft];
-
-	bool s = ndLeft->IsInside(posLeft);
-	bool s2 = ndTop->IsInside(posTop);
-	bool s3 = ndTop->IsInside(posTop);
-	bool s4 = ndTopLeft->IsInside(posTopLeft);
-	bool s5 = ndTopRight->IsInside(posTopRight);
-	bool s6 = ndBottomRight->IsInside(posBottomRight);
-	bool s7 = ndBottomLeft->IsInside(posBottomLeft);
-	bool s8 = ndRight->IsInside(posRight);
-	bool s9 = ndBottom->IsInside(posBottom);
 	
 	if (ndLeft->IsInside(posLeft) &&
 		ndTop->IsInside(posTop) &&
@@ -353,9 +343,10 @@ void PassabilityMap::Render()
 				PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
 				SDL_Rect localRect = nd->m_rect;
 
-				localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-				localRect.y = localRect.y + Camera::instance()->GetDiff().y;
-
+				auto diff = Camera::instance()->GetDiff();
+				localRect.x = localRect.x + diff.x;
+				localRect.y = localRect.y + diff.y;
+				
 				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 				SDL_RenderDrawRect(m_renderer, &localRect);
 

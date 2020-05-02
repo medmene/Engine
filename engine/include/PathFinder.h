@@ -54,7 +54,8 @@ public:
 	PathFinder();
 	
 	bool InProgress() { return m_working; }
-
+	void GetResult(vector<Vector2> &path);
+	
 	void StartFinding(const Vector2 & start, const Vector2 & end);
 	void ResetPassabilityMap();
 	
@@ -75,7 +76,6 @@ private:
 	vector<vector<int>>		dir_map; // map of directions
 	
 	vector<Vector2>			m_resultPath;
-	vector<int>				m_directions;
 
 	bool					m_working;
 };

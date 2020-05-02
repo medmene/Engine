@@ -9,19 +9,28 @@ class MovingController
 {
 	MovingController();
 public:
-	explicit MovingController(ICharacter * owner, const Vector2 & speedMod);
+	explicit MovingController(SDL_Renderer *r, ICharacter * owner, float speedMod);
 	~MovingController();
 	
 	void MoveToPos(const Vector2 &pos);
-	bool IsMoving() { return m_moving; }
+	bool IsMoving() { return m_moving || m_searching; }
+
+	void SetVisualisation(bool visualisation) { m_visualisation = visualisation; }
 
 	void Update(float dt);
+	void Render();
 private:
-	Vector2							m_speedModifier;
+	SDL_Renderer				  * m_renderer;
+	float							m_speedModifier;
 	Vector2							m_curSpeed;
+	map<int, string>				m_directionsOfAnimations;
+	
 	PathFinder					  * m_finder = nullptr;
-	map<string, int>				m_directionsOfAnimations;
+	bool							m_searching;
+	bool							m_moving;
+	vector<Vector2>					m_movingPath;
+	int								m_pathIndex;
 	
 	ICharacter					  * m_owner = nullptr;
-	bool							m_moving;
+	bool							m_visualisation;
 };

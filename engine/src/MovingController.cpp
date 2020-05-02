@@ -1,29 +1,61 @@
 #include "include/MovingController.h"
 #include "include/PathFinder.h"
 #include "include/Character.h"
+#include "include/GameObject.h"
+#include "include/KeyboardInput.h"
+#include "include/Camera.h"
+#include "include/PassabilityMap.h"
+#include "include/Animator.h"
+
 
 MovingController::MovingController()
-	: m_speedModifier(0.16f, 0.12f)
+	: m_speedModifier(0.16f)
 	, m_curSpeed(Vector2::zero)
 	, m_moving(false)
+	, m_searching(false)
+	, m_visualisation(false)
+	, m_pathIndex(0)
 {
 }
 
-MovingController::MovingController(ICharacter * owner, const Vector2 & speedMod)
+MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float speedMod)
 	: m_speedModifier(speedMod)
 	, m_curSpeed(Vector2::zero)
 	, m_moving(false)
+	, m_searching(false)
+	, m_visualisation(false)
 	, m_owner(owner)
+	, m_pathIndex(0)
 {
-	m_directionsOfAnimations["_left"] = 0;
-	m_directionsOfAnimations["_top_left"] = 1;
-	m_directionsOfAnimations["_top"] = 2;
-	m_directionsOfAnimations["_top_right"] = 3;
-	m_directionsOfAnimations["_right"] = 4;
-	m_directionsOfAnimations["_bottom_right"] = 5;
-	m_directionsOfAnimations["_bottom"] = 6;
-	m_directionsOfAnimations["_bottom_left"] = 7;
+	m_renderer = r;
 
+	map<int, string> tmp;
+	tmp[0] = "_left";
+	tmp[1] = "_top_left";
+	tmp[2] = "_top";
+	tmp[3] = "_top_right";
+	tmp[4] = "_right";
+	tmp[5] = "_bottom_right";
+	tmp[6] = "_bottom";
+	tmp[7] = "_bottom_left";
+
+	if (m_owner && m_owner->GetGameObject())
+	{
+		auto allAnims = m_owner->GetGameObject()->GetAnimator()->GetAllAnimations();
+		for (auto && item : tmp)
+		{
+			for (auto && anim : allAnims)
+			{
+				auto pos = anim->GetName().find(item.second);
+				if (pos != string::npos)
+				{
+					m_directionsOfAnimations[item.first] = anim->GetName();
+					break;
+				}
+			}
+		}
+	}
+	
 	m_finder = new PathFinder();
 }
 
@@ -37,13 +69,89 @@ MovingController::~MovingController()
 
 void MovingController::MoveToPos(const Vector2 &pos)
 {
-	// if (m_finder && m_owner)
-	// {
-	// 	m_finder->StartFinding()
-	// }
+	if (m_finder && m_owner && !IsMoving())
+	{
+		m_searching = true;
+		m_finder->StartFinding(m_owner->GetGameObject()->GetCenterPos(), pos);
+	}
 }
 
 void MovingController::Update(float dt)
 {
+	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	{
+		if (KeyboardInput::instance()->GetKey() == KeyboardInput::I)
+		{
+			m_visualisation = !m_visualisation;
+		}
+	}
 	
+	if (m_searching)
+	{
+		if (!m_finder->InProgress())
+		{
+			m_movingPath.clear();
+			m_finder->GetResult(m_movingPath);
+
+			if (!m_movingPath.empty())
+			{
+				m_moving = true;
+				m_pathIndex = 0;
+			}
+			m_searching = false;
+		}
+	}
+
+	if (m_moving)
+	{
+		if (auto obj = m_owner->GetGameObject())
+		{
+			// string animName = m_directionsOfAnimations[m_movingDirs[m_pathIndex]];
+			// if (!obj->GetAnimator()->IsAnimationPlaying(animName))
+			// {
+			// 	obj->GetAnimator()->PlayAnimation(animName);
+			// }
+			
+			auto oldPos = obj->GetCenterPos();
+			auto dir = m_movingPath[m_pathIndex] - oldPos;
+			float dirLen = dir.length();
+
+			float coef = m_speedModifier / dirLen;
+
+			dir *= coef;
+
+			auto newPos = oldPos + dir;
+			obj->UpdateCenterPos(newPos);
+
+			if (dirLen < m_speedModifier)
+			{
+				m_pathIndex++;
+				if (m_pathIndex == m_movingPath.size())
+				{
+					m_movingPath.clear();
+					m_moving = false;
+				}
+			}
+		}
+	}
+}
+
+void MovingController::Render()
+{
+	if (m_visualisation)
+	{
+		if (!m_movingPath.empty())
+		{
+			SDL_SetRenderDrawColor(m_renderer, 0, 0, 250, 100);
+			auto diff = Camera::instance()->GetDiff();
+			
+			for (int i = 1; i < m_movingPath.size(); ++i)
+			{
+				SDL_Rect rct = { (int)m_movingPath[i].x - 5, (int)m_movingPath[i].y -5 , 10, 10};
+				rct.x = rct.x + diff.x;
+				rct.y = rct.y + diff.y;
+				SDL_RenderFillRect(m_renderer, &rct);
+			}
+		}
+	}
 }

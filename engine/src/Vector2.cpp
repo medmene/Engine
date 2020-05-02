@@ -48,11 +48,9 @@ void Vector2::scale(float scale)
 	this->y *= scale;
 }
 
-float Vector2::length(const Vector2 other)
+float Vector2::length()
 {
-	float tmpX = other.x - x;
-	float tmpY = other.y - y;
-	return sqrt(tmpX * tmpX + tmpY * tmpY);
+	return sqrt(x * x + y * y);
 }
 
 Vector2 & Vector2::operator=(const Vector2 & other)
@@ -90,6 +88,13 @@ Vector2& Vector2::operator+=(float other)
 {
 	this->x += other;
 	this->y += other;
+	return  *this;
+}
+
+Vector2& Vector2::operator*=(float other)
+{
+	this->x *= other;
+	this->y *= other;
 	return  *this;
 }
 
@@ -141,4 +146,9 @@ Vector2 operator-(const Vector2& lhs, const Vector2& rhs)
 Vector2 operator*(const Vector2& lhs, const Vector2& rhs)
 {
 	return Vector2(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
+Vector2 operator/(const Vector2& lhs, const Vector2& rhs)
+{
+	return Vector2(lhs.x / rhs.x, lhs.y / rhs.y);
 }

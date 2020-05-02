@@ -141,6 +141,16 @@ void GameObject::UpdatePos(const Vector2 & pos)
 	}
 }
 
+void GameObject::UpdateCenterPos(const Vector2& pos)
+{
+	if (m_center != pos)
+	{
+		m_position = Vector2(pos.x - m_size.x / 2, pos.y - m_size.y / 2);
+		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
+		m_center = pos;
+	}
+}
+
 void GameObject::Update(float dt)
 {
 	m_animator->Update(dt);

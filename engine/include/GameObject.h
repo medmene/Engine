@@ -35,6 +35,7 @@ public:
 	void UpdateColor(const Color & clr);
 	void UpdateSize(const Vector2 & size);
 	void UpdatePos(const Vector2 & pos);
+	void UpdateCenterPos(const Vector2 & pos);
 	void Update(float dt);
 
 	void Render();
