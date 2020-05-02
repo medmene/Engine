@@ -68,6 +68,9 @@ target_sources(GameEngine PRIVATE
 	engine/include/NPC.h
 	engine/include/PathFinder.h
 	engine/include/MovingController.h
+	engine/include/Event.h
+	engine/include/EventManager.h
+	engine/include/Reaction.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -87,6 +90,10 @@ target_sources(GameEngine PRIVATE
 	engine/src/NPC.cpp
 	engine/src/PathFinder.cpp
 	engine/src/MovingController.cpp
+	engine/src/Event.cpp
+	engine/src/EventPass.cpp
+	engine/src/EventManager.cpp
+	engine/src/Reaction.cpp
 )
 
 # Include lib pugi XML

@@ -9,6 +9,7 @@
 #include "Game_sources/include/Level1.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
+#include "include/EventManager.h"
 #include <iostream>
 
 
@@ -51,6 +52,7 @@ GameWindow::~GameWindow()
 	delete KeyboardInput::instance();
 	delete PassabilityMap::instance();
 	delete ResourceManager::instance();
+	delete EventManager::instance();
 }
 
 void GameWindow::Initialize()
@@ -58,14 +60,14 @@ void GameWindow::Initialize()
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_level1 = new Level1();
-	m_level1->Init(m_renderer, m_windowSize);
-
 	m_player = new Player();
 	m_player->Init(m_renderer);
 	
 	m_npc = new NPC();
 	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
+
+	m_level1 = new Level1();
+	m_level1->Init(m_renderer, m_windowSize);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
@@ -104,6 +106,7 @@ void GameWindow::Update()
 		m_npc->Update(FPS.dt);
 		PassabilityMap::instance()->Update();
 		Camera::instance()->Update(FPS.dt);
+		EventManager::instance()->Update();
 
 		//////////////////////////////////////////
 		//////////////////////////////////////////

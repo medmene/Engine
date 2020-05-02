@@ -30,7 +30,7 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 {
 	m_renderer = renderer;
 	m_resource = ResourceManager::instance()->GetResource(src, type);
-	
+	m_staticObject = false;
 	if (type == ResourceManager::GOBJECT)
 	{
 		if (m_resource)
@@ -106,7 +106,7 @@ void Button::UpdateColor(const Color & clr)
 
 bool Button::IsMouseInside() 
 {
-	Vector2 mpousePos = MouseInput::instance()->GetPos();
+	Vector2 mpousePos = MouseInput::instance()->GetPosInMap();
 	return m_rect.x <= mpousePos.x && (m_rect.x + m_rect.w) >= mpousePos.x && m_rect.y <= mpousePos.y && (m_rect.y + m_rect.h) >= mpousePos.y;
 }
 
