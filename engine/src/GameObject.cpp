@@ -2,6 +2,8 @@
 #include "include/Camera.h"
 #include "pugixml/pugixml.hpp"
 #include "include/Animator.h"
+#include "include/Event.h"
+#include "include/Reaction.h"
 
 
 
@@ -170,4 +172,10 @@ void GameObject::Render()
 
 		SDL_RenderCopy(m_renderer, m_texture, &m_animator->GetActiveAnimation()->GetCurrentState(), &localRect);
 	}
+}
+
+
+void Subscribe(Event e, Reaction r)
+{
+	
 }
