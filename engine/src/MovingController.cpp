@@ -29,6 +29,15 @@ MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float sp
 {
 	m_renderer = r;
 
+	m_dirs[0][0] = 1;
+	m_dirs[0][1] = 0;
+	m_dirs[0][2] = 7;
+	m_dirs[1][0] = 2;
+	m_dirs[1][2] = 6;
+	m_dirs[2][0] = 3;
+	m_dirs[2][1] = 4;
+	m_dirs[2][2] = 5;
+	
 	map<int, string> tmp;
 	tmp[0] = "_left";
 	tmp[1] = "_top_left";
@@ -106,16 +115,20 @@ void MovingController::Update(float dt)
 	{
 		if (auto obj = m_owner->GetGameObject())
 		{
-			// string animName = m_directionsOfAnimations[m_movingDirs[m_pathIndex]];
-			// if (!obj->GetAnimator()->IsAnimationPlaying(animName))
-			// {
-			// 	obj->GetAnimator()->PlayAnimation(animName);
-			// }
 			
 			auto oldPos = obj->GetCenterPos();
 			auto dir = m_movingPath[m_pathIndex] - oldPos;
 			float dirLen = dir.length();
 
+			int signX = (dir.x > 0) - (dir.x < 0) + 1; // 0 1 2
+			int signY = (dir.y > 0) - (dir.y < 0) + 1; // 0 1 2
+
+			string animName = m_directionsOfAnimations[m_dirs[signX][signY]];
+			if (!obj->GetAnimator()->IsAnimationPlaying(animName))
+			{
+				obj->GetAnimator()->PlayAnimation(animName);
+			}
+			
 			float coef = m_speedModifier / dirLen;
 
 			dir *= coef;

@@ -30,7 +30,8 @@ private:
 	bool							m_moving;
 	vector<Vector2>					m_movingPath;
 	int								m_pathIndex;
-	
+
+	int								m_dirs[3][3];
 	ICharacter					  * m_owner = nullptr;
 	bool							m_visualisation;
 };
