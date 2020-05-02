@@ -91,6 +91,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/PathFinder.cpp
 	engine/src/MovingController.cpp
 	engine/src/Event.cpp
+	engine/src/EventPass.cpp
 	engine/src/EventManager.cpp
 	engine/src/Reaction.cpp
 )

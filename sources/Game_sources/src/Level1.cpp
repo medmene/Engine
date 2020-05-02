@@ -22,6 +22,7 @@ void OpenDoorByButton(GameObject *o, Event *e)
 		break;
 	case EventPass::State::GET_IN:
 		ep->SetCurrentState(EventPass::State::STAY_IN);
+		o->GetAnimator()->GetActiveAnimation()->Play();
 		// o->SetAnimationEnable(false);
 		break;
 	case EventPass::State::STAY_IN:
@@ -53,17 +54,20 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(false);
-	m_buttons.back()->UpdateSize(Vector2(20, 20));
-	m_buttons.back()->UpdatePos(Vector2(700, 1000));
+	m_buttons.back()->UpdateSize(Vector2(200, 40));
+	m_buttons.back()->UpdatePos(Vector2(700, 900));
 
-	// m_events.emplace_back(new EventPass());
-	// ((EventPass*)m_events.back())->SetObject( GameWindow::instance()->GetPlayer()->GetGameObject() );
-	// ((EventPass*)m_events.back())->SetRect({scale * 240, scale * 245},{scale * 240, scale * 245});
+	 m_events.emplace_back(new EventPass());
+
+	 Player* p = GameWindow::instance()->GetPlayer();
+
+	 ((EventPass*)m_events.back())->SetObject( p->GetGameObject() );
+	 ((EventPass*)m_events.back())->SetRect({ 700, 900},{ 700 + 200, 900 + 40 });
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
-	m_objects.back()->UpdateSize(Vector2(scaleDoor * 70, scaleDoor * 70));
-	m_objects.back()->UpdatePos(Vector2(scale * 240, scale * 245));
-	//m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
+	m_objects.back()->UpdateSize(Vector2(140, 140));
+	m_objects.back()->UpdatePos(Vector2(720, 720));
+	m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
 
 	m_objects.back()->SetAnimationEnable(true);
 	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();

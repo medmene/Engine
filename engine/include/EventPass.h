@@ -22,7 +22,7 @@ public:
 		LEFT
 	};
 
-	EventPass();
+	EventPass() {};
 	EventPass(State s) { state = s; }
 
 	void SetCurrentState(State s) { state = s; }
@@ -44,6 +44,6 @@ private:
 	State state = STAY_OUT;
 	GameObject *object = 0;
 	pair<Vector2,Vector2> rect;
-	CheckPos checkBy = CENTER;
+	EventPass::CheckPos checkBy = CENTER;
 	float x, y; //object pos
 };

@@ -6,8 +6,8 @@ bool EventPass::CheckEvent()
 	{
 	case CENTER:
 		x = object->GetCenterPos().x , y = object->GetCenterPos().y;
-		return x >= rect.x && x <= (rect.x + rect.w) &&
-		y >= rect.y && y <= (rect.y + rect.h);
+		return x >= rect.first.x && x <= rect.second.x &&
+		y >= rect.first.y && y <= rect.second.y;
 		break;
 	
 	default:

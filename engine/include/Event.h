@@ -3,7 +3,5 @@
 class Event
 {
 public:
-	Event();
-
-	virtual bool CheckEvent();
+	virtual bool CheckEvent() = 0;
 };
