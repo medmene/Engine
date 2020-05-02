@@ -21,6 +21,8 @@ public:
 	void Initialize();
 	void Update();
 	
+	Player * GetPlayer() { return m_player; }
+
 private:
 	SDL_Window					  * m_window = nullptr;
 	SDL_DisplayMode					m_displayMode;

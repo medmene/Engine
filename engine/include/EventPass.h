@@ -28,15 +28,8 @@ public:
 	void SetCurrentState(State s) { state = s; }
 	State GetCurrentState() { return state; }
 
-	void SetRect(Vector2 left, Vector2 right) { 
-		rect = {
-				left.x,
-				left.y,
-				right.x - left.x,
-				right.y - left.y
-				}; }
-	void SetRect(SDL_Rect r) { rect = r; }
-	SDL_Rect GetRect() { return rect; }
+	void SetRect(Vector2 left, Vector2 right) { rect = { left, right }; }
+	pair<Vector2, Vector2> GetRect() { return rect; }
 
 	void SetObject(GameObject *o) { object = o; }
 	GameObject * GetObject() { return object; }
@@ -50,7 +43,7 @@ public:
 private:
 	State state = STAY_OUT;
 	GameObject *object = 0;
-	SDL_Rect rect;
+	pair<Vector2,Vector2> rect;
 	CheckPos checkBy = CENTER;
 	float x, y; //object pos
 };

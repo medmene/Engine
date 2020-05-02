@@ -5,6 +5,8 @@
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/EventPass.h"
+#include "Game_sources/include/GameWindow.h"
+#include "include/Player.h"
 
 
 void OpenDoorByButton(GameObject *o, Event *e)
@@ -54,13 +56,14 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->UpdateSize(Vector2(20, 20));
 	m_buttons.back()->UpdatePos(Vector2(700, 1000));
 
-	m_events.emplace_back(new EventPass());
-	((EventPass*)m_events.back())->SetCheckStrategy()
+	// m_events.emplace_back(new EventPass());
+	// ((EventPass*)m_events.back())->SetObject( GameWindow::instance()->GetPlayer()->GetGameObject() );
+	// ((EventPass*)m_events.back())->SetRect({scale * 240, scale * 245},{scale * 240, scale * 245});
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
 	m_objects.back()->UpdateSize(Vector2(scaleDoor * 70, scaleDoor * 70));
 	m_objects.back()->UpdatePos(Vector2(scale * 240, scale * 245));
-	m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
+	//m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
 
 	m_objects.back()->SetAnimationEnable(true);
 	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();

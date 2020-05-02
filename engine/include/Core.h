@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <thread>
 #include <map>
+#include <functional>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
@@ -34,5 +35,6 @@ using std::make_shared;
 using std::unordered_map;
 using std::pair;
 using std::weak_ptr;
+using std::function;
 using std::find;
 using std::wstring;
