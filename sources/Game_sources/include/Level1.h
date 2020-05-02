@@ -21,6 +21,7 @@ struct Level1
 	vector<GameObject*>			m_grounds;
 	vector<GameObject*>			m_objects;
 	vector<Button*> 			m_buttons;
+	vector<Event*> 				m_events;
 
 	Vector2						m_winSize;
 	SDL_Renderer			  * m_renderer;

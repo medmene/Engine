@@ -4,9 +4,32 @@
 #include "include/Animator.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
+#include "include/EventPass.h"
 
 
-
+void OpenDoorByButton(GameObject *o, Event *e)
+{
+	EventPass* ep = (EventPass*)e;
+	EventPass::State s = ep->GetCurrentState();
+	switch (s)
+	{
+	case EventPass::State::STAY_OUT:
+		ep->SetCurrentState(EventPass::State::GET_IN);
+		o->SetAnimationEnable(true);
+		o->GetAnimator()->GetActiveAnimation()->Play();
+		break;
+	case EventPass::State::GET_IN:
+		ep->SetCurrentState(EventPass::State::STAY_IN);
+		// o->SetAnimationEnable(false);
+		break;
+	case EventPass::State::STAY_IN:
+		break;
+	case EventPass::State::GET_OUT: // ????
+		break;
+	default:
+		break;
+	}
+}
 
 void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
@@ -31,9 +54,14 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->UpdateSize(Vector2(20, 20));
 	m_buttons.back()->UpdatePos(Vector2(700, 1000));
 
+	m_events.emplace_back(new EventPass());
+	((EventPass*)m_events.back())->SetCheckStrategy()
+
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
 	m_objects.back()->UpdateSize(Vector2(scaleDoor * 70, scaleDoor * 70));
 	m_objects.back()->UpdatePos(Vector2(scale * 240, scale * 245));
+	m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
+
 	m_objects.back()->SetAnimationEnable(true);
 	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
 }

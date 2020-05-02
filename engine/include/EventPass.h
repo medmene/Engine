@@ -41,6 +41,7 @@ public:
 	void SetObject(GameObject *o) { object = o; }
 	GameObject * GetObject() { return object; }
 
+	// Default CENTER
 	void SetCheckStrategy(CheckPos c) { checkBy = c; }
 	CheckPos GetCheckStrategy() { return checkBy; }
 
@@ -48,7 +49,7 @@ public:
 
 private:
 	State state = STAY_OUT;
-	GameObject *object;
+	GameObject *object = 0;
 	SDL_Rect rect;
 	CheckPos checkBy = CENTER;
 	float x, y; //object pos

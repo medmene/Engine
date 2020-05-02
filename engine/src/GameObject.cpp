@@ -3,6 +3,7 @@
 #include "pugixml/pugixml.hpp"
 #include "include/Animator.h"
 #include "include/Event.h"
+#include "include/EventManager.h"
 #include "include/Reaction.h"
 
 
@@ -174,8 +175,7 @@ void GameObject::Render()
 	}
 }
 
-
-void Subscribe(Event e, Reaction r)
+void GameObject::Subscribe(Event* e, void(*callback)(GameObject*, Event*))
 {
-	
+	EventManager::instance()->RegisterEvent(e, new Reaction(this, callback));
 }
