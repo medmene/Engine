@@ -12,6 +12,7 @@
 void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
+	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
 	
 	m_winSize = winSize;
 	m_renderer = renderer;
@@ -21,6 +22,17 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_backgrounds.emplace_back(new GameObject(m_renderer, "lvl_2", ResourceManager::PNG));
 	m_backgrounds.back()->UpdateSize(Vector2(scale * m_winSize.x, scale * m_winSize.y));
 	m_backgrounds.back()->UpdatePos(Vector2(0, 0)); // for non static
+
+	m_objects.emplace_back(new GameObject(m_renderer, "alien1", ResourceManager::GOBJECT));
+	m_objects.back()->UpdateSize(Vector2(140, 140));
+	m_objects.back()->UpdatePos(Vector2(720, 720));
+	m_objects.back()->SetAnimationEnable(true);
+	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
+	m_objects.emplace_back(new GameObject(m_renderer, "alien2", ResourceManager::GOBJECT));
+	m_objects.back()->UpdateSize(Vector2(140, 140));
+	m_objects.back()->UpdatePos(Vector2(600, 600));
+	m_objects.back()->SetAnimationEnable(true);
+	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
 }
 
 Level2::~Level2()

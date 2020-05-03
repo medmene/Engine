@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object>
+	<source name="Alien2.png" />
+	<size x="391" y="508" />
+	<animation name="idle" row="0" count="3" loop="true" speed="100" next_state="" />
+</object>

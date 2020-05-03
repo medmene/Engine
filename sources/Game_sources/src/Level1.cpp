@@ -59,9 +59,7 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	 m_events.emplace_back(new EventPass());
 
-	 Player* p = GameWindow::instance()->GetPlayer();
-
-	 ((EventPass*)m_events.back())->SetObject( p->GetGameObject() );
+	 ((EventPass*)m_events.back())->SetObject( GameWindow::instance()->GetPlayer()->GetGameObject() );
 	 ((EventPass*)m_events.back())->SetRect({ 700, 900},{ 700 + 200, 900 + 40 });
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
