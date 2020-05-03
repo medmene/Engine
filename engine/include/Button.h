@@ -23,7 +23,7 @@ public:
 private:
 	bool						m_isPressed = false;
 	function<void()>			m_onClick;
-	Label						m_label;
+	Label					  * m_label = nullptr;
 	
 	bool IsMouseInside();
 };
