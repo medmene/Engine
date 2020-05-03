@@ -11,6 +11,7 @@ Player::Player()
 	: m_playerName("player")
 	, m_speed(0, 0)
 	, m_speedConst(0.16f, 0.12f)
+	, m_noclip(false)
 {
 }
 
@@ -53,11 +54,20 @@ void Player::SetVisible(bool visible)
 
 void Player::Update(float dt)
 {
+	if (!m_playerObject->IsVisible())
+	{
+		return;
+	}
+	
 	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
 		if (KeyboardInput::instance()->GetKey() == kb::P)
 		{
 			m_drawPassability = !m_drawPassability;
+		}
+		if (KeyboardInput::instance()->GetKey() == kb::U)
+		{
+			m_noclip = !m_noclip;
 		}
 	}
 	
@@ -106,23 +116,32 @@ void Player::Update(float dt)
 			break;
 		}
 
-		if (m_speed != Vector2::zero)
+		if (!m_noclip)
 		{
-			Vector2 pos = m_playerObject->GetCenterPos();
-			Vector2 oldPos = m_passabilityArea->m_pos;
-			pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
-			m_passabilityArea->m_pos = pos + m_speed;
+			if (m_speed != Vector2::zero)
+			{
+				Vector2 pos = m_playerObject->GetCenterPos();
+				Vector2 oldPos = m_passabilityArea->m_pos;
+				pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
+				m_passabilityArea->m_pos = pos + m_speed;
 
-			if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))
-			{
-				auto oldPos = GetGameObject()->GetPosition();
-				oldPos += m_speed;
-				GetGameObject()->UpdatePos(oldPos);
+				if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))
+				{
+					auto oldPos = GetGameObject()->GetPosition();
+					oldPos += m_speed;
+					GetGameObject()->UpdatePos(oldPos);
+				}
+				else
+				{
+					m_passabilityArea->m_pos = oldPos;
+				}
 			}
-			else
-			{
-				m_passabilityArea->m_pos = oldPos;
-			}
+		}
+		else
+		{
+			auto oldPos = GetGameObject()->GetPosition();
+			oldPos += Vector2(m_speed.x * 1.5f, m_speed.y * 1.5f);
+			GetGameObject()->UpdatePos(oldPos);
 		}
 	}
 }

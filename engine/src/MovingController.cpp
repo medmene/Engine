@@ -107,6 +107,7 @@ void MovingController::Update(float dt)
 				m_moving = true;
 				m_pathIndex = 0;
 			}
+			m_hasPath = !m_movingPath.empty();
 			m_searching = false;
 		}
 	}

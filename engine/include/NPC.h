@@ -1,12 +1,11 @@
 #pragma once
 #include "Core.h"
-#include "Vector2.h"
 #include "Character.h"
 #include "ResourceManager.h"
 
 class GameObject;
 class PassabilityArea;
-class MovingController;
+class BehaviourController;
 
 class NPC: public ICharacter
 {
@@ -32,5 +31,5 @@ private:
 	bool							m_drawPassability = false;
 	float							m_passOffsetCoef = 0.1f;
 
-	MovingController			  * m_movingController = nullptr;
+	BehaviourController			  * m_behaviourController;
 };

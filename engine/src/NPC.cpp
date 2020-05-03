@@ -6,6 +6,7 @@
 #include "include/KeyboardInput.h"
 #include "include/MovingController.h"
 #include "include/MouseInput.h"
+#include "include/BehaviourController.h"
 
 
 NPC::NPC()
@@ -25,9 +26,9 @@ NPC::~NPC()
 		delete m_passabilityArea;
 	}
 
-	if (m_movingController)
+	if (m_behaviourController)
 	{
-		delete m_movingController;
+		delete m_behaviourController;
 	}
 }
 
@@ -52,7 +53,7 @@ void NPC::Init(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	m_npcObject->UpdateColor(Color(50,250,50,255));
 	m_npcObject->UpdateSize(Vector2(180, 180));
 
-	m_movingController = new MovingController(m_renderer, this, 0.15f);
+	m_behaviourController = new BehaviourController(m_renderer, this);
 	
 	Vector2 pos = m_npcObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_npcObject->GetSize().y;
@@ -61,6 +62,11 @@ void NPC::Init(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 
 void NPC::Update(float dt)
 {
+	if (!m_npcObject->IsVisible())
+	{
+		return;
+	}
+	
 	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
 		if (KeyboardInput::instance()->GetKey() == kb::P)
@@ -68,30 +74,18 @@ void NPC::Update(float dt)
 			m_drawPassability = !m_drawPassability;
 		}
 	}
-
-	if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
-	{
-		if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
-		{
-			if (m_movingController && !m_movingController->IsMoving())
-			{
-				m_movingController->MoveToPos(MouseInput::instance()->GetPosInMap());
-			}
-		}
-	}
 	
 	Vector2 pos = m_npcObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_npcObject->GetSize().y;
 	m_passabilityArea->m_pos = pos;
 	
-	m_movingController->Update(dt);
-	
+	m_behaviourController->Update(dt);
 	m_npcObject->Update(dt);
 }
 
 void NPC::Render()
 {
-	m_movingController->Render();
+	m_behaviourController->Render();
 	m_npcObject->Render();
 
 	if (m_drawPassability)

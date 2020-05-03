@@ -81,6 +81,14 @@ void GameInterface::Init()
 	lbl5->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl5);
 
+	auto lbl6 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	lbl6->Init("U - noclip", 16);
+	lbl6->SetStaticObject(true);
+	lbl6->SetParent(back.get());
+	lbl6->UpdateRelativePos(Vector2(0, 40));
+	lbl6->UpdateColor(Color(0, 0, 0, 255));
+	m_elements.emplace_back(lbl6);
+
 	// ----------------------------------------------------------------------------------- //
 	
 	auto btnStngs = make_shared<Button>(m_renderer, "gameSettingsBtn_settings", ResourceManager::GOBJECT);

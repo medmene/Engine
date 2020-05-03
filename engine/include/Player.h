@@ -32,6 +32,8 @@ private:
 	PassabilityArea				  * m_passabilityArea = nullptr;
 	bool							m_drawPassability = false;
 	float							m_passOffsetCoef = 0.33f;
+
+	bool							m_noclip;
 };
 
 

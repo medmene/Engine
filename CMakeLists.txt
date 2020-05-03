@@ -76,6 +76,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/Reaction.h
 	engine/include/SoundManager.h
 	engine/include/KeyboardBinds.h
+	engine/include/BehaviourController.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -100,6 +101,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/EventManager.cpp
 	engine/src/Reaction.cpp
 	engine/src/SoundManager.cpp
+	engine/src/BehaviourController.cpp
 )
 
 # Include lib pugi XML
