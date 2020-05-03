@@ -22,12 +22,14 @@ SoundManager::~SoundManager()
 {
 	for (auto && snd : m_sounds)
 	{
+		Mix_FreeMusic(snd->m_music);
 		delete snd;
 	}
 	m_sounds.clear();
 
 	for (auto && music : m_musics)
 	{
+		Mix_FreeMusic(music->m_music);
 		delete music;
 	}
 	m_musics.clear();
