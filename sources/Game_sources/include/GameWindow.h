@@ -11,10 +11,22 @@ class Player;
 class NPC;
 struct Level1;
 class GameInterface;
+struct Level2;
+struct Menu;
 
 class GameWindow
 {
 public:
+	enum State
+	{
+		MENU = 0,
+		LEVEL1,
+		LEVEL2,
+		LEVEL3,
+		LEVEL4
+	};
+
+
 	GameWindow();
 	~GameWindow();
 	static GameWindow * instance() { return sm_instance; }
@@ -33,7 +45,11 @@ private:
 
 	GameInterface				  * m_interface;
 	
+	State							m_state = State::MENU;
+
+	Menu						  * m_menu = nullptr;
 	Level1						  * m_level1 = nullptr;
+	Level2						  * m_level2 = nullptr;
 	Player						  * m_player = nullptr;
 	NPC							  * m_npc = nullptr;
 

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+	<source name="menu.jpg" />
+	<objSize x="3000" y="2000" />
+	<animSize x="3000" y="2000" />
+	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
+</object>

@@ -36,4 +36,7 @@ public:
 	Vector2& operator-=(float other);
 	Vector2& operator/=(int other);
 	Vector2& operator/=(float other);
+
+private:
+	float eps = 1E-5;
 };

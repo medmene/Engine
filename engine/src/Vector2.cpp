@@ -62,12 +62,12 @@ Vector2 & Vector2::operator=(const Vector2 & other)
 
 bool Vector2::operator==(const Vector2& other) const
 {
-	return this->x == other.x && this->y == other.y;
+	return abs(this->x - other.x) < eps && abs(this->y - other.y) < eps;
 }
 
 bool Vector2::operator!=(const Vector2& other) const
 {
-	return this->x != other.x || this->y != other.y;
+	return abs(this->x - other.x) > eps || abs(this->y - other.y) > eps;
 }
 
 Vector2& Vector2::operator+=(const Vector2& other)

@@ -7,8 +7,10 @@
 #include "include/Player.h"
 #include "include/NPC.h"
 #include "include/GameObject.h"
+#include "Game_sources/include/Menu.h"
 #include "Game_sources/include/Level1.h"
 #include "Game_sources/include/GameInterface.h"
+#include "Game_sources/include/Level2.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/EventManager.h"
@@ -78,9 +80,15 @@ void GameWindow::Initialize()
 	m_npc = new NPC();
 	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
 
-	m_level1 = new Level1();
-	m_level1->Init(m_renderer, m_windowSize);
-	
+	 m_level1 = new Level1();
+	 m_level1->Init(m_renderer, m_windowSize);
+
+	 m_level2 = new Level2();
+	 m_level2->Init(m_renderer, m_windowSize);
+
+	m_menu = new Menu();
+	m_menu->Init(m_renderer, m_windowSize);
+
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
@@ -113,9 +121,29 @@ void GameWindow::Update()
 		//////////////////////////////////////////
 
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
-		m_level1->Update(FPS.dt);
-		m_player->Update(FPS.dt);
-		m_npc->Update(FPS.dt);
+		switch (m_state)
+		{
+		case GameWindow::MENU:
+			m_menu->Update(FPS.dt);
+			break;
+		case GameWindow::LEVEL1:
+			m_player->Update(FPS.dt);
+			m_npc->Update(FPS.dt);
+			m_level1->Update(FPS.dt);
+			break;
+		case GameWindow::LEVEL2:
+			m_player->Update(FPS.dt);
+			m_npc->Update(FPS.dt);
+			m_level2->Update(FPS.dt);
+			break;
+		case GameWindow::LEVEL3:
+			break;
+		case GameWindow::LEVEL4:
+			break;
+		default:
+			break;
+		}
+
 		PassabilityMap::instance()->Update();
 		Camera::instance()->Update(FPS.dt);
 		EventManager::instance()->Update();
@@ -132,9 +160,29 @@ void GameWindow::Update()
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 		SDL_RenderClear(m_renderer);
 
-		m_level1->Render();
-		m_player->Render();
-		m_npc->Render();
+		switch (m_state)
+		{
+		case GameWindow::MENU:
+			m_menu->Render();
+			break;
+		case GameWindow::LEVEL1:
+			m_player->Render();
+			m_npc->Render();
+			m_level1->Render();
+			break;
+		case GameWindow::LEVEL2:
+			m_player->Render();
+			m_npc->Render();
+			m_level2->Render();
+			break;
+		case GameWindow::LEVEL3:
+			break;
+		case GameWindow::LEVEL4:
+			break;
+		default:
+			break;
+		}
+
 		PassabilityMap::instance()->Render();
 		m_interface->Render();
 		

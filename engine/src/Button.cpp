@@ -19,6 +19,19 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	m_onClick = [] {};
 }
 
+void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
+{
+	m_label = new Label(m_renderer, src, type);
+	if (m_label)
+	{
+		m_label->SetVisible(true);
+		m_label->SetFontSize(textFontSize);
+		m_label->SetStaticObject(IsStaticObject());
+		m_label->SetText(text);
+		m_label->SetParent(this);
+	}
+}
+
 void Button::Update(float dt)
 {
 	if (IsMouseInside())
@@ -35,6 +48,10 @@ void Button::Update(float dt)
 	}
 	
 	GameObject::Update(dt);
+	if (m_label && m_label->IsVisible())
+	{
+		m_label->Update(dt);
+	}
 }
 
 
@@ -79,5 +96,10 @@ void Button::Render()
 		
 		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
 		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
+
+		if (m_label && m_label->IsVisible())
+		{
+			m_label->Render();
+		}
 	}
 }
