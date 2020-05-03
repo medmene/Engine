@@ -11,6 +11,7 @@
 GameObject::GameObject()
 	: m_rect({ 0, 0, 0, 0 })
 	, m_center(0, 0)
+	, m_relativePos(0, 0)
 	, m_color({ 255, 255, 255, 255 })
 	, m_position(0, 0)
 	, m_size(0, 0)
@@ -130,6 +131,7 @@ bool GameObject::LoadSettings()
 
 GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
 	: m_position(0, 0)
+	, m_relativePos(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
 {
@@ -191,13 +193,25 @@ void GameObject::SetAnimationEnable(bool anim)
 	m_animator->SetAnimationsEnabled(anim);
 }
 
+string GameObject::GetName()
+{
+	if (m_resourceSettings)
+	{
+		return m_resourceSettings->GetName();
+	}
+	return "";
+}
+
 void GameObject::UpdateColor(const Color & clr)
 {
-	m_color = clr;
-	if (m_texture)
+	if (m_color != clr)
 	{
-		SDL_SetTextureColorMod(m_texture, m_color.GetR(), m_color.GetG(), m_color.GetB());
-		SDL_SetTextureAlphaMod(m_texture, m_color.GetA());
+		m_color = clr;
+		if (m_texture)
+		{
+			SDL_SetTextureColorMod(m_texture, m_color.GetR(), m_color.GetG(), m_color.GetB());
+			SDL_SetTextureAlphaMod(m_texture, m_color.GetA());
+		}
 	}
 }
 
@@ -231,9 +245,23 @@ void GameObject::UpdateCenterPos(const Vector2& pos)
 	}
 }
 
+void GameObject::UpdateRelativePos(const Vector2& pos)
+{
+	m_relativePos = pos;
+}
+
 void GameObject::Update(float dt)
 {
-	m_animator->Update(dt);
+	if (m_animator)
+	{
+		m_animator->Update(dt);
+	}
+
+	if (m_parent)
+	{
+		UpdateCenterPos(m_parent->GetCenterPos() + m_relativePos);
+		m_visible = m_parent->IsVisible();
+	}
 }
 
 void GameObject::Render()

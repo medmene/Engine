@@ -41,7 +41,19 @@ Label::~Label()
 
 void Label::Init(const string & text, int fontSize)
 {
-	m_fontSize = fontSize;
+	if (fontSize != m_fontSize)
+	{
+		m_fontSize = fontSize;
+		if (m_resourceSettings)
+		{
+			m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
+			if (m_font)
+			{
+				CreateTexture();
+			}
+		}
+	}
+	
 	m_text = text;
 	CreateTexture();
 }
@@ -117,6 +129,9 @@ void Label::CreateTexture()
 			m_rect.y = m_position.y;
 			m_rect.w = surfaceMessage->w;
 			m_rect.h = surfaceMessage->h;
+
+			UpdateSize(Vector2(surfaceMessage->w, surfaceMessage->h));
+			
 			if (surfaceMessage)
 			{
 				SDL_FreeSurface(surfaceMessage);
@@ -127,5 +142,5 @@ void Label::CreateTexture()
 			return;
 		}
 	}
-	throw std::exception();
+	throw std::exception("Error in smth mb text is empty");
 }
