@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+	<source name="textBubble.png" />
+	<objSize x="180" y="125" annotation="This is size for saving" />
+	<animSize x="512" y="353" annotation="This is size of real frame in image" />
+	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+</object>

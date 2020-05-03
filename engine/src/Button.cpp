@@ -19,6 +19,11 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	m_onClick = [] {};
 }
 
+Button::~Button()
+{
+	if (m_label) { delete m_label; }
+}
+
 void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
 	m_label = new Label(m_renderer, src, type);

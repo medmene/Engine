@@ -84,8 +84,7 @@ void Animation::Update(float dt)
 
 // ------------------------------------------------------------------------------------------ //
 
-Animator::Animator(pugi::xml_document * doc, GameObject * object)
-	: m_object(object)
+Animator::Animator(pugi::xml_document * doc)
 {
 	auto rootNode = doc->child("object");
 	auto sizeNode = rootNode.child("animSize");

@@ -23,10 +23,7 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 
 BehaviourController::~BehaviourController()
 {
-	if (m_movingController)
-	{
-		delete m_movingController;
-	}
+	if (m_movingController) { delete m_movingController; }
 }
 
 void BehaviourController::Update(float dt)

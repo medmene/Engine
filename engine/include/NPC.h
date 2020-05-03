@@ -6,14 +6,15 @@
 class GameObject;
 class PassabilityArea;
 class BehaviourController;
+class TextBubble;
 
 class NPC: public ICharacter
 {
 public:
-	NPC();
+	NPC(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 	virtual ~NPC();
 
-	void Init(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	void Init();
 
 	bool IsVisible() override;
 	void SetVisible(bool visible)override;
@@ -31,5 +32,7 @@ private:
 	bool							m_drawPassability = false;
 	float							m_passOffsetCoef = 0.1f;
 
-	BehaviourController			  * m_behaviourController;
+	TextBubble					  * m_bubble = nullptr;
+	
+	BehaviourController			  * m_behaviourController = nullptr;
 };

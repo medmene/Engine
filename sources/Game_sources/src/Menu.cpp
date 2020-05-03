@@ -62,6 +62,12 @@ Menu::~Menu()
 		delete obj;
 	}
 	m_buttons.clear();
+
+	for (auto&& ev : m_events)
+	{
+		delete ev;
+	}
+	m_events.clear();
 }
 
 void Menu::Update(float dt)

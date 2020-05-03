@@ -81,6 +81,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/SoundManager.h
 	engine/include/KeyboardBinds.h
 	engine/include/BehaviourController.h
+	engine/include/TextBubble.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -106,6 +107,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/Reaction.cpp
 	engine/src/SoundManager.cpp
 	engine/src/BehaviourController.cpp
+	engine/src/TextBubble.cpp
 )
 
 # Include lib pugi XML
