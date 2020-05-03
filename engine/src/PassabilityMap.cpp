@@ -47,21 +47,6 @@ PassabilityMap::PassabilityMap()
 	, m_nodeSize(Vector2(30, 25))
 	, m_indexOffset(Vector2((int)m_mapSize.x / 2, (int)m_mapSize.y / 2))
 {
-	// m_nodes.resize(200);
-	// Vector2 size(30, 25);
-	//
-	// int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-	// int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
-	//
-	// for (int x = stPosX; x < endPosX; ++x)
-	// {
-	// 	m_nodes[x + endPosX].resize(m_mapSize.y);
-	// 	
-	// 	for (int y = stPosY; y < endPosY; ++y)
-	// 	{
-	// 		m_nodes[x + endPosX][y + endPosY] = new PassabilityNode(Vector2(x * size.x, y * size.y), size, true);
-	// 	}
-	// }
 }
 
 PassabilityMap::~PassabilityMap()

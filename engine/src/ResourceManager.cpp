@@ -1,4 +1,6 @@
 #include "include/ResourceManager.h"
+#include <fstream>
+
 
 using namespace std::filesystem;
 
@@ -41,6 +43,7 @@ Resource::Resource(const string & path, const string & name, ResourceManager::Ty
 	, m_path(path)
 	, m_resName(name)
 {
+	m_dir = m_path.substr(0, m_path.find(m_resName));
 }
 
 // ----------------------------------------------------------------------------------------- //
@@ -105,7 +108,7 @@ Resource* ResourceManager::GetResource(const string& src)
 	return nullptr;
 }
 
-const string& ResourceManager::GetType(Type type)
+string ResourceManager::GetType(Type type)
 {
 	auto it = m_types.find(type);
 	
@@ -115,6 +118,23 @@ const string& ResourceManager::GetType(Type type)
 	}
 	
 	return "";
+}
+
+Resource* ResourceManager::CreateResourceFile(const string& dir, const string& name, Type tp)
+{
+	std::ofstream out;
+	out.open(dir + name + m_types[tp]);
+	if (out.is_open())
+	{
+		out << "<?xml version=\"1.0\"?>\n";
+		out << "<object>\n";
+		out << "</object>\n";
+		out.close();
+		Resource * res = new Resource(dir + name + m_types[tp], name, tp);
+		m_resources.emplace_back(res);
+		return res;
+	}
+	return nullptr;
 }
 
 ResourceManager* ResourceManager::instance()

@@ -21,8 +21,10 @@ public:
 
 	Resource * GetResource(const string & name, Type type);
 	Resource * GetResource(const string & src);
-	const string & GetType(Type type);
+	string GetType(Type type);
 
+	Resource * CreateResourceFile(const string & dir, const string & name, Type tp);
+	
 	static ResourceManager * instance();
 private:
 	vector<Resource *>					m_resources;
@@ -41,10 +43,12 @@ public:
 	Resource();
 	Resource(const string & path, const string & name, ResourceManager::Type type);
 	const string GetPath() { return m_path; }
+	const string GetDir() { return m_dir; }
 	const string GetName() { return m_resName; }
 	ResourceManager::Type GetType() { return m_type; }
 private:
 	string						m_path;
+	string						m_dir;
 	string						m_resName;
 	ResourceManager::Type		m_type;
 };

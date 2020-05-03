@@ -33,7 +33,6 @@ void Player::Init(SDL_Renderer * renderer)
 	
 	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_playerObject->SetAnimationEnable(true);
-	m_playerObject->SetGravity(true);
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
 	m_playerObject->UpdatePos(Vector2(500, 1400));
 

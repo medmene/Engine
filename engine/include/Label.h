@@ -32,7 +32,7 @@ public:
 	void UpdateColor(const Color & color);
 	void Update() {}
 
-	void Draw();
+	void Render();
 private:
 	Resource						  * m_resource = nullptr;
 	SDL_Renderer					  * m_renderer = nullptr;

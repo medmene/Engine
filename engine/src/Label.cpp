@@ -95,7 +95,7 @@ void Label::UpdatePos(const Vector2 & pos)
 	m_rect.y = m_position.y;
 }
 
-void Label::Draw()
+void Label::Render()
 {
 	if (IsVisible())
 	{

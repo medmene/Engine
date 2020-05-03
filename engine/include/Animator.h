@@ -17,8 +17,6 @@ class Animator
 {
 public:
 	explicit Animator(pugi::xml_document * doc, GameObject * object);
-	explicit Animator(pugi::xml_document * doc, Button * object);
-	explicit Animator(GameObject * object);
 	~Animator();
 
 	void SetAnimationsEnabled(bool enabled) { m_animationsEnabled = enabled; }
