@@ -1,4 +1,5 @@
 #include "Game_sources/include/GameWindow.h"
+#include <iostream>
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
@@ -7,10 +8,11 @@
 #include "include/NPC.h"
 #include "include/GameObject.h"
 #include "Game_sources/include/Level1.h"
+#include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/EventManager.h"
-#include <iostream>
+#include "include/SoundManager.h"
 
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
@@ -37,29 +39,39 @@ GameWindow::GameWindow()
 
 GameWindow::~GameWindow()
 {
+	delete Camera::instance();
+	delete MouseInput::instance();
+	delete KeyboardInput::instance();
+	delete PassabilityMap::instance();
+	delete SoundManager::instance();
+	delete EventManager::instance();
+	delete ResourceManager::instance();
+
 	if (m_renderer)
 	{
 		SDL_DestroyRenderer(m_renderer);
 	}
-	
+
 	if (m_window)
 	{
 		SDL_DestroyWindow(m_window);
 	}
 
-	delete Camera::instance();
-	delete MouseInput::instance();
-	delete KeyboardInput::instance();
-	delete PassabilityMap::instance();
-	delete ResourceManager::instance();
-	delete EventManager::instance();
+	Mix_Quit();
+	TTF_Quit();
+	SDL_Quit();
 }
 
 void GameWindow::Initialize()
 {
+	SoundManager::instance()->PlaySound(ResourceManager::instance()->GetResource("mainTheme", ResourceManager::MP3));
+	SoundManager::instance()->PauseAll();
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
+	m_interface = new GameInterface(m_renderer);
+	m_interface->Init();
+	
 	m_player = new Player();
 	m_player->Init(m_renderer);
 	
@@ -107,7 +119,10 @@ void GameWindow::Update()
 		PassabilityMap::instance()->Update();
 		Camera::instance()->Update(FPS.dt);
 		EventManager::instance()->Update();
+		SoundManager::instance()->Update();
+		m_interface->Update(FPS.dt);
 
+		
 		//////////////////////////////////////////
 		//////////////////////////////////////////
 		//////////////////////////////////////////
@@ -121,7 +136,8 @@ void GameWindow::Update()
 		m_player->Render();
 		m_npc->Render();
 		PassabilityMap::instance()->Render();
-
+		m_interface->Render();
+		
 		SDL_RenderPresent(m_renderer);
 	}
 }

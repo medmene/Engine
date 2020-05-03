@@ -5,6 +5,7 @@
 
 class MouseInput
 {
+	MouseInput();
 public:
 	enum Button
 	{
@@ -22,9 +23,7 @@ public:
 		MOUSE_BUTTON_UNDEFINED
 	};
 
-	MouseInput();
-	~MouseInput() {}
-	static MouseInput * instance() { return sm_instance; }
+	static MouseInput * instance();
 
 	bool IsPressed(Button btn) { return m_pressed[btn]; }
 	const Vector2 & GetPos() { return m_pos; }

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <object>
 	<source name="doors anim.png" />
-	<size x="70" y="70" />
+	<objSize x="70" y="70" />
+	<animSize x="70" y="70" />
 	<animation name="open" row="0" count="3" loop="false" speed="300" next_state="" />
 </object>

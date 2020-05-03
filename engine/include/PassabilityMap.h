@@ -26,11 +26,11 @@ struct PassabilityArea
 
 class PassabilityMap
 {
-public:
 	PassabilityMap();
+public:
 	~PassabilityMap();
 
-	static PassabilityMap * instance() { return sm_instance; }
+	static PassabilityMap * instance();
 	void Init(SDL_Renderer * renderer);
 	void SetMap(const string & src, ResourceManager::Type type);
 

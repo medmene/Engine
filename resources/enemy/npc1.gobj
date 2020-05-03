@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <object>
 	<source name="npc1_texture.png" />
-	<size x="128" y="128" />
+	<objSize x="128" y="128" />
+	<animSize x="128" y="128" />
 	<animation name="going_left" row="0" count="8" loop="true" speed="100" next_state="" />
 	<animation name="going_top_left" row="1" count="8" loop="true" speed="100" next_state="" />
 	<animation name="going_top" row="2" count="8" loop="true" speed="100" next_state="" />

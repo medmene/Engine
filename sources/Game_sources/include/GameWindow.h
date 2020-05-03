@@ -10,6 +10,7 @@ class GameObject;
 class Player;
 class NPC;
 struct Level1;
+class GameInterface;
 
 class GameWindow
 {
@@ -30,6 +31,8 @@ private:
 	Vector2							m_windowSize;
 	_FPS							FPS;
 
+	GameInterface				  * m_interface;
+	
 	Level1						  * m_level1 = nullptr;
 	Player						  * m_player = nullptr;
 	NPC							  * m_npc = nullptr;

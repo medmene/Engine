@@ -2,6 +2,7 @@
 #include "include/PassabilityMap.h"
 #include <queue>
 
+// From http://code.activestate.com/recipes/577457-a-star-shortest-path-algorithm/
 
 PathFinder::node::node(int xp, int yp, int d, int p)
 {

@@ -2,7 +2,22 @@
 
 
 
-KeyboardInput * KeyboardInput::sm_instance = new KeyboardInput();
+KeyboardInput * KeyboardInput::sm_instance = nullptr;
+
+KeyboardInput::KeyboardInput()
+	: m_state(State::KEY_UNDEFINED)
+	, m_key(Key(0))
+{
+}
+
+KeyboardInput* KeyboardInput::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new KeyboardInput();
+	}
+	return sm_instance;
+}
 
 bool KeyboardInput::IsKeyPressed(int key)
 {

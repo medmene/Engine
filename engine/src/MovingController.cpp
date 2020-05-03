@@ -87,9 +87,9 @@ void MovingController::MoveToPos(const Vector2 &pos)
 
 void MovingController::Update(float dt)
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::I)
+		if (KeyboardInput::instance()->GetKey() == kb::I)
 		{
 			m_visualisation = !m_visualisation;
 		}
@@ -155,16 +155,30 @@ void MovingController::Render()
 	{
 		if (!m_movingPath.empty())
 		{
-			SDL_SetRenderDrawColor(m_renderer, 0, 0, 250, 100);
 			auto diff = Camera::instance()->GetDiff();
-			
+
+			SDL_SetRenderDrawColor(m_renderer, 250, 0, 0, 100);
+			SDL_Rect rct = { (int)m_movingPath[0].x - 7, (int)m_movingPath[0].y - 7 , 15, 15 };
+			rct.x = rct.x + diff.x;
+			rct.y = rct.y + diff.y;
+			SDL_RenderFillRect(m_renderer, &rct);
+
+			SDL_SetRenderDrawColor(m_renderer, 0, 0, 250, 100);
 			for (int i = 1; i < m_movingPath.size(); ++i)
 			{
-				SDL_Rect rct = { (int)m_movingPath[i].x - 5, (int)m_movingPath[i].y -5 , 10, 10};
+				rct = { (int)m_movingPath[i].x - 5, (int)m_movingPath[i].y -5 , 10, 10};
 				rct.x = rct.x + diff.x;
 				rct.y = rct.y + diff.y;
 				SDL_RenderFillRect(m_renderer, &rct);
 			}
+			
+			SDL_SetRenderDrawColor(m_renderer, 250, 0, 0, 100);
+			rct = { (int)m_movingPath[m_movingPath.size() - 1].x - 7, (int)m_movingPath[m_movingPath.size() - 1].y - 7 , 15, 15 };
+			rct.x = rct.x + diff.x;
+			rct.y = rct.y + diff.y;
+			SDL_RenderFillRect(m_renderer, &rct);
+
+			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 		}
 	}
 }

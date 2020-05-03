@@ -61,9 +61,9 @@ void NPC::Init(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 
 void NPC::Update(float dt)
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::P)
+		if (KeyboardInput::instance()->GetKey() == kb::P)
 		{
 			m_drawPassability = !m_drawPassability;
 		}
