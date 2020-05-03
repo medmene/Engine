@@ -28,8 +28,7 @@ void Button::SetLabel(const string& text, int textFontSize, const string& src, R
 		m_label->SetFontSize(textFontSize);
 		m_label->SetStaticObject(IsStaticObject());
 		m_label->SetText(text);
-		m_label->UpdateCenterPos(m_position + m_size * Vector2{ (float)0.5, (float)0.5 });
-		//m_label->UpdateSize(textSize);
+		m_label->SetParent(this);
 	}
 }
 
