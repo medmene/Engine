@@ -9,6 +9,7 @@
 Button::Button()
 	: GameObject()
 {
+	m_label->SetVisible(false);
 	m_onClick = [] {};
 }
 
@@ -17,6 +18,7 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 {
 	m_renderer = renderer;
 	m_onClick = [] {};
+	m_label->SetVisible(false);
 }
 
 void Button::SetLabel(const string& text, const string& src, ResourceManager::Type type)
@@ -47,7 +49,7 @@ void Button::Update(float dt)
 	}
 	
 	GameObject::Update(dt);
-	if (m_label)
+	if (m_label && m_label->IsVisible())
 	{
 		m_label->Update(dt);
 	}
@@ -96,7 +98,7 @@ void Button::Render()
 		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
 		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
 
-		if (m_label)
+		if (m_label && m_label->IsVisible())
 		{
 			m_label->Render();
 		}

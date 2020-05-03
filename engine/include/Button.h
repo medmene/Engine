@@ -22,6 +22,7 @@ public:
 	
 private:
 	bool						m_isPressed = false;
+	bool						m_isTextVisible = false;
 	function<void()>			m_onClick;
 	Label					  * m_label = nullptr;
 	

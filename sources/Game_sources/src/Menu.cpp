@@ -28,13 +28,13 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
-	m_buttons.back()->SetLabel("Start", "calibri", ResourceManager::TTF);
+	//m_buttons.back()->SetLabel("Start", "calibri", ResourceManager::TTF);
 
 	m_buttons.emplace_back(new Button(m_renderer, "button2", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 300));
-	m_buttons.back()->SetLabel("Exit", "calibri", ResourceManager::TTF);
+	//m_buttons.back()->SetLabel("Exit", "calibri", ResourceManager::TTF);
 }
 
 Menu::~Menu()
