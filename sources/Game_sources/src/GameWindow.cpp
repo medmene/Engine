@@ -9,8 +9,10 @@
 #include "include/GameObject.h"
 #include "Game_sources/include/Menu.h"
 #include "Game_sources/include/Level1.h"
-#include "Game_sources/include/GameInterface.h"
 #include "Game_sources/include/Level2.h"
+#include "Game_sources/include/Level3.h"
+#include "Game_sources/include/Level4.h"
+#include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/EventManager.h"
@@ -76,7 +78,7 @@ void GameWindow::Initialize()
 	m_player = new Player();
 	m_player->Init(m_renderer);
 
-	ChangeState(LEVEL2);
+	ChangeState(MENU);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
@@ -131,8 +133,12 @@ void GameWindow::Update()
 		m_player->Update(FPS.dt);
 		break;
 	case GameWindow::LEVEL3:
+		m_level3->Update(FPS.dt);
+		m_player->Update(FPS.dt);
 		break;
 	case GameWindow::LEVEL4:
+		m_level4->Update(FPS.dt);
+		m_player->Update(FPS.dt);
 		break;
 	default:
 		break;
@@ -165,8 +171,12 @@ void GameWindow::Render()
 		m_player->Render();
 		break;
 	case GameWindow::LEVEL3:
+		m_level3->Render();
+		m_player->Render();
 		break;
 	case GameWindow::LEVEL4:
+		m_level4->Render();
+		m_player->Render();
 		break;
 	default:
 		break;
@@ -235,8 +245,12 @@ void GameWindow::OnStateLevel2Entering()
 
 void GameWindow::OnStateLevel3Entering()
 {
+	m_level3 = new Level3();
+	m_level3->Init(m_renderer, m_windowSize);
 }
 
 void GameWindow::OnStateLevel4Entering()
 {
+	m_level4 = new Level4();
+	m_level4->Init(m_renderer, m_windowSize);
 }
