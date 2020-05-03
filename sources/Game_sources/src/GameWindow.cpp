@@ -49,15 +49,14 @@ GameWindow::~GameWindow()
 	delete EventManager::instance();
 	delete ResourceManager::instance();
 
-	if (m_renderer)
-	{
-		SDL_DestroyRenderer(m_renderer);
-	}
-
-	if (m_window)
-	{
-		SDL_DestroyWindow(m_window);
-	}
+	if (m_menu) { delete m_menu; }
+	if (m_level1) { delete m_level1; }
+	if (m_level2) { delete m_level2; }
+	if (m_player) { delete m_player; }
+	if (m_interface) { delete m_interface; }
+	
+	if (m_renderer) { SDL_DestroyRenderer(m_renderer); }
+	if (m_window) { SDL_DestroyWindow(m_window); }
 
 	Mix_Quit();
 	TTF_Quit();
@@ -76,34 +75,25 @@ void GameWindow::Initialize()
 	
 	m_player = new Player();
 	m_player->Init(m_renderer);
+
+	ChangeState(LEVEL1);
 	
-	m_npc = new NPC();
-	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
-
-	m_level1 = new Level1();
-	m_level1->Init(m_renderer, m_windowSize);
-
-	m_level2 = new Level2();
-	m_level2->Init(m_renderer, m_windowSize);
-
-	m_menu = new Menu();
-	m_menu->Init(m_renderer, m_windowSize);
-
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
-void GameWindow::Update()
+void GameWindow::Processing()
 {
 	while (true)
 	{
-		////////////////  FPS     ////////////////
+		////////////////   FPS    ////////////////
 		FPS.UpdateFPS();
 		cout << FPS.fps << "\n";
 
-		////////////////  Events  ////////////////SDL_KEYUP
+		////////////////  Events  ////////////////
 		MouseInput::instance()->ResetDiffs();
 		KeyboardInput::instance()->Reset();
 		SDL_Event * e = new SDL_Event();
+		
 		if (SDL_PollEvent(e))
 		{
 			MouseInput::instance()->Update(e);
@@ -114,78 +104,139 @@ void GameWindow::Update()
 			else if (e->type == SDL_KEYUP && e->key.keysym.sym == SDLK_ESCAPE)
 				break;
 		}
+		delete e;
 
-
-		//////////////////////////////////////////
 		////////////////  Update  ////////////////
-		//////////////////////////////////////////
-
-		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
-		switch (m_state)
-		{
-		case GameWindow::MENU:
-			m_menu->Update(FPS.dt);
-			break;
-		case GameWindow::LEVEL1:
-			m_player->Update(FPS.dt);
-			m_npc->Update(FPS.dt);
-			m_level1->Update(FPS.dt);
-			break;
-		case GameWindow::LEVEL2:
-			m_player->Update(FPS.dt);
-			m_npc->Update(FPS.dt);
-			m_level2->Update(FPS.dt);
-			break;
-		case GameWindow::LEVEL3:
-			break;
-		case GameWindow::LEVEL4:
-			break;
-		default:
-			break;
-		}
-
-		PassabilityMap::instance()->Update();
-		Camera::instance()->Update(FPS.dt);
-		EventManager::instance()->Update();
-		SoundManager::instance()->Update();
-		m_interface->Update(FPS.dt);
-
-		
-		//////////////////////////////////////////
-		//////////////////////////////////////////
-		//////////////////////////////////////////
-
+		Update();
 
 		////////////////  Render  ////////////////
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
-		SDL_RenderClear(m_renderer);
+		Render();
+	}
+}
+
+void GameWindow::Update()
+{
+	//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
+	switch (m_state)
+	{
+	case GameWindow::MENU:
+		m_menu->Update(FPS.dt);
+		break;
+	case GameWindow::LEVEL1:
+		m_level1->Update(FPS.dt);
+		m_player->Update(FPS.dt);
+		break;
+	case GameWindow::LEVEL2:
+		m_level2->Update(FPS.dt);
+		m_player->Update(FPS.dt);
+		break;
+	case GameWindow::LEVEL3:
+		break;
+	case GameWindow::LEVEL4:
+		break;
+	default:
+		break;
+	}
+
+	PassabilityMap::instance()->Update();
+	Camera::instance()->Update(FPS.dt);
+	EventManager::instance()->Update();
+	SoundManager::instance()->Update();
+	m_interface->Update(FPS.dt);
+
+}
+
+void GameWindow::Render()
+{
+	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
+	SDL_RenderClear(m_renderer);
+
+	switch (m_state)
+	{
+	case GameWindow::MENU:
+		m_menu->Render();
+		break;
+	case GameWindow::LEVEL1:
+		m_level1->Render();
+		m_player->Render();
+		break;
+	case GameWindow::LEVEL2:
+		m_level2->Render();
+		m_player->Render();
+		break;
+	case GameWindow::LEVEL3:
+		break;
+	case GameWindow::LEVEL4:
+		break;
+	default:
+		break;
+	}
+
+	PassabilityMap::instance()->Render();
+	m_interface->Render();
+
+	SDL_RenderPresent(m_renderer);
+}
+
+void GameWindow::ChangeState(State newState)
+{
+	if (m_state != newState)
+	{
+		m_state = newState;
 
 		switch (m_state)
 		{
-		case GameWindow::MENU:
-			m_menu->Render();
+		case MENU:
+			OnStateMenuEntering();
 			break;
-		case GameWindow::LEVEL1:
-			m_player->Render();
-			m_npc->Render();
-			m_level1->Render();
+		case LEVEL1:
+			OnStateLevel1Entering();
 			break;
-		case GameWindow::LEVEL2:
-			m_player->Render();
-			m_npc->Render();
-			m_level2->Render();
+		case LEVEL2:
+			OnStateLevel2Entering();
 			break;
-		case GameWindow::LEVEL3:
+		case LEVEL3:
+			OnStateLevel3Entering();
 			break;
-		case GameWindow::LEVEL4:
-			break;
-		default:
+		case LEVEL4:
+			OnStateLevel4Entering();
 			break;
 		}
-
-		PassabilityMap::instance()->Render();
-		m_interface->Render();
-		
-		SDL_RenderPresent(m_renderer);
 	}
+}
+
+void GameWindow::OnStateMenuEntering()
+{
+	m_menu = new Menu();
+	m_menu->Init(m_renderer, m_windowSize);
+}
+
+void GameWindow::OnStateLevel1Entering()
+{
+	if (m_menu)
+	{
+		delete m_menu;
+	}
+	
+	m_level1 = new Level1();
+	m_level1->Init(m_renderer, m_windowSize);
+}
+
+void GameWindow::OnStateLevel2Entering()
+{
+	if (m_level1)
+	{
+		delete m_level1;
+	}
+	
+	m_level2 = new Level2();
+	m_level2->Init(m_renderer, m_windowSize);
+}
+
+void GameWindow::OnStateLevel3Entering()
+{
+}
+
+void GameWindow::OnStateLevel4Entering()
+{
 }

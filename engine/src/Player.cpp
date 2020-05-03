@@ -5,6 +5,7 @@
 #include "include/Animator.h"
 #include "include/PassabilityMap.h"
 #include "include/Camera.h"
+#include "include/TextBubble.h"
 
 
 Player::Player()
@@ -17,15 +18,9 @@ Player::Player()
 
 Player::~Player()
 {
-	if (m_playerObject)
-	{
-		delete m_playerObject;
-	}
-
-	if (m_passabilityArea)
-	{
-		delete m_passabilityArea;
-	}
+	if (m_playerObject) { delete m_playerObject; }
+	if (m_passabilityArea) { delete m_passabilityArea; }
+	if (m_bubble) { delete m_bubble; }
 }
 
 void Player::Init(SDL_Renderer * renderer)
@@ -37,6 +32,10 @@ void Player::Init(SDL_Renderer * renderer)
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
 	m_playerObject->UpdatePos(Vector2(500, 1400));
 
+	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
+	m_bubble->SetParent(m_playerObject);
+	m_bubble->SetSide(TextBubble::LEFT);
+	
 	Vector2 pos = m_playerObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
 	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
@@ -61,7 +60,7 @@ void Player::Update(float dt)
 	
 	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == kb::P)
+		if (KeyboardInput::instance()->GetKey() == kb::I)
 		{
 			m_drawPassability = !m_drawPassability;
 		}
@@ -72,6 +71,7 @@ void Player::Update(float dt)
 	}
 	
 	m_playerObject->Update(dt);
+	m_bubble->Update(dt);
 
 	m_speed.x = 0;
 	m_speed.y = 0;
@@ -139,6 +139,10 @@ void Player::Update(float dt)
 		}
 		else
 		{
+			Vector2 pos = m_playerObject->GetCenterPos();
+			pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
+			m_passabilityArea->m_pos = pos;
+			
 			auto oldPos = GetGameObject()->GetPosition();
 			oldPos += Vector2(m_speed.x * 1.5f, m_speed.y * 1.5f);
 			GetGameObject()->UpdatePos(oldPos);
@@ -149,6 +153,7 @@ void Player::Update(float dt)
 void Player::Render()
 {
 	m_playerObject->Render();
+	m_bubble->Render();
 
 	if (m_drawPassability)
 	{

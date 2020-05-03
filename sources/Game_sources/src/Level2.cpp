@@ -60,6 +60,12 @@ Level2::~Level2()
 		delete obj;
 	}
 	m_buttons.clear();
+
+	for (auto&& ev : m_buttons)
+	{
+		delete ev;
+	}
+	m_events.clear();
 }
 
 void Level2::Update(float dt)

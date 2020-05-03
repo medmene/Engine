@@ -2,6 +2,16 @@
 
 EventManager* EventManager::sm_instance = 0;
 
+EventManager::~EventManager()
+{
+	for (auto && event : events)
+	{
+		delete event.first;
+		delete event.second;
+	}
+	events.clear();
+}
+
 EventManager* EventManager::instance()
 {
     if(!sm_instance)

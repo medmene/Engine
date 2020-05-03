@@ -5,6 +5,7 @@
 
 
 class GameObject;
+class NPC;
 
 struct Level1
 {
@@ -23,6 +24,8 @@ struct Level1
 	vector<Button*> 			m_buttons;
 	vector<Event*> 				m_events;
 
+	NPC						  * m_npc = nullptr;
+	
 	Vector2						m_winSize;
 	SDL_Renderer			  * m_renderer;
 };

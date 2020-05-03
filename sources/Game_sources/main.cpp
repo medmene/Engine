@@ -3,7 +3,7 @@
 int main()
 {
 	GameWindow::instance()->Initialize();
-	GameWindow::instance()->Update();
+	GameWindow::instance()->Processing();
 	delete GameWindow::instance();
 	return 1;
 }

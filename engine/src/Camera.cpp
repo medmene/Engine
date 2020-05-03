@@ -39,5 +39,8 @@ void Camera::UpdateZoom(int zoomDir)
 
 void Camera::Update(float dt)
 {
-	m_position = m_followingObject->GetCenterPos();
+	if (m_followingObject)
+	{
+		m_position = m_followingObject->GetCenterPos();
+	}
 }

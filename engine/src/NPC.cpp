@@ -7,29 +7,22 @@
 #include "include/MovingController.h"
 #include "include/MouseInput.h"
 #include "include/BehaviourController.h"
+#include "include/TextBubble.h"
 
 
-NPC::NPC()
+NPC::NPC(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
 	: m_npcName("npc")
 {
+	m_renderer = renderer;
+	m_npcObject = new GameObject(m_renderer, src, type);
 }
 
 NPC::~NPC()
 {
-	if (m_npcObject)
-	{
-		delete m_npcObject;
-	}
-
-	if (m_passabilityArea)
-	{
-		delete m_passabilityArea;
-	}
-
-	if (m_behaviourController)
-	{
-		delete m_behaviourController;
-	}
+	if (m_npcObject) { delete m_npcObject; }
+	if (m_bubble) { delete m_bubble; }
+	if (m_passabilityArea) { delete m_passabilityArea; }
+	if (m_behaviourController) { delete m_behaviourController; }
 }
 
 bool NPC::IsVisible()
@@ -42,19 +35,14 @@ void NPC::SetVisible(bool visible)
 	m_npcObject->SetVisible(visible);
 }
 
-void NPC::Init(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
+void NPC::Init(/*SDL_Renderer* renderer, const string& src, ResourceManager::Type type*/)
 {
-	m_renderer = renderer;
-	
-	m_npcObject = new GameObject(m_renderer, src, type);
-	m_npcObject->SetAnimationEnable(true);
-	m_npcObject->GetAnimator()->GetActiveAnimation()->Play();
-	m_npcObject->UpdatePos(Vector2(750, 1000));
-	m_npcObject->UpdateColor(Color(50,250,50,255));
-	m_npcObject->UpdateSize(Vector2(180, 180));
+	m_bubble = new TextBubble(m_renderer, "textBubble_settings", ResourceManager::GOBJECT);
+	m_bubble->SetParent(m_npcObject);
+	m_bubble->SetSide(TextBubble::LEFT);
 
 	m_behaviourController = new BehaviourController(m_renderer, this);
-	
+
 	Vector2 pos = m_npcObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_npcObject->GetSize().y;
 	m_passabilityArea = new PassabilityArea(pos, m_npcObject->GetSize().x * 0.25f);
@@ -69,7 +57,7 @@ void NPC::Update(float dt)
 	
 	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == kb::P)
+		if (KeyboardInput::instance()->GetKey() == kb::I)
 		{
 			m_drawPassability = !m_drawPassability;
 		}
@@ -81,12 +69,14 @@ void NPC::Update(float dt)
 	
 	m_behaviourController->Update(dt);
 	m_npcObject->Update(dt);
+	m_bubble->Update(dt);
 }
 
 void NPC::Render()
 {
 	m_behaviourController->Render();
 	m_npcObject->Render();
+	m_bubble->Render();
 
 	if (m_drawPassability)
 	{

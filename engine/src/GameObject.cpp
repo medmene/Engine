@@ -80,7 +80,7 @@ bool GameObject::CreateSettings(const string & src, ResourceManager::Type type)
 
 			doc.save_file(m_resourceSettings->GetPath().c_str());
 
-			m_animator = new Animator(&doc, this);
+			m_animator = new Animator(&doc);
 			return true;
 		}
 	}
@@ -113,7 +113,7 @@ bool GameObject::LoadSettings()
 
 	if (m_resourceTexture)
 	{
-		m_animator = new Animator(&doc, this);
+		m_animator = new Animator(&doc);
 
 		auto surface = IMG_Load(m_resourceTexture->GetPath().c_str());
 
@@ -169,15 +169,8 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 
 GameObject::~GameObject()
 {
-	if (m_texture)
-	{
-		SDL_DestroyTexture(m_texture);
-	}
-
-	if (m_animator)
-	{
-		delete m_animator;
-	}
+	if (m_texture) { SDL_DestroyTexture(m_texture); }
+	if (m_animator) { delete m_animator; }
 }
 
 bool GameObject::IsAnimationEnabled()

@@ -6,6 +6,7 @@
 class EventManager
 {
 public:
+	~EventManager();
 	static EventManager * instance();
     void RegisterEvent(Event *e, Reaction *r) { events.push_back(pair{e,r}); };
     void Update();

@@ -33,10 +33,7 @@ Label::Label(SDL_Renderer* renderer, const string& src, ResourceManager::Type ty
 
 Label::~Label()
 {
-	if (m_font)
-	{
-		TTF_CloseFont(m_font);
-	}
+	if (m_font) { TTF_CloseFont(m_font); }
 }
 
 void Label::Init(const string & text, int fontSize)

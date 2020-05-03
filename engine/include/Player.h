@@ -5,6 +5,7 @@
 
 class GameObject;
 class PassabilityArea;
+class TextBubble;
 
 class Player : public ICharacter
 {
@@ -33,6 +34,8 @@ private:
 	bool							m_drawPassability = false;
 	float							m_passOffsetCoef = 0.33f;
 
+	TextBubble					  * m_bubble;
+	
 	bool							m_noclip;
 };
 

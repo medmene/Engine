@@ -7,6 +7,7 @@
 #include "include/EventPass.h"
 #include "Game_sources/include/GameWindow.h"
 #include "include/Player.h"
+#include "include/NPC.h"
 
 
 void OpenDoorByButton(GameObject *o, Event *e)
@@ -57,10 +58,10 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->UpdateSize(Vector2(200, 40));
 	m_buttons.back()->UpdatePos(Vector2(700, 900));
 
-	 m_events.emplace_back(new EventPass());
+	m_events.emplace_back(new EventPass());
 
-	 ((EventPass*)m_events.back())->SetObject( GameWindow::instance()->GetPlayer()->GetGameObject() );
-	 ((EventPass*)m_events.back())->SetRect({ 700, 900},{ 700 + 200, 900 + 40 });
+	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
+	((EventPass*)m_events.back())->SetRect({ 700, 900 }, { 700 + 200, 900 + 40 });
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
 	m_objects.back()->UpdateSize(Vector2(140, 140));
@@ -69,6 +70,15 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	m_objects.back()->SetAnimationEnable(true);
 	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
+
+	// Initialize NPC
+	m_npc = new NPC(m_renderer, "npc1", ResourceManager::GOBJECT);
+	m_npc->GetGameObject()->SetAnimationEnable(true);
+	m_npc->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	m_npc->GetGameObject()->UpdatePos(Vector2(750, 1000));
+	m_npc->GetGameObject()->UpdateColor(Color(50, 250, 50, 255));
+	m_npc->GetGameObject()->UpdateSize(Vector2(180, 180));
+	m_npc->Init();
 }
 
 Level1::~Level1()
@@ -96,10 +106,19 @@ Level1::~Level1()
 		delete obj;
 	}
 	m_buttons.clear();
+	
+	for (auto&& ev : m_events)
+	{
+		delete ev;
+	}
+	m_events.clear();
+
+	if (m_npc) { delete m_npc; }
 }
 
 void Level1::Update(float dt)
 {
+	m_npc->Update(dt);
 	for (auto && background : m_backgrounds)
 	{
 		background->Update(dt);
@@ -142,4 +161,5 @@ void Level1::Render()
 	{
 		object->Render();
 	}
+	m_npc->Render();
 }

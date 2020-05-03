@@ -70,10 +70,7 @@ MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float sp
 
 MovingController::~MovingController()
 {
-	if (m_finder)
-	{
-		delete m_finder;
-	}
+	if (m_finder) { delete m_finder; }
 }
 
 void MovingController::MoveToPos(const Vector2 &pos)
