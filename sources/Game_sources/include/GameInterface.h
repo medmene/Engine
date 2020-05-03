@@ -17,7 +17,7 @@ public:
 	void Update(float dt);
 	void Render();
 private:
-	SDL_Renderer			  * m_renderer;
-	bool						m_visible;
-	vector<GameObject *>		m_elements;
+	SDL_Renderer					  * m_renderer;
+	bool								m_visible;
+	vector<shared_ptr<GameObject>>		m_elements;
 };

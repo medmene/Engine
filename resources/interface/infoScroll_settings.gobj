@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+	<source name="infoScroll.png" />
+	<objSize x="150" y="200" />
+	<animSize x="731" y="934" />
+	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
+</object>
