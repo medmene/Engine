@@ -11,21 +11,30 @@
 
 void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
-	//PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
-	//GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
+	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
+	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
 	
 	m_winSize = winSize;
 	m_renderer = renderer;
 
 	m_backgrounds.emplace_back(new GameObject(m_renderer, "menu", ResourceManager::JPG));
-	//m_backgrounds.back()->SetStaticObject(true);
+	m_backgrounds.back()->SetStaticObject(true);
 	m_backgrounds.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y));
-	m_backgrounds.back()->UpdatePos(Vector2(0, 0)); // for non static
+	m_backgrounds.back()->UpdatePos(Vector2(0, 0));
+
+	float bSizeX = 200, bSizeY = 50, bPosX = m_winSize.x / 2 - bSizeX / 2;
 
 	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
-	//m_buttons.back()->SetStaticObject(true);
-	m_buttons.back()->UpdateSize(Vector2(200, 40));
-	m_buttons.back()->UpdatePos(Vector2(200, 200));
+	m_buttons.back()->SetStaticObject(true);
+	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
+	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
+	m_buttons.back()->SetLabel("Start", "calibri", ResourceManager::TTF);
+
+	m_buttons.emplace_back(new Button(m_renderer, "button2", ResourceManager::GOBJECT));
+	m_buttons.back()->SetStaticObject(true);
+	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
+	m_buttons.back()->UpdatePos(Vector2(bPosX, 300));
+	m_buttons.back()->SetLabel("Exit", "calibri", ResourceManager::TTF);
 }
 
 Menu::~Menu()

@@ -19,6 +19,14 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 	m_onClick = [] {};
 }
 
+void Button::SetLabel(const string& text, const string& src, ResourceManager::Type type)
+{
+	m_label = Label(m_renderer, src, type);
+	m_label.SetText(text);
+	m_label.UpdatePos(m_position);
+	m_label.UpdateSize(m_size);
+}
+
 void Button::Update(float dt)
 {
 	if (IsMouseInside())
@@ -35,6 +43,7 @@ void Button::Update(float dt)
 	}
 	
 	GameObject::Update(dt);
+	m_label.Update(dt);
 }
 
 
@@ -79,5 +88,7 @@ void Button::Render()
 		
 		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
 		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
+
+		m_label.Render();
 	}
 }

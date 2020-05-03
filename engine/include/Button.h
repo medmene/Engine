@@ -15,6 +15,7 @@ public:
 	Button(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 	
 	void SetOnclick(function<void()> onClick) { m_onClick = onClick; }
+	void SetLabel(const string& text, const string& src, ResourceManager::Type type);
 
 	void Update(float dt) override;
 	void Render() override;
@@ -22,7 +23,7 @@ public:
 private:
 	bool						m_isPressed = false;
 	function<void()>			m_onClick;
-
+	Label						m_label;
 	
 	bool IsMouseInside();
 };

@@ -8,8 +8,8 @@
 
 class Label : public GameObject
 {
-	explicit Label();
 public:
+	explicit Label();
 	
 	Label(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 	~Label();

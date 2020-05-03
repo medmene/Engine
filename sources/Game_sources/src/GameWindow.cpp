@@ -122,7 +122,8 @@ void GameWindow::Update()
 
 		//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 		//m_level1->Update(FPS.dt);
-		m_level2->Update(FPS.dt);
+		//m_level2->Update(FPS.dt);
+		m_menu->Update(FPS.dt);
 		m_player->Update(FPS.dt);
 		m_npc->Update(FPS.dt);
 		PassabilityMap::instance()->Update();
