@@ -14,6 +14,7 @@ public:
 		GOBJECT,
 		PMAP,
 		MP3,
+		TTF,
 		UNDEFINED = 1337
 	};
 

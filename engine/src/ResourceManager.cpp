@@ -153,4 +153,5 @@ void ResourceManager::RegisterTypes()
 	m_types.emplace(std::pair<int, string>(GOBJECT, ".gobj"));
 	m_types.emplace(std::pair<int, string>(PMAP, ".pmap"));
 	m_types.emplace(std::pair<int, string>(MP3, ".mp3"));
+	m_types.emplace(std::pair<int, string>(TTF, ".ttf"));
 }
