@@ -80,11 +80,11 @@ void GameWindow::Initialize()
 	m_npc = new NPC();
 	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
 
-	 m_level1 = new Level1();
-	 m_level1->Init(m_renderer, m_windowSize);
+	m_level1 = new Level1();
+	m_level1->Init(m_renderer, m_windowSize);
 
-	 m_level2 = new Level2();
-	 m_level2->Init(m_renderer, m_windowSize);
+	m_level2 = new Level2();
+	m_level2->Init(m_renderer, m_windowSize);
 
 	m_menu = new Menu();
 	m_menu->Init(m_renderer, m_windowSize);
