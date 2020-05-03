@@ -16,7 +16,7 @@ protected:
 	bool LoadSettings(const string & src, ResourceManager::Type type);
 	bool LoadSettings();
 public:
-	~GameObject();
+	virtual ~GameObject();
 	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 
 	bool IsVisible() { return m_visible; }
@@ -57,5 +57,5 @@ protected:
 	bool						m_visible;
 	bool						m_staticObject;
 
-	Animator				  * m_animator;
+	Animator				  * m_animator = nullptr;
 };

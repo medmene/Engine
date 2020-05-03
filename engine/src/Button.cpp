@@ -9,20 +9,14 @@
 Button::Button()
 	: GameObject()
 {
-}
-
-Button::~Button()
-{
-	if (m_texture)
-	{
-		SDL_DestroyTexture(m_texture);
-	}
+	m_onClick = [] {};
 }
 
 Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
 	: GameObject(renderer, src, type)
 {
 	m_renderer = renderer;
+	m_onClick = [] {};
 }
 
 void Button::Update(float dt)
@@ -30,9 +24,14 @@ void Button::Update(float dt)
 	if (IsMouseInside())
 	{
 		if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
+		{
 			m_isPressed = true;
+		}
 		else if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_UP)
+		{
+			m_onClick();
 			m_isPressed = false;
+		}
 	}
 	
 	GameObject::Update(dt);

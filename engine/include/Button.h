@@ -7,20 +7,22 @@
 #include "ResourceManager.h"
 
 class Animator;
-class GameObject;
 
 class Button : public GameObject
 {
 	explicit Button();
 public:
-	~Button();
 	Button(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 	
-	void Update(float dt) override;
-	bool IsMouseInside();
+	void SetOnclick(function<void()> onClick) { m_onClick = onClick; }
 
+	void Update(float dt) override;
 	void Render() override;
 	
 private:
 	bool						m_isPressed = false;
+	function<void()>			m_onClick;
+
+	
+	bool IsMouseInside();
 };

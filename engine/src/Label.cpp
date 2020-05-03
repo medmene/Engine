@@ -5,27 +5,23 @@
 
 
 Label::Label()
-	: m_fontSize(24)
-	, m_color({ 255, 255, 255, 255 })
+	: GameObject()
+	, m_fontSize(24)
 	, m_text("_")
-	, m_position(0,0)
-	, m_visible(true)
 {
 }
 
 Label::Label(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
-	: m_fontSize(24)
-	, m_color({ 255, 255, 255, 255 })
+	: GameObject()
+	, m_fontSize(24)
 	, m_text("_")
-	, m_position(0, 0)
-	, m_visible(true)
 {
 	m_renderer = renderer;
-	m_resource = ResourceManager::instance()->GetResource(src, type);
+	m_resourceSettings = ResourceManager::instance()->GetResource(src, type);
 
-	if (m_resource)
+	if (m_resourceSettings)
 	{
-		m_font = TTF_OpenFont(m_resource->GetPath().c_str(), m_fontSize);
+		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
 			CreateTexture();
@@ -37,18 +33,15 @@ Label::Label(SDL_Renderer* renderer, const string& src, ResourceManager::Type ty
 
 Label::~Label()
 {
-	if (m_texture)
+	if (m_font)
 	{
-		SDL_DestroyTexture(m_texture);
+		TTF_CloseFont(m_font);
 	}
 }
 
-void Label::Init(SDL_Renderer * renderer, const string & text, Vector2 pos, int fontSize, Color color)
+void Label::Init(const string & text, int fontSize)
 {
-	m_renderer = renderer;
 	m_fontSize = fontSize;
-	m_color = color;
-	m_position = pos;
 	m_text = text;
 	CreateTexture();
 }
@@ -61,11 +54,11 @@ void Label::SetText(const string & text)
 
 void Label::SetFont(const string & src, ResourceManager::Type type)
 {
-	m_resource = ResourceManager::instance()->GetResource(src, type);
+	m_resourceSettings = ResourceManager::instance()->GetResource(src, type);
 
-	if (m_resource)
+	if (m_resourceSettings)
 	{
-		m_font = TTF_OpenFont(m_resource->GetPath().c_str(), m_fontSize);
+		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
 			CreateTexture();
@@ -78,32 +71,23 @@ void Label::SetFont(const string & src, ResourceManager::Type type)
 void Label::SetFontSize(int fontSize)
 {
 	m_fontSize = fontSize;
-	m_font = TTF_OpenFont(m_resource->GetPath().c_str(), m_fontSize);
+	m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 	CreateTexture();
-}
-
-void Label::UpdateColor(const Color & color)
-{
-	m_color = color;
-	CreateTexture();
-}
-
-void Label::UpdatePos(const Vector2 & pos)
-{
-	m_position = pos;
-	m_rect.x = m_position.x;
-	m_rect.y = m_position.y;
 }
 
 void Label::Render()
 {
 	if (IsVisible())
 	{
-		SDL_Rect localRect = GetRenderRect();
-
-		auto diff = Camera::instance()->GetDiff();
-		localRect.x = localRect.x + diff.x;
-		localRect.y = localRect.y + diff.y;
+		SDL_Rect localRect = m_rect;
+		
+		// Apply camera moving
+		if (!m_staticObject)
+		{
+			auto diff = Camera::instance()->GetDiff();
+			localRect.x = localRect.x + diff.x;
+			localRect.y = localRect.y + diff.y;
+		}
 
 		localRect.x *= Camera::instance()->GetZoom();
 		localRect.y *= Camera::instance()->GetZoom();

@@ -10,8 +10,10 @@
 
 GameObject::GameObject()
 	: m_rect({ 0, 0, 0, 0 })
+	, m_center(0, 0)
 	, m_color({ 255, 255, 255, 255 })
 	, m_position(0, 0)
+	, m_size(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
 {
@@ -127,8 +129,8 @@ bool GameObject::LoadSettings()
 }
 
 GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
-	: m_visible(true)
-	, m_position(0, 0)
+	: m_position(0, 0)
+	, m_visible(true)
 	, m_staticObject(false)
 {
 	m_renderer = renderer;
@@ -201,7 +203,7 @@ void GameObject::UpdateColor(const Color & clr)
 
 void GameObject::UpdateSize(const Vector2 & size)
 {
-	if (m_rect.w != size.x && m_rect.h != size.y)
+	if (m_size != size)
 	{
 		m_size = size;
 		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };

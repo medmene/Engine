@@ -3,5 +3,5 @@
 	<source name="button1.png" />
 	<objSize x="512" y="512" />
 	<animSize x="512" y="512" />
-	<animation name="idle" row="0" count="2" loop="false" speed="100" next_state="" />
+	<animation name="idle" row="0" count="2" loop="true" speed="100" next_state="" />
 </object>
