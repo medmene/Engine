@@ -12,6 +12,7 @@ class NPC;
 struct Level1;
 class GameInterface;
 struct Level2;
+struct Menu;
 
 class GameWindow
 {
@@ -34,6 +35,7 @@ private:
 
 	GameInterface				  * m_interface;
 	
+	Menu						  * m_menu = nullptr;
 	Level1						  * m_level1 = nullptr;
 	Level2						  * m_level2 = nullptr;
 	Player						  * m_player = nullptr;

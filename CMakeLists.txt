@@ -42,6 +42,7 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameInterface.h
 	sources/Game_sources/include/Level1.h
 	sources/Game_sources/include/Level2.h
+	sources/Game_sources/include/Menu.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -49,6 +50,7 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameInterface.cpp
 	sources/Game_sources/src/Level1.cpp
 	sources/Game_sources/src/Level2.cpp
+	sources/Game_sources/src/Menu.cpp
 )
 
 # Include Engine

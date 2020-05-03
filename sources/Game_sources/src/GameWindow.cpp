@@ -7,6 +7,7 @@
 #include "include/Player.h"
 #include "include/NPC.h"
 #include "include/GameObject.h"
+#include "Game_sources/include/Menu.h"
 #include "Game_sources/include/Level1.h"
 #include "Game_sources/include/GameInterface.h"
 #include "Game_sources/include/Level2.h"
@@ -79,9 +80,15 @@ void GameWindow::Initialize()
 	m_npc = new NPC();
 	m_npc->Init(m_renderer, "npc1", ResourceManager::GOBJECT);
 
-	m_level2 = new Level2();
-	m_level2->Init(m_renderer, m_windowSize);
-	
+	// m_level1 = new Level1();
+	// m_level1->Init(m_renderer, m_windowSize);
+
+	// m_level2 = new Level2();
+	// m_level2->Init(m_renderer, m_windowSize);
+
+	m_menu = new Menu();
+	m_menu->Init(m_renderer, m_windowSize);
+
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
@@ -135,7 +142,9 @@ void GameWindow::Update()
 		SDL_RenderClear(m_renderer);
 
 		//m_level1->Render();
-		m_level2->Render();
+		m_menu->Render();
+		//m_level2->Render();
+
 		m_player->Render();
 		m_npc->Render();
 		PassabilityMap::instance()->Render();
