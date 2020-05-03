@@ -1,4 +1,5 @@
 #include "Game_sources/include/GameWindow.h"
+#include <iostream>
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
@@ -10,7 +11,7 @@
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/EventManager.h"
-#include <iostream>
+#include "include/SoundManager.h"
 
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
@@ -51,12 +52,15 @@ GameWindow::~GameWindow()
 	delete MouseInput::instance();
 	delete KeyboardInput::instance();
 	delete PassabilityMap::instance();
-	delete ResourceManager::instance();
+	delete SoundManager::instance();
 	delete EventManager::instance();
+	delete ResourceManager::instance();
 }
 
 void GameWindow::Initialize()
 {
+	SoundManager::instance()->PlaySound(ResourceManager::instance()->GetResource("mainTheme", ResourceManager::MP3));
+	SoundManager::instance()->PauseAll();
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
@@ -107,7 +111,10 @@ void GameWindow::Update()
 		PassabilityMap::instance()->Update();
 		Camera::instance()->Update(FPS.dt);
 		EventManager::instance()->Update();
+		SoundManager::instance()->Update();
 
+
+		
 		//////////////////////////////////////////
 		//////////////////////////////////////////
 		//////////////////////////////////////////

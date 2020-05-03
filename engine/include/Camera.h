@@ -5,12 +5,10 @@ class GameObject;
 
 class Camera 
 {
-public:
 	Camera();
-	~Camera(){}
-	
+public:
 	void Initialize(const Vector2 & posInWindow) { m_posInWindow = posInWindow; }
-	static Camera * instance() { return sm_instance; }
+	static Camera * instance();
 
 	bool IsZoomEnabled() { return m_zoomEnabled; }
 	void SetFollowingObject(GameObject * obj) { m_followingObject = obj; }

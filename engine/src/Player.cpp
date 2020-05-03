@@ -20,6 +20,11 @@ Player::~Player()
 	{
 		delete m_playerObject;
 	}
+
+	if (m_passabilityArea)
+	{
+		delete m_passabilityArea;
+	}
 }
 
 void Player::Init(SDL_Renderer * renderer)
@@ -49,9 +54,9 @@ void Player::SetVisible(bool visible)
 
 void Player::Update(float dt)
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::P)
+		if (KeyboardInput::instance()->GetKey() == kb::P)
 		{
 			m_drawPassability = !m_drawPassability;
 		}
@@ -72,28 +77,28 @@ void Player::Update(float dt)
 		auto key = KeyboardInput::instance()->GetKeyMap()[KeyboardInput::instance()->GetKeyMap().size() - 1];
 		switch (key)
 		{
-		case KeyboardInput::W:
+		case kb::W:
 			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_left"))
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("going_left");
 			}
 			m_speed.y = -m_speedConst.y;
 			break;
-		case KeyboardInput::A:
+		case kb::A:
 			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_left"))
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("idle_left");
 			}
 			m_speed.x = -m_speedConst.x;
 			break;
-		case KeyboardInput::D:
+		case kb::D:
 			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_right"))
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("idle_right");
 			}
 			m_speed.x = m_speedConst.x;
 			break;
-		case KeyboardInput::S:
+		case kb::S:
 			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_right"))
 			{
 				m_playerObject->GetAnimator()->PlayAnimation("going_right");

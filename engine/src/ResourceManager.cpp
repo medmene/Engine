@@ -3,7 +3,7 @@
 using namespace std::filesystem;
 
 
-ResourceManager * ResourceManager::sm_instance = new ResourceManager();
+ResourceManager * ResourceManager::sm_instance = nullptr;
 
 // ----------------------------------------------------------------------------------------- //
 
@@ -117,10 +117,20 @@ const string& ResourceManager::GetType(Type type)
 	return "";
 }
 
+ResourceManager* ResourceManager::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new ResourceManager();
+	}
+	return sm_instance;
+}
+
 void ResourceManager::RegisterTypes()
 {
 	m_types.emplace(std::pair<int, string>(PNG, ".png"));
 	m_types.emplace(std::pair<int, string>(JPG, ".jpg"));
 	m_types.emplace(std::pair<int, string>(GOBJECT, ".gobj"));
 	m_types.emplace(std::pair<int, string>(PMAP, ".pmap"));
+	m_types.emplace(std::pair<int, string>(MP3, ".mp3"));
 }

@@ -16,6 +16,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
+#include "SDL/SDL_mixer.h"
 #include <unordered_map>
 
 //#pragma comment(lib,"SDL/SDL2.lib")

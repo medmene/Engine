@@ -5,7 +5,7 @@
 #include "include/KeyboardInput.h"
 
 
-PassabilityMap * PassabilityMap::sm_instance = new PassabilityMap();
+PassabilityMap * PassabilityMap::sm_instance = nullptr;
 
 PassabilityNode::PassabilityNode(const Vector2& pos, const Vector2& size, bool passible)
 	: m_pos(pos)
@@ -79,6 +79,15 @@ PassabilityMap::~PassabilityMap()
 	}
 
 	m_nodes.clear();
+}
+
+PassabilityMap* PassabilityMap::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new PassabilityMap();
+	}
+	return sm_instance;
 }
 
 void PassabilityMap::Init(SDL_Renderer * renderer)
@@ -285,9 +294,9 @@ bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 
 void PassabilityMap::Update()
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::O)
+		if (KeyboardInput::instance()->GetKey() == kb::O)
 		{
 			if (m_editMode)
 			{
@@ -295,7 +304,7 @@ void PassabilityMap::Update()
 			}
 		}
 		
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::L)
+		if (KeyboardInput::instance()->GetKey() == kb::L)
 		{
 			m_editMode = !m_editMode;
 		}
@@ -335,7 +344,8 @@ void PassabilityMap::Render()
 	{
 		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
 		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
-		
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 		for (int x = stPosX; x < endPosX; ++x)
 		{
 			for (int y = stPosY; y < endPosY; ++y)
@@ -347,7 +357,6 @@ void PassabilityMap::Render()
 				localRect.x = localRect.x + diff.x;
 				localRect.y = localRect.y + diff.y;
 				
-				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 				SDL_RenderDrawRect(m_renderer, &localRect);
 
 				if (!nd->m_passible)
@@ -356,6 +365,8 @@ void PassabilityMap::Render()
 				}
 			}
 		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	}
 }
 

@@ -27,6 +27,7 @@ target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
 target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_ttf.lib)
+target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_mixer.lib)
 
 
 install(TARGETS GameEngine RUNTIME DESTINATION bin)
@@ -71,6 +72,8 @@ target_sources(GameEngine PRIVATE
 	engine/include/Event.h
 	engine/include/EventManager.h
 	engine/include/Reaction.h
+	engine/include/SoundManager.h
+	engine/include/KeyboardBinds.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -94,6 +97,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/EventPass.cpp
 	engine/src/EventManager.cpp
 	engine/src/Reaction.cpp
+	engine/src/SoundManager.cpp
 )
 
 # Include lib pugi XML

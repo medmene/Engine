@@ -87,9 +87,9 @@ void MovingController::MoveToPos(const Vector2 &pos)
 
 void MovingController::Update(float dt)
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::I)
+		if (KeyboardInput::instance()->GetKey() == kb::I)
 		{
 			m_visualisation = !m_visualisation;
 		}

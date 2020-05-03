@@ -5,6 +5,7 @@ class Resource;
 
 class ResourceManager
 {
+	ResourceManager();
 public:
 	enum Type
 	{
@@ -12,17 +13,17 @@ public:
 		JPG,
 		GOBJECT,
 		PMAP,
+		MP3,
 		UNDEFINED = 1337
 	};
 
-	ResourceManager();
 	~ResourceManager();
 
 	Resource * GetResource(const string & name, Type type);
 	Resource * GetResource(const string & src);
 	const string & GetType(Type type);
 
-	static ResourceManager * instance() { return sm_instance; }
+	static ResourceManager * instance();
 private:
 	vector<Resource *>					m_resources;
 	map<int, string>					m_types;
