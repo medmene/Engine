@@ -27,14 +27,16 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
-	m_buttons.back()->UpdatePos(Vector2(bPosX, 150));
+	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
 	m_buttons.back()->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
+	m_buttons.back()->SetOnclick([]() {GameWindow::instance()->ChangeState(GameWindow::LEVEL1); });
 
 	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 300));
 	m_buttons.back()->SetLabel("Exit", 30, "calibri", ResourceManager::TTF);
+	m_buttons.back()->SetOnclick([]() { exit(0); });
 }
 
 Menu::~Menu()

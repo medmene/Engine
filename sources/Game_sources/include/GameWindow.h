@@ -12,6 +12,8 @@ class NPC;
 struct Level1;
 class GameInterface;
 struct Level2;
+struct Level3;
+struct Level4;
 struct Menu;
 
 class GameWindow
@@ -35,6 +37,7 @@ public:
 	void Processing();
 	
 	Player * GetPlayer() { return m_player; }
+	void ChangeState(State newState);
 
 private:
 	void Update();
@@ -53,11 +56,12 @@ private:
 	Menu						  * m_menu = nullptr;
 	Level1						  * m_level1 = nullptr;
 	Level2						  * m_level2 = nullptr;
+	Level3						  * m_level3 = nullptr;
+	Level4						  * m_level4 = nullptr;
 	Player						  * m_player = nullptr;
 
 	static GameWindow			  * sm_instance;
 
-	void ChangeState(State newState);
 	void OnStateMenuEntering();
 	void OnStateLevel1Entering();
 	void OnStateLevel2Entering();

@@ -7,10 +7,10 @@
 class GameObject;
 class NPC;
 
-struct Level2
+struct Level4
 {
-	Level2(){}
-	~Level2();
+	Level4(){}
+	~Level4();
 
 	void Init(SDL_Renderer * renderer, const Vector2 & winSize);
 	void Update(float dt);
