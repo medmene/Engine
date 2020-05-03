@@ -61,11 +61,13 @@ bool GameObject::CreateSettings(const string & src, ResourceManager::Type type)
 			auto objSizeChild = rootNode.append_child("objSize");
 			objSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
 			objSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
+			objSizeChild.append_attribute("annotation") = "This is size for saving";
 
 			// Node 3. - size
 			auto animSizeChild = rootNode.append_child("animSize");
 			animSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
 			animSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
+			animSizeChild.append_attribute("annotation") = "This is size of real frame in image";
 
 			// Node 4. - default animation
 			auto node = rootNode.append_child("animation");
@@ -259,6 +261,7 @@ void GameObject::Update(float dt)
 
 	if (m_parent)
 	{
+		m_staticObject = m_parent->IsStaticObject();
 		UpdateCenterPos(m_parent->GetCenterPos() + m_relativePos);
 		m_visible = m_parent->IsVisible();
 	}
