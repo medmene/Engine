@@ -17,8 +17,6 @@ class Animator
 {
 public:
 	explicit Animator(pugi::xml_document * doc, GameObject * object);
-	explicit Animator(pugi::xml_document * doc, Button * object);
-	explicit Animator(GameObject * object);
 	~Animator();
 
 	void SetAnimationsEnabled(bool enabled) { m_animationsEnabled = enabled; }
@@ -36,6 +34,7 @@ public:
 	bool IsAnimationsEnabled() { return m_animationsEnabled; }
 
 	Animation * GetAnimation(const string & name);
+	vector<Animation *> GetAllAnimations() { return m_animations; }
 	int GetAnimationStateCount(const string & name);
 	Animation * GetActiveAnimation() { return m_activeAnimation; }
 	Animation * GetPreviousAnimation() { return m_prevAnimation; }

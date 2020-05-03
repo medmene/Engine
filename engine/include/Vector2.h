@@ -18,7 +18,7 @@ public:
 
 	void scale(float scale);
 
-	float length(const Vector2 other);
+	float length();
 	
 	Vector2& operator=(const Vector2& other);
 	bool operator==(const Vector2& other) const;
@@ -26,12 +26,17 @@ public:
 	friend Vector2 operator+(const Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator-(const Vector2& lhs, const Vector2& rhs);
 	friend Vector2 operator*(const Vector2& lhs, const Vector2& rhs);
+	friend Vector2 operator/(const Vector2& lhs, const Vector2& rhs);
 	Vector2& operator+=(const Vector2& other);
 	Vector2& operator+=(int other);
 	Vector2& operator+=(float other);
+	Vector2& operator*=(float other);
 	Vector2& operator-=(const Vector2& other);
 	Vector2& operator-=(int other);
 	Vector2& operator-=(float other);
 	Vector2& operator/=(int other);
 	Vector2& operator/=(float other);
+
+private:
+	float eps = 1E-5;
 };

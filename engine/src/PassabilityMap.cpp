@@ -5,7 +5,7 @@
 #include "include/KeyboardInput.h"
 
 
-PassabilityMap * PassabilityMap::sm_instance = new PassabilityMap();
+PassabilityMap * PassabilityMap::sm_instance = nullptr;
 
 PassabilityNode::PassabilityNode(const Vector2& pos, const Vector2& size, bool passible)
 	: m_pos(pos)
@@ -47,21 +47,6 @@ PassabilityMap::PassabilityMap()
 	, m_nodeSize(Vector2(30, 25))
 	, m_indexOffset(Vector2((int)m_mapSize.x / 2, (int)m_mapSize.y / 2))
 {
-	// m_nodes.resize(200);
-	// Vector2 size(30, 25);
-	//
-	// int stPosX = -((int)m_mapSize.x / 2), endPosX = ((int)m_mapSize.x / 2);
-	// int stPosY = -((int)m_mapSize.y / 2), endPosY = ((int)m_mapSize.x / 2);
-	//
-	// for (int x = stPosX; x < endPosX; ++x)
-	// {
-	// 	m_nodes[x + endPosX].resize(m_mapSize.y);
-	// 	
-	// 	for (int y = stPosY; y < endPosY; ++y)
-	// 	{
-	// 		m_nodes[x + endPosX][y + endPosY] = new PassabilityNode(Vector2(x * size.x, y * size.y), size, true);
-	// 	}
-	// }
 }
 
 PassabilityMap::~PassabilityMap()
@@ -79,6 +64,15 @@ PassabilityMap::~PassabilityMap()
 	}
 
 	m_nodes.clear();
+}
+
+PassabilityMap* PassabilityMap::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new PassabilityMap();
+	}
+	return sm_instance;
 }
 
 void PassabilityMap::Init(SDL_Renderer * renderer)
@@ -180,6 +174,20 @@ void PassabilityMap::SetMap(const string& src, ResourceManager::Type type)
 	throw std::exception("Can't load passability resource");
 }
 
+Vector2 PassabilityMap::WorldToNodeIndex(const Vector2& pos)
+{
+	int x = pos.x / m_nodeSize.x + m_indexOffset.x;
+	int y = pos.y / m_nodeSize.y + m_indexOffset.y;
+	return Vector2(x, y);
+}
+
+Vector2 PassabilityMap::NodeIndexToWorld(const Vector2& pos)
+{
+	auto nd = m_nodes[pos.x][pos.y];
+	return Vector2(nd->m_pos.x + nd->m_size.x / 2,
+		nd->m_pos.y + nd->m_size.y / 2);
+}
+
 bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 {
 	//				higher
@@ -243,16 +251,6 @@ bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 	PassabilityNode * ndBottomRight =	m_nodes[xBottomRight][yBottomRight];
 	PassabilityNode * ndBottom =		m_nodes[xBottom][yBottom];
 	PassabilityNode * ndBottomLeft =	m_nodes[xBottomLeft][yBottomLeft];
-
-	bool s = ndLeft->IsInside(posLeft);
-	bool s2 = ndTop->IsInside(posTop);
-	bool s3 = ndTop->IsInside(posTop);
-	bool s4 = ndTopLeft->IsInside(posTopLeft);
-	bool s5 = ndTopRight->IsInside(posTopRight);
-	bool s6 = ndBottomRight->IsInside(posBottomRight);
-	bool s7 = ndBottomLeft->IsInside(posBottomLeft);
-	bool s8 = ndRight->IsInside(posRight);
-	bool s9 = ndBottom->IsInside(posBottom);
 	
 	if (ndLeft->IsInside(posLeft) &&
 		ndTop->IsInside(posTop) &&
@@ -281,9 +279,9 @@ bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 
 void PassabilityMap::Update()
 {
-	if (KeyboardInput::instance()->GetState() == KeyboardInput::KEY_DOWN)
+	if (KeyboardInput::instance()->GetState() == kb::KEY_DOWN)
 	{
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::O)
+		if (KeyboardInput::instance()->GetKey() == kb::O)
 		{
 			if (m_editMode)
 			{
@@ -291,7 +289,7 @@ void PassabilityMap::Update()
 			}
 		}
 		
-		if (KeyboardInput::instance()->GetKey() == KeyboardInput::L)
+		if (KeyboardInput::instance()->GetKey() == kb::L)
 		{
 			m_editMode = !m_editMode;
 		}
@@ -299,8 +297,7 @@ void PassabilityMap::Update()
 	
 	if (m_editMode && MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
 	{
-		auto pos = MouseInput::instance()->GetPos();
-		pos = pos + Camera::instance()->GetPos() - Camera::instance()->GetPosInWnd();
+		auto pos = MouseInput::instance()->GetPosInMap();
 
 
 		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
@@ -332,7 +329,8 @@ void PassabilityMap::Render()
 	{
 		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
 		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
-		
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 		for (int x = stPosX; x < endPosX; ++x)
 		{
 			for (int y = stPosY; y < endPosY; ++y)
@@ -340,10 +338,10 @@ void PassabilityMap::Render()
 				PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
 				SDL_Rect localRect = nd->m_rect;
 
-				localRect.x = localRect.x + Camera::instance()->GetDiff().x;
-				localRect.y = localRect.y + Camera::instance()->GetDiff().y;
-
-				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
+				auto diff = Camera::instance()->GetDiff();
+				localRect.x = localRect.x + diff.x;
+				localRect.y = localRect.y + diff.y;
+				
 				SDL_RenderDrawRect(m_renderer, &localRect);
 
 				if (!nd->m_passible)
@@ -352,6 +350,8 @@ void PassabilityMap::Render()
 				}
 			}
 		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	}
 }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+	<source name="gameSettingsBtn.png" />
+	<objSize x="40" y="40" />
+	<animSize x="512" y="512" />
+	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+</object>

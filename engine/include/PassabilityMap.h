@@ -26,15 +26,21 @@ struct PassabilityArea
 
 class PassabilityMap
 {
-public:
 	PassabilityMap();
+public:
 	~PassabilityMap();
 
-	static PassabilityMap * instance() { return sm_instance; }
+	static PassabilityMap * instance();
 	void Init(SDL_Renderer * renderer);
 	void SetMap(const string & src, ResourceManager::Type type);
 
+	Vector2 WorldToNodeIndex(const Vector2 & pos);
+	Vector2 NodeIndexToWorld(const Vector2 & pos);
+	
 	bool IsAreaPossible(PassabilityArea * area);
+	auto GetAllNodes() { return m_nodes; }
+	auto GetMapSize() { return m_mapSize; }
+	auto GetNodeSize() { return m_nodeSize; }
 	
 	void Update();
 	void Render();

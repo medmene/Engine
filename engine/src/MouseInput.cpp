@@ -1,8 +1,8 @@
 #include "include/MouseInput.h"
+#include "include/Camera.h"
 
 
-
-MouseInput * MouseInput::sm_instance = new MouseInput();
+MouseInput * MouseInput::sm_instance = nullptr;
 
 MouseInput::MouseInput()
 	: m_pos(0, 0)
@@ -16,6 +16,20 @@ MouseInput::MouseInput()
 	{
 		m_pressed[i] = false;
 	}
+}
+
+MouseInput* MouseInput::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new MouseInput();
+	}
+	return sm_instance;
+}
+
+Vector2 MouseInput::GetPosInMap()
+{
+	return m_pos + Camera::instance()->GetPos() - Camera::instance()->GetPosInWnd();
 }
 
 void MouseInput::Update(SDL_Event * e)

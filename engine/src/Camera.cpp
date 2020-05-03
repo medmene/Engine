@@ -2,7 +2,7 @@
 #include "include/GameObject.h"
 
 
-Camera * Camera::sm_instance = new Camera();
+Camera * Camera::sm_instance = nullptr;
 
 Camera::Camera()
 	: m_position(0, 0)
@@ -11,6 +11,15 @@ Camera::Camera()
 	, m_zoomEnabled(false)
 	, m_zoomBorders(0.1f, 3.f)
 {
+}
+
+Camera* Camera::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new Camera();
+	}
+	return sm_instance;
 }
 
 void Camera::UpdateZoom(int zoomDir)

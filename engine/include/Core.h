@@ -11,10 +11,13 @@
 #include <filesystem>
 #include <thread>
 #include <map>
+#include <functional>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
+#include "SDL/SDL_mixer.h"
+#include <unordered_map>
 
 //#pragma comment(lib,"SDL/SDL2.lib")
 //#pragma comment(lib,"SDL/SDL2main.lib")
@@ -30,6 +33,9 @@ using std::vector;
 using std::cout;
 using std::shared_ptr;
 using std::make_shared;
+using std::unordered_map;
+using std::pair;
 using std::weak_ptr;
+using std::function;
 using std::find;
 using std::wstring;
