@@ -9,7 +9,6 @@
 Button::Button()
 	: GameObject()
 {
-	m_label->SetVisible(false);
 	m_onClick = [] {};
 }
 
@@ -18,18 +17,19 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 {
 	m_renderer = renderer;
 	m_onClick = [] {};
-	m_label->SetVisible(false);
 }
 
-void Button::SetLabel(const string& text, const string& src, ResourceManager::Type type)
+void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
 	m_label = new Label(m_renderer, src, type);
 	if (m_label)
 	{
+		m_label->SetVisible(true);
+		m_label->SetFontSize(textFontSize);
 		m_label->SetStaticObject(IsStaticObject());
 		m_label->SetText(text);
-		m_label->UpdatePos(m_position);
-		m_label->UpdateSize(m_size);
+		m_label->UpdateCenterPos(m_position + m_size * Vector2{ (float)0.5, (float)0.5 });
+		//m_label->UpdateSize(textSize);
 	}
 }
 

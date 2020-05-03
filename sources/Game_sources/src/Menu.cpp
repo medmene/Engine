@@ -24,17 +24,17 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	float bSizeX = 200, bSizeY = 50, bPosX = m_winSize.x / 2 - bSizeX / 2;
 
-	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
+	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
-	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
-	//m_buttons.back()->SetLabel("Start", "calibri", ResourceManager::TTF);
+	m_buttons.back()->UpdatePos(Vector2(bPosX, 150));
+	m_buttons.back()->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
 
-	m_buttons.emplace_back(new Button(m_renderer, "button2", ResourceManager::GOBJECT));
+	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 300));
-	//m_buttons.back()->SetLabel("Exit", "calibri", ResourceManager::TTF);
+	m_buttons.back()->SetLabel("Exit", 30, "calibri", ResourceManager::TTF);
 }
 
 Menu::~Menu()

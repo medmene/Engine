@@ -15,7 +15,7 @@ public:
 	Button(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 	
 	void SetOnclick(function<void()> onClick) { m_onClick = onClick; }
-	void SetLabel(const string& text, const string& src, ResourceManager::Type type);
+	void SetLabel(const string& text, int textScale, const string& src, ResourceManager::Type type);
 
 	void Update(float dt) override;
 	void Render() override;
