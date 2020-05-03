@@ -3,5 +3,7 @@
 	<source name="doors anim.png" />
 	<objSize x="70" y="70" />
 	<animSize x="70" y="70" />
-	<animation name="open" row="0" count="3" loop="false" speed="300" next_state="" />
+	<animation name="open" row="0" count="3" loop="false" speed="100" next_state="idle_open" />
+	<animation name="close" row="1" count="3" loop="false" speed="300" next_state="" />
+	<animation name="idle_open" row="2" count="3" loop="true" speed="100" next_state="" />
 </object>

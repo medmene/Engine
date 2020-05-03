@@ -35,6 +35,7 @@ public:
 	void Processing();
 	
 	Player * GetPlayer() { return m_player; }
+	void ChangeState(State newState);
 
 private:
 	void Update();
@@ -57,7 +58,6 @@ private:
 
 	static GameWindow			  * sm_instance;
 
-	void ChangeState(State newState);
 	void OnStateMenuEntering();
 	void OnStateLevel1Entering();
 	void OnStateLevel2Entering();

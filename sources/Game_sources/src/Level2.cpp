@@ -6,13 +6,14 @@
 #include "include/PassabilityMap.h"
 #include "include/EventPass.h"
 #include "Game_sources/include/GameWindow.h"
+#include "include/NPC.h"
 #include "include/Player.h"
 
 
 void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
-	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
+	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 475,280 });
 	
 	m_winSize = winSize;
 	m_renderer = renderer;
@@ -23,16 +24,39 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_backgrounds.back()->UpdateSize(Vector2(scale * m_winSize.x, scale * m_winSize.y));
 	m_backgrounds.back()->UpdatePos(Vector2(0, 0)); // for non static
 
-	m_objects.emplace_back(new GameObject(m_renderer, "alien1", ResourceManager::GOBJECT));
-	m_objects.back()->UpdateSize(Vector2(140, 140));
-	m_objects.back()->UpdatePos(Vector2(720, 720));
-	m_objects.back()->SetAnimationEnable(true);
-	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
-	m_objects.emplace_back(new GameObject(m_renderer, "alien2", ResourceManager::GOBJECT));
-	m_objects.back()->UpdateSize(Vector2(140, 140));
-	m_objects.back()->UpdatePos(Vector2(600, 600));
-	m_objects.back()->SetAnimationEnable(true);
-	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
+	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(90, 90));
+	m_objects.back()->UpdatePos(Vector2(1749, 394));
+
+	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(90, 90));
+	m_objects.back()->UpdatePos(Vector2(574, 1427));
+
+
+	//+		m_player->m_playerObject->m_position	{x=981.162109 y=857.176514 eps=9.99999975e-06 }	Vector2 npc 1
+//+		m_player->m_playerObject->m_position	{x=2249.90259 y=1517.14966 eps=9.99999975e-06 }	Vector2 npc2
+
+
+	//m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	//m_objects.back()->UpdateSize(Vector2(90, 90));
+	//m_objects.back()->UpdatePos(Vector2(1537, 1000));
+
+	//// Initialize NPC
+	m_npcs.emplace_back(new NPC(m_renderer, "alien1", ResourceManager::GOBJECT));
+	m_npcs.back()->GetGameObject()->SetAnimationEnable(true);
+	m_npcs.back()->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	m_npcs.back()->GetGameObject()->UpdateColor(Color(250, 10, 50, 255));
+	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(981, 857));
+	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(80, 80));
+	m_npcs.back()->Init();
+
+	m_npcs.emplace_back(new NPC(m_renderer, "alien1", ResourceManager::GOBJECT));
+	m_npcs.back()->GetGameObject()->SetAnimationEnable(true);
+	m_npcs.back()->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	m_npcs.back()->GetGameObject()->UpdateColor(Color(0, 10, 250, 255));
+	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(2249, 1517));
+	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(90, 90));
+	m_npcs.back()->Init();
 }
 
 Level2::~Level2()
@@ -66,10 +90,21 @@ Level2::~Level2()
 		delete ev;
 	}
 	m_events.clear();
+
+	for (auto&& ev : m_npcs)
+	{
+		delete ev;
+	}
+	m_npcs.clear();
 }
 
 void Level2::Update(float dt)
 {
+	for (auto&& npc : m_npcs)
+	{
+		npc->Update(dt);
+	}
+
 	for (auto && background : m_backgrounds)
 	{
 		background->Update(dt);
@@ -111,5 +146,10 @@ void Level2::Render()
 	for (auto&& object : m_buttons)
 	{
 		object->Render();
+	}
+
+	for (auto&& npc : m_npcs)
+	{
+		npc->Render();
 	}
 }

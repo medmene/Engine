@@ -76,7 +76,7 @@ void GameWindow::Initialize()
 	m_player = new Player();
 	m_player->Init(m_renderer);
 
-	ChangeState(LEVEL1);
+	ChangeState(LEVEL2);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
@@ -213,10 +213,10 @@ void GameWindow::OnStateMenuEntering()
 
 void GameWindow::OnStateLevel1Entering()
 {
-	if (m_menu)
-	{
-		delete m_menu;
-	}
+	//if (m_menu)
+	//{
+	//	delete m_menu;
+	//}
 	
 	m_level1 = new Level1();
 	m_level1->Init(m_renderer, m_windowSize);
@@ -224,10 +224,10 @@ void GameWindow::OnStateLevel1Entering()
 
 void GameWindow::OnStateLevel2Entering()
 {
-	if (m_level1)
-	{
-		delete m_level1;
-	}
+	//if (m_level1)
+	//{
+	//	delete m_level1;
+	//}
 	
 	m_level2 = new Level2();
 	m_level2->Init(m_renderer, m_windowSize);
