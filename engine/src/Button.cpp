@@ -41,9 +41,12 @@ void Button::Update(float dt)
 
 bool Button::IsMouseInside() 
 {
-	Vector2 mpousePos = MouseInput::instance()->GetPosInMap();
-	return m_rect.x <= mpousePos.x && (m_rect.x + m_rect.w) >= mpousePos.x
-		&& m_rect.y <= mpousePos.y && (m_rect.y + m_rect.h) >= mpousePos.y;
+	Vector2 mousePos = m_staticObject
+		? MouseInput::instance()->GetPos()
+		: MouseInput::instance()->GetPosInMap();
+	
+	return m_rect.x <= mousePos.x && (m_rect.x + m_rect.w) >= mousePos.x
+		&& m_rect.y <= mousePos.y && (m_rect.y + m_rect.h) >= mousePos.y;
 }
 
 void Button::Render()
