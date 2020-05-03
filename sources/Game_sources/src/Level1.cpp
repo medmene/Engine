@@ -36,7 +36,7 @@ void OpenDoorByButton(GameObject *o, Event *e)
 
 void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
-	PassabilityMap::instance()->SetMap("passability", ResourceManager::PMAP);
+	PassabilityMap::instance()->SetMap("passability1", ResourceManager::PMAP);
 	
 	m_winSize = winSize;
 	m_renderer = renderer;

@@ -41,12 +41,14 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameWindow.h
 	sources/Game_sources/include/GameInterface.h
 	sources/Game_sources/include/Level1.h
+	sources/Game_sources/include/Level2.h
 )
 
 target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameWindow.cpp
 	sources/Game_sources/src/GameInterface.cpp
 	sources/Game_sources/src/Level1.cpp
+	sources/Game_sources/src/Level2.cpp
 )
 
 # Include Engine
