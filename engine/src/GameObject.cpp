@@ -191,6 +191,15 @@ void GameObject::SetAnimationEnable(bool anim)
 	m_animator->SetAnimationsEnabled(anim);
 }
 
+string GameObject::GetName()
+{
+	if (m_resourceSettings)
+	{
+		return m_resourceSettings->GetName();
+	}
+	return "";
+}
+
 void GameObject::UpdateColor(const Color & clr)
 {
 	m_color = clr;
@@ -233,7 +242,10 @@ void GameObject::UpdateCenterPos(const Vector2& pos)
 
 void GameObject::Update(float dt)
 {
-	m_animator->Update(dt);
+	if (m_animator)
+	{
+		m_animator->Update(dt);
+	}
 }
 
 void GameObject::Render()

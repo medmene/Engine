@@ -31,6 +31,7 @@ public:
 	const Vector2 & GetPosition() { return m_position; }
 	const Vector2 & GetSize() { return m_size; }
 	const Color & GetColor() { return m_color; }
+	string GetName();
 	Animator * GetAnimator() { return m_animator; }
 
 	void UpdateColor(const Color & clr);

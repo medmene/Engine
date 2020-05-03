@@ -117,6 +117,9 @@ void Label::CreateTexture()
 			m_rect.y = m_position.y;
 			m_rect.w = surfaceMessage->w;
 			m_rect.h = surfaceMessage->h;
+
+			UpdateSize(Vector2(surfaceMessage->w, surfaceMessage->h));
+			
 			if (surfaceMessage)
 			{
 				SDL_FreeSurface(surfaceMessage);
