@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <object>
 	<source name="textBubble.png" />
-	<objSize x="100" y="70" annotation="This is size for saving" />
+	<objSize x="150" y="103" annotation="This is size for saving" />
 	<animSize x="512" y="353" annotation="This is size of real frame in image" />
+	<relativePos x="60" y="85" annotation="This setup relative parent position" />
 	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
 </object>

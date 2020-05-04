@@ -141,7 +141,7 @@ void Player::Update(float dt)
 			m_passabilityArea->m_pos = pos;
 			
 			auto oldPos = GetGameObject()->GetPosition();
-			oldPos += Vector2(m_speed.x * 1.5f, m_speed.y * 1.5f);
+			oldPos += Vector2(m_speed.x * 2.f, m_speed.y * 2.f);
 			GetGameObject()->UpdatePos(oldPos);
 		}
 	}
@@ -149,8 +149,8 @@ void Player::Update(float dt)
 
 void Player::Render()
 {
-	m_playerObject->Render();
 	m_bubble->Render();
+	m_playerObject->Render();
 
 	if (m_drawPassability)
 	{

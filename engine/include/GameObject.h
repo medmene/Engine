@@ -35,6 +35,7 @@ public:
 	GameObject * GetParent() { return m_parent; }
 	const Vector2 & GetCenterPos() { return m_center; }
 	const Vector2 & GetPosition() { return m_position; }
+	const Vector2 & GetRelativePos() { return m_relativePos; }
 	const Vector2 & GetSize() { return m_size; }
 	const Color & GetColor() { return m_color; }
 	string GetName();

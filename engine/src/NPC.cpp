@@ -76,8 +76,8 @@ void NPC::Update(float dt)
 void NPC::Render()
 {
 	m_behaviourController->Render();
-	m_npcObject->Render();
 	m_bubble->Render();
+	m_npcObject->Render();
 
 	if (m_drawPassability)
 	{

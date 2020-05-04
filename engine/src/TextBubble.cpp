@@ -1,33 +1,45 @@
 #include "include/TextBubble.h"
 #include "include/Camera.h"
 #include "include/Animator.h"
+#include "pugixml/pugixml.hpp"
 
 
 TextBubble::TextBubble(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
 	: GameObject(renderer, src, type)
 {
 	m_currentSide = RIGHT;
+
+	if (m_resourceSettings)
+	{
+		pugi::xml_document doc;
+		doc.load_file(m_resourceSettings->GetPath().c_str());
+		auto rootNode = doc.child("object");
+
+		auto sizeNode = rootNode.child("relativePos");
+		int x = std::stoi(sizeNode.attribute("x").value());
+		int y =  std::stoi(sizeNode.attribute("y").value());
+		m_defaultRelPos = Vector2(x, y);
+	}
 }
 
 void TextBubble::SetSide(Side s)
 {
 	if (m_currentSide != s)
 	{
-		if (auto parent = GetParent())
+		m_currentSide = s;
+		auto pos = GetRelativePos();
+		switch (m_currentSide)
 		{
-			m_currentSide = s;
-			auto pos = parent->GetSize();
-			switch (m_currentSide)
-			{
-			case LEFT:
-				pos = Vector2(-pos.x / 2, -pos.y / 2);
-				break;
-			case RIGHT:
-				pos = Vector2(pos.x / 2, -pos.y / 2);
-				break;
-			}
-			UpdateRelativePos(pos);
+		case LEFT:
+			pos.x = -m_defaultRelPos.x;
+			pos.y = -m_defaultRelPos.y;
+			break;
+		case RIGHT:
+			pos.x = m_defaultRelPos.x;
+			pos.y = -m_defaultRelPos.y;
+			break;
 		}
+		UpdateRelativePos(pos);
 	}
 }
 
