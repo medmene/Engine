@@ -22,4 +22,5 @@ public:
 	void Render() override;
 private:
 	Side						m_currentSide;
+	Vector2						m_defaultRelPos;
 };

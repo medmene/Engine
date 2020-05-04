@@ -42,6 +42,8 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameInterface.h
 	sources/Game_sources/include/Level1.h
 	sources/Game_sources/include/Level2.h
+	sources/Game_sources/include/Level3.h
+	sources/Game_sources/include/Level4.h
 	sources/Game_sources/include/Menu.h
 )
 
@@ -50,6 +52,8 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameInterface.cpp
 	sources/Game_sources/src/Level1.cpp
 	sources/Game_sources/src/Level2.cpp
+	sources/Game_sources/src/Level3.cpp
+	sources/Game_sources/src/Level4.cpp
 	sources/Game_sources/src/Menu.cpp
 )
 
@@ -82,6 +86,7 @@ target_sources(GameEngine PRIVATE
 	engine/include/KeyboardBinds.h
 	engine/include/BehaviourController.h
 	engine/include/TextBubble.h
+	engine/include/GameModeChangeController.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -108,6 +113,7 @@ target_sources(GameEngine PRIVATE
 	engine/src/SoundManager.cpp
 	engine/src/BehaviourController.cpp
 	engine/src/TextBubble.cpp
+	engine/src/GameModeChangeController.cpp
 )
 
 # Include lib pugi XML

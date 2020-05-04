@@ -11,4 +11,12 @@
 	<animation name="going_bottom_right" row="5" count="8" loop="true" speed="100" next_state="" />
 	<animation name="going_bottom" row="6" count="8" loop="true" speed="100" next_state="" />
 	<animation name="going_bottom_left" row="7" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_left" row="8" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_top_left" row="9" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_top" row="10" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_top_right" row="11" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_right" row="12" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_bottom_right" row="13" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_bottom" row="14" count="8" loop="true" speed="100" next_state="" />
+	<animation name="idle_bottom_left" row="15" count="8" loop="true" speed="100" next_state="" />
 </object>

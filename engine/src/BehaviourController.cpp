@@ -4,6 +4,7 @@
 #include "include/PassabilityMap.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
+#include "include/Animator.h"
 
 
 BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
@@ -15,9 +16,38 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	, m_runSpeed(0.15f)
 	, m_running(false)
 {
+	map<int, string> tmp;
+	tmp[0] = "_left";
+	tmp[1] = "_top_left";
+	tmp[2] = "_top";
+	tmp[3] = "_top_right";
+	tmp[4] = "_right";
+	tmp[5] = "_bottom_right";
+	tmp[6] = "_bottom";
+	tmp[7] = "_bottom_left";
+
+	if (m_owner && m_owner->GetGameObject())
+	{
+		auto allAnims = m_owner->GetGameObject()->GetAnimator()->GetAllAnimations();
+		for (auto && item : tmp)
+		{
+			for (auto && anim : allAnims)
+			{
+				auto pos = anim->GetName().find(item.second);
+				if (pos != string::npos)
+				{
+					m_directionsOfAnimations[item.first] = anim->GetName();
+					break;
+				}
+			}
+		}
+	}
+
 	m_movingController = new MovingController(r, owner, m_normalSpeed);
+	m_movingController->SetAnimationMap(m_directionsOfAnimations);
 	m_currentState = UNDEFINED;
 	m_anchorPoint = owner->GetGameObject()->GetCenterPos();
+	
 	ChangeState(WAIT);
 }
 
@@ -61,6 +91,7 @@ void BehaviourController::Update(float dt)
 			}
 			else
 			{
+				// TODO add play idle animation
 				ChangeState(WAIT);
 			}
 		}

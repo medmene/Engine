@@ -23,10 +23,12 @@ void OpenDoorByButton(GameObject *o, Event *e)
 		break;
 	case EventPass::State::GET_IN:
 		ep->SetCurrentState(EventPass::State::STAY_IN);
-		o->GetAnimator()->GetActiveAnimation()->Play();
+		//o->GetAnimator()->PlayAnimation("idle_open");
+		//o->GetAnimator()->GetActiveAnimation()->Play();
 		// o->SetAnimationEnable(false);
 		break;
 	case EventPass::State::STAY_IN:
+		o->GetAnimator()->PlayAnimation("idle_open");
 		break;
 	case EventPass::State::GET_OUT: // ????
 		break;
@@ -38,7 +40,8 @@ void OpenDoorByButton(GameObject *o, Event *e)
 void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passability1", ResourceManager::PMAP);
-	
+	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 530,1300 });
+
 	m_winSize = winSize;
 	m_renderer = renderer;
 
@@ -53,32 +56,50 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_objects.back()->UpdateSize(Vector2(200, 30));
 	m_objects.back()->UpdatePos(Vector2(400, 200));*/
 
-	m_buttons.emplace_back(new Button(m_renderer, "button1", ResourceManager::GOBJECT));
-	m_buttons.back()->SetStaticObject(false);
-	m_buttons.back()->UpdateSize(Vector2(200, 40));
-	m_buttons.back()->UpdatePos(Vector2(700, 900));
+	Vector2 area{ 160 , 150}, pos{ 720 , 820};
 
 	m_events.emplace_back(new EventPass());
 
 	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
-	((EventPass*)m_events.back())->SetRect({ 700, 900 }, { 700 + 200, 900 + 40 });
+	((EventPass*)m_events.back())->SetRect(pos, area + pos);
+
+	m_objects.emplace_back(new GameObject(m_renderer, "wall", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(110, 150));
+	m_objects.back()->UpdatePos(Vector2(750, 670));
 
 	m_objects.emplace_back(new GameObject(m_renderer, "doors", ResourceManager::GOBJECT));
-	m_objects.back()->UpdateSize(Vector2(140, 140));
-	m_objects.back()->UpdatePos(Vector2(720, 720));
+	m_objects.back()->UpdateSize(Vector2(160, 170));
+	m_objects.back()->UpdatePos(Vector2(725, 710));
 	m_objects.back()->Subscribe(m_events.back(),OpenDoorByButton);
 
-	m_objects.back()->SetAnimationEnable(true);
-	m_objects.back()->GetAnimator()->GetActiveAnimation()->Play();
-
+	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(90, 90));
+	m_objects.back()->UpdatePos(Vector2(1537, 1000));
+	
 	// Initialize NPC
-	m_npc = new NPC(m_renderer, "npc1", ResourceManager::GOBJECT);
-	m_npc->GetGameObject()->SetAnimationEnable(true);
-	m_npc->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
-	m_npc->GetGameObject()->UpdatePos(Vector2(750, 1000));
-	m_npc->GetGameObject()->UpdateColor(Color(50, 250, 50, 255));
-	m_npc->GetGameObject()->UpdateSize(Vector2(180, 180));
-	m_npc->Init();
+	m_npcs.emplace_back(new NPC(m_renderer, "alien1", ResourceManager::GOBJECT));
+	m_npcs.back()->GetGameObject()->SetAnimationEnable(true);
+	m_npcs.back()->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(1480, 450));
+	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(100, 100));
+	m_npcs.back()->Init();
+
+
+	m_npcs.emplace_back(new NPC(m_renderer, "alien2", ResourceManager::GOBJECT));
+	m_npcs.back()->GetGameObject()->SetAnimationEnable(true);
+	m_npcs.back()->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(2045, 1445));
+	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(100, 100));
+	m_npcs.back()->Init();
+
+
+	//m_npcs.emplace_back(new NPC(m_renderer, "npc1", ResourceManager::GOBJECT));
+	//m_npcs.back()->GetGameObject()->SetAnimationEnable(true);
+	//m_npcs.back()->GetGameObject()->GetAnimator()->GetActiveAnimation()->Play();
+	//m_npcs.back()->GetGameObject()->UpdatePos(Vector2(750, 1000));
+	//m_npcs.back()->GetGameObject()->UpdateColor(Color(50, 250, 50, 255));
+	//m_npcs.back()->GetGameObject()->UpdateSize(Vector2(180, 180));
+	//m_npcs.back()->Init();
 }
 
 Level1::~Level1()
@@ -107,18 +128,26 @@ Level1::~Level1()
 	}
 	m_buttons.clear();
 	
-	for (auto&& ev : m_events)
+	// for (auto&& ev : m_events)
+	// {
+	// 	delete ev;
+	// }
+	// m_events.clear();
+
+	for (auto&& ev : m_npcs)
 	{
 		delete ev;
 	}
-	m_events.clear();
-
-	if (m_npc) { delete m_npc; }
+	m_npcs.clear();
 }
 
 void Level1::Update(float dt)
 {
-	m_npc->Update(dt);
+	for (auto&& npc : m_npcs)
+	{
+		npc->Update(dt);
+	}
+
 	for (auto && background : m_backgrounds)
 	{
 		background->Update(dt);
@@ -161,5 +190,9 @@ void Level1::Render()
 	{
 		object->Render();
 	}
-	m_npc->Render();
+
+	for (auto&& npc : m_npcs)
+	{
+		npc->Render();
+	}
 }

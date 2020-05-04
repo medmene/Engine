@@ -8,25 +8,14 @@
 #include "include/TextBubble.h"
 
 
-Player::Player()
+Player::Player(SDL_Renderer * renderer)
 	: m_playerName("player")
 	, m_speed(0, 0)
 	, m_speedConst(0.16f, 0.12f)
 	, m_noclip(false)
 {
-}
-
-Player::~Player()
-{
-	if (m_playerObject) { delete m_playerObject; }
-	if (m_passabilityArea) { delete m_passabilityArea; }
-	if (m_bubble) { delete m_bubble; }
-}
-
-void Player::Init(SDL_Renderer * renderer)
-{
 	m_renderer = renderer;
-	
+
 	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_playerObject->SetAnimationEnable(true);
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
@@ -34,11 +23,19 @@ void Player::Init(SDL_Renderer * renderer)
 
 	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
 	m_bubble->SetParent(m_playerObject);
+	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
-	
+
 	Vector2 pos = m_playerObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
 	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
+}
+
+Player::~Player()
+{
+	if (m_playerObject) { delete m_playerObject; }
+	if (m_passabilityArea) { delete m_passabilityArea; }
+	if (m_bubble) { delete m_bubble; }
 }
 
 bool Player::IsVisible()
@@ -87,30 +84,30 @@ void Player::Update(float dt)
 		switch (key)
 		{
 		case kb::W:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_left"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_top"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("going_left");
+				m_playerObject->GetAnimator()->PlayAnimation("going_top");
 			}
 			m_speed.y = -m_speedConst.y;
 			break;
 		case kb::A:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_left"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_left"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("idle_left");
+				m_playerObject->GetAnimator()->PlayAnimation("going_left");
 			}
 			m_speed.x = -m_speedConst.x;
 			break;
 		case kb::D:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_right"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_right"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("idle_right");
+				m_playerObject->GetAnimator()->PlayAnimation("going_right");
 			}
 			m_speed.x = m_speedConst.x;
 			break;
 		case kb::S:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_right"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_bottom"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("going_right");
+				m_playerObject->GetAnimator()->PlayAnimation("going_bottom");
 			}
 			m_speed.y = m_speedConst.y;
 			break;
@@ -144,7 +141,7 @@ void Player::Update(float dt)
 			m_passabilityArea->m_pos = pos;
 			
 			auto oldPos = GetGameObject()->GetPosition();
-			oldPos += Vector2(m_speed.x * 1.5f, m_speed.y * 1.5f);
+			oldPos += Vector2(m_speed.x * 2.f, m_speed.y * 2.f);
 			GetGameObject()->UpdatePos(oldPos);
 		}
 	}
@@ -152,8 +149,8 @@ void Player::Update(float dt)
 
 void Player::Render()
 {
-	m_playerObject->Render();
 	m_bubble->Render();
+	m_playerObject->Render();
 
 	if (m_drawPassability)
 	{
