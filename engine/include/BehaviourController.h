@@ -7,7 +7,8 @@ class MovingController;
 
 class BehaviourController
 {
-	enum State
+public:
+	enum BehaviourState
 	{
 		WAIT = 0,
 		MOVE,
@@ -15,17 +16,19 @@ class BehaviourController
 		BATTLE,
 		UNDEFINED
 	};
-public:
+	
 	BehaviourController(SDL_Renderer *r , ICharacter * owner);
 	~BehaviourController();
 
 	auto GetMovingController() { return m_movingController; }
 
 	bool IsRunning() { return m_running; }
+	bool IsFreeBehaviour() { return m_freeBehaviour; }
 	
-	void SetAnchorPoint(const Vector2 point) { m_anchorPoint = point; }
+	void SetAnchorPoint(const Vector2 & point) { m_anchorPoint = point; }
 	void SetNormalSpeed(float speed) { m_normalSpeed = speed; }
 	void SetRunSpeed(float speed) { m_runSpeed = speed; }
+	void SetFreeBehaviour(bool free) { m_freeBehaviour = free; }
 	
 	Vector2 GetAnchorPoint() { return m_anchorPoint; }
 	float GetNormalSpeed() { return m_normalSpeed; }
@@ -40,17 +43,17 @@ private:
 	Vector2						m_anchorPoint;
 	Vector2						m_anchorArea;
 	map<int, string>			m_directionsOfAnimations;
-	
-	State						m_currentState;
+
+	bool						m_freeBehaviour;
+	BehaviourState				m_currentState;
 	float						m_waitingTime = 0.f;
 	bool						m_running;
-	int							m_movingRadius;
 	float						m_normalSpeed;
 	float						m_runSpeed;
 
 	bool						m_visualisation = false;
 
-	void ChangeState(State newState, bool force = false);
+	void ChangeState(BehaviourState newState, bool force = false);
 	void OnStateWaitEntering();
 	void OnStateMoveEntering();
 	void OnStateTalkEntering();

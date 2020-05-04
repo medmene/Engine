@@ -5,16 +5,17 @@
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
 #include "include/Animator.h"
+#include "include/TextBubble.h"
 
 
 BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	: m_renderer(r)
 	, m_owner(owner)
-	, m_movingRadius(5)
 	, m_normalSpeed(0.07f)
 	, m_anchorArea(Vector2(20,20))
 	, m_runSpeed(0.15f)
 	, m_running(false)
+	, m_freeBehaviour(true)
 {
 	map<int, string> tmp;
 	tmp[0] = "_left";
@@ -65,34 +66,52 @@ void BehaviourController::Update(float dt)
 			m_visualisation = !m_visualisation;
 		}
 	}
-	
-	// State 1.
-	if (m_currentState == WAIT)
+
+	if (m_freeBehaviour)
 	{
-		if (m_waitingTime > 0.f)
+		// State 1.
+		if (m_currentState == WAIT)
 		{
-			m_waitingTime -= dt;
-			if (m_waitingTime <= 0.f)
+			if (m_waitingTime > 0.f)
 			{
-				m_waitingTime = 0.f;
-				ChangeState(MOVE);
+				m_waitingTime -= dt;
+				if (m_waitingTime <= 0.f)
+				{
+					m_waitingTime = 0.f;
+					ChangeState(MOVE);
+				}
 			}
 		}
-	}
 
-	// State 2.
-	if (m_currentState == MOVE)
-	{
-		if (!m_movingController->IsMoving())
+		// State 2.
+		if (m_currentState == MOVE)
 		{
-			if (!m_movingController->CanMove())
+			if (!m_movingController->IsMoving())
 			{
-				ChangeState(MOVE, true);
+				if (!m_movingController->CanMove())
+				{
+					ChangeState(MOVE, true);
+				}
+				else
+				{
+					// TODO add play idle animation here
+					ChangeState(TALK);
+				}
 			}
-			else
+		}
+
+		// State 3.
+		if (m_currentState == TALK)
+		{
+			if (m_waitingTime > 0.f)
 			{
-				// TODO add play idle animation
-				ChangeState(WAIT);
+				m_waitingTime -= dt;
+				if (m_waitingTime <= 0.f)
+				{
+					m_waitingTime = 0.f;
+					m_owner->GetTextObject()->SetVisible(false);
+					ChangeState(WAIT);
+				}
 			}
 		}
 	}
@@ -100,39 +119,8 @@ void BehaviourController::Update(float dt)
 	m_movingController->Update(dt);
 }
 
-void BehaviourController::Render()
-{
-	m_movingController->Render();
 
-	if (m_visualisation)
-	{
-		auto diff = Camera::instance()->GetDiff();
-		
-		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
-		SDL_Rect rct = { (int)m_anchorPoint.x - 7, (int)m_anchorPoint.y - 7 , 15, 15 };
-		rct.x = rct.x + diff.x;
-		rct.y = rct.y + diff.y;
-		SDL_RenderFillRect(m_renderer, &rct);
-
-		auto pos = m_anchorPoint;
-		pos.x -= m_anchorArea.x / 2 * PassabilityMap::instance()->GetNodeSize().x;
-		pos.y -= m_anchorArea.y / 2 * PassabilityMap::instance()->GetNodeSize().y;
-		
-		auto end = m_anchorPoint;
-		end.x += m_anchorArea.x / 2 * PassabilityMap::instance()->GetNodeSize().x;
-		end.y += m_anchorArea.y / 2 * PassabilityMap::instance()->GetNodeSize().y;
-
-		auto size = end - pos;
-		
-		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
-		rct = { (int)pos.x, (int)pos.y, (int)size.x, (int)size.y };
-		rct.x = rct.x + diff.x;
-		rct.y = rct.y + diff.y;
-		SDL_RenderFillRect(m_renderer, &rct);
-	}
-}
-
-void BehaviourController::ChangeState(State newState, bool force)
+void BehaviourController::ChangeState(BehaviourState newState, bool force)
 {
 	if (m_currentState != newState || force)
 	{
@@ -174,8 +162,46 @@ void BehaviourController::OnStateMoveEntering()
 
 void BehaviourController::OnStateTalkEntering()
 {
+	m_waitingTime = 2000.f + rand() % 2000;
+	if (auto textObj = m_owner->GetTextObject())
+	{
+		textObj->SetVisible(true);
+		textObj->SetText("Xocesh eshe etix magkix fransuzkix bulochek");
+	}
 }
 
 void BehaviourController::OnStateBattleEntering()
 {
+}
+
+void BehaviourController::Render()
+{
+	m_movingController->Render();
+
+	if (m_visualisation)
+	{
+		auto diff = Camera::instance()->GetDiff();
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
+		SDL_Rect rct = { (int)m_anchorPoint.x - 7, (int)m_anchorPoint.y - 7 , 15, 15 };
+		rct.x = rct.x + diff.x;
+		rct.y = rct.y + diff.y;
+		SDL_RenderFillRect(m_renderer, &rct);
+
+		auto pos = m_anchorPoint;
+		pos.x -= m_anchorArea.x / 2 * PassabilityMap::instance()->GetNodeSize().x;
+		pos.y -= m_anchorArea.y / 2 * PassabilityMap::instance()->GetNodeSize().y;
+
+		auto end = m_anchorPoint;
+		end.x += m_anchorArea.x / 2 * PassabilityMap::instance()->GetNodeSize().x;
+		end.y += m_anchorArea.y / 2 * PassabilityMap::instance()->GetNodeSize().y;
+
+		auto size = end - pos;
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
+		rct = { (int)pos.x, (int)pos.y, (int)size.x, (int)size.y };
+		rct.x = rct.x + diff.x;
+		rct.y = rct.y + diff.y;
+		SDL_RenderFillRect(m_renderer, &rct);
+	}
 }
