@@ -30,7 +30,14 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
 	m_buttons.back()->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
-	m_buttons.back()->SetOnclick([this]() {GameModeChangeController::instance()->StartHiding(); m_startFading = true; });
+	m_buttons.back()->SetOnclick([this]()
+	{
+		if (!GameModeChangeController::instance()->IsHiding())
+		{
+			GameModeChangeController::instance()->StartHiding();
+			m_startFading = true;
+		}
+	});
 
 	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
