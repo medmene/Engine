@@ -44,6 +44,7 @@ void GameInterface::Init()
 	lbl->Init("P-character area", 16);
 	lbl->SetStaticObject(true);
 	lbl->SetParent(back.get());
+	lbl->SetFollowVisibility(true);
 	lbl->UpdateRelativePos(Vector2(0, -60));
 	lbl->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl);
@@ -52,6 +53,7 @@ void GameInterface::Init()
 	lbl2->Init("L-not passible map", 16);
 	lbl2->SetStaticObject(true);
 	lbl2->SetParent(back.get());
+	lbl2->SetFollowVisibility(true);
 	lbl2->UpdateRelativePos(Vector2(0, -40));
 	lbl2->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl2);
@@ -60,6 +62,7 @@ void GameInterface::Init()
 	lbl3->Init("O-save map (with L)", 16);
 	lbl3->SetStaticObject(true);
 	lbl3->SetParent(back.get());
+	lbl3->SetFollowVisibility(true);
 	lbl3->UpdateRelativePos(Vector2(0, -20));
 	lbl3->UpdateColor(Color(0, 0, 0, 255));
 	lbl3->SetVisible(false);
@@ -69,6 +72,7 @@ void GameInterface::Init()
 	lbl4->Init("J-music", 16);
 	lbl4->SetStaticObject(true);
 	lbl4->SetParent(back.get());
+	lbl4->SetFollowVisibility(true);
 	lbl4->UpdateRelativePos(Vector2(0, 0));
 	lbl4->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl4);
@@ -77,6 +81,7 @@ void GameInterface::Init()
 	lbl5->Init("I-NPC way", 16);
 	lbl5->SetStaticObject(true);
 	lbl5->SetParent(back.get());
+	lbl5->SetFollowVisibility(true);
 	lbl5->UpdateRelativePos(Vector2(0, 20));
 	lbl5->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl5);
@@ -85,6 +90,7 @@ void GameInterface::Init()
 	lbl6->Init("U - noclip", 16);
 	lbl6->SetStaticObject(true);
 	lbl6->SetParent(back.get());
+	lbl6->SetFollowVisibility(true);
 	lbl6->UpdateRelativePos(Vector2(0, 40));
 	lbl6->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl6);

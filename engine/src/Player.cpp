@@ -23,6 +23,7 @@ Player::Player(SDL_Renderer * renderer)
 
 	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
 	m_bubble->SetParent(m_playerObject);
+	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
 
 	Vector2 pos = m_playerObject->GetCenterPos();
@@ -83,30 +84,30 @@ void Player::Update(float dt)
 		switch (key)
 		{
 		case kb::W:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_left"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_top"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("going_left");
+				m_playerObject->GetAnimator()->PlayAnimation("going_top");
 			}
 			m_speed.y = -m_speedConst.y;
 			break;
 		case kb::A:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_left"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_left"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("idle_left");
+				m_playerObject->GetAnimator()->PlayAnimation("going_left");
 			}
 			m_speed.x = -m_speedConst.x;
 			break;
 		case kb::D:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("idle_right"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_right"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("idle_right");
+				m_playerObject->GetAnimator()->PlayAnimation("going_right");
 			}
 			m_speed.x = m_speedConst.x;
 			break;
 		case kb::S:
-			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_right"))
+			if (!m_playerObject->GetAnimator()->IsAnimationPlaying("going_bottom"))
 			{
-				m_playerObject->GetAnimator()->PlayAnimation("going_right");
+				m_playerObject->GetAnimator()->PlayAnimation("going_bottom");
 			}
 			m_speed.y = m_speedConst.y;
 			break;

@@ -35,10 +35,11 @@ void NPC::SetVisible(bool visible)
 	m_npcObject->SetVisible(visible);
 }
 
-void NPC::Init(/*SDL_Renderer* renderer, const string& src, ResourceManager::Type type*/)
+void NPC::Init()
 {
 	m_bubble = new TextBubble(m_renderer, "textBubble_settings", ResourceManager::GOBJECT);
 	m_bubble->SetParent(m_npcObject);
+	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
 
 	m_behaviourController = new BehaviourController(m_renderer, this);

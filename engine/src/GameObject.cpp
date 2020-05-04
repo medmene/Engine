@@ -254,9 +254,17 @@ void GameObject::Update(float dt)
 
 	if (m_parent)
 	{
-		m_staticObject = m_parent->IsStaticObject();
 		UpdateCenterPos(m_parent->GetCenterPos() + m_relativePos);
-		m_visible = m_parent->IsVisible();
+		
+		if (m_followVisibility)
+		{
+			m_visible = m_parent->IsVisible();
+		}
+
+		if (m_followStatic)
+		{
+			m_staticObject = m_parent->IsStaticObject();
+		}
 	}
 }
 

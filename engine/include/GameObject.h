@@ -20,11 +20,15 @@ public:
 	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
 
 	bool IsVisible() { return m_visible; }
+	bool IsFollowVisibility() { return m_followVisibility; }
+	bool IsFollowStatic() { return m_followStatic; }
 	bool IsStaticObject() { return m_staticObject; }
 	bool IsAnimationEnabled();
 
 	void SetParent(GameObject * parent) { m_parent = parent; }
 	void SetVisible(bool visible) { m_visible = visible; }
+	void SetFollowVisibility(bool follow) { m_followVisibility = follow; }
+	void SetFollowStatic(bool follow) { m_followStatic = follow; }
 	void SetStaticObject(bool stObj) { m_staticObject = stObj; }
 	void SetAnimationEnable(bool anim);
 
@@ -62,6 +66,8 @@ protected:
 	Vector2						m_size;
 	bool						m_visible;
 	bool						m_staticObject;
+	bool						m_followVisibility = false;
+	bool						m_followStatic = false;
 
 	Animator				  * m_animator = nullptr;
 };

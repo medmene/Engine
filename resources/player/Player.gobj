@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <object>
-	<source name="char2.png" />
-	<objSize x="100" y="100" />
-	<animSize x="100" y="100" />
-	<animation name="idle_right" row="0" count="6" loop="true" speed="100" next_state="" />
-	<animation name="idle_left" row="1" count="6" loop="true" speed="100" next_state="" />
-	<animation name="going_right" row="2" count="6" loop="true" speed="100" next_state="idle_right" />
-	<animation name="going_left" row="3" count="6" loop="true" speed="100" next_state="idle_left" />
+	<source name="playerAnims.png" />
+	<objSize x="90" y="120" />
+	<animSize x="225" y="300" />
+	<animation name="going_right" row="0" count="7" loop="true" speed="100" next_state="" />
+	<animation name="going_left" row="1" count="7" loop="true" speed="100" next_state="" />
+	<animation name="going_top" row="2" count="7" loop="true" speed="100" next_state="" />
+	<animation name="going_bottom" row="3" count="6" loop="true" speed="100" next_state="" />
+	<animation name="attack_right" row="4" count="8" loop="true" speed="100" next_state="" />
+	<animation name="attack_left" row="5" count="8" loop="true" speed="100" next_state="" />
 </object>
