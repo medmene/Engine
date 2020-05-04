@@ -112,7 +112,10 @@ void Label::CreateTexture()
 	if (m_renderer && m_font)
 	{
 		SDL_Color clr = { m_color.GetR(), m_color.GetG(), m_color.GetB() };
-		SDL_Surface* surfaceMessage = TTF_RenderText_Solid(m_font, m_text.c_str(), clr);
+		
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		wstring str = converter.from_bytes(m_text.c_str());
+		SDL_Surface* surfaceMessage = TTF_RenderUNICODE_Blended(m_font, (Uint16*)str.c_str(), clr);
 		if (surfaceMessage)
 		{
 			if (m_texture)

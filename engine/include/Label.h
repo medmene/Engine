@@ -19,6 +19,9 @@ public:
 	void SetText(const string & text);
 	void SetFont(const string & src, ResourceManager::Type type);
 	void SetFontSize(int fontSize);
+
+	string GetText() { return m_text; }
+	int GetFontSize() { return m_fontSize; }
 	
 	void Render() override;
 private:

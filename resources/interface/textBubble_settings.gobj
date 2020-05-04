@@ -4,5 +4,6 @@
 	<objSize x="150" y="103" annotation="This is size for saving" />
 	<animSize x="512" y="353" annotation="This is size of real frame in image" />
 	<relativePos x="75" y="95" annotation="This setup relative parent position" />
+	<textCenterRelPos x="5" y="-15" annotation="This setup relative center of text pos" />
 	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
 </object>
