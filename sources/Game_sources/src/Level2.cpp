@@ -57,6 +57,15 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(2249, 1517));
 	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(90, 90));
 	m_npcs.back()->Init();
+
+	m_events.emplace_back(new EventPass());
+	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
+	((EventPass*)m_events.back())->SetRect({ 2249, 1517 }, Vector2{ 2249, 1517 } + Vector2{ 200, 200 });
+
+	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(200, 200));
+	m_objects.back()->UpdatePos(Vector2(2249, 1517));
+	m_objects.back()->Subscribe(m_events.back(), [](GameObject* o, Event* e) {GameWindow::instance()->ChangeState(GameWindow::LEVEL3); });
 }
 
 Level2::~Level2()

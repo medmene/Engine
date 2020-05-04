@@ -63,6 +63,8 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
 	((EventPass*)m_events.back())->SetRect(pos, area + pos);
 
+
+
 	m_objects.emplace_back(new GameObject(m_renderer, "wall", ResourceManager::PNG));
 	m_objects.back()->UpdateSize(Vector2(110, 150));
 	m_objects.back()->UpdatePos(Vector2(750, 670));
@@ -91,6 +93,15 @@ void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_npcs.back()->GetGameObject()->UpdatePos(Vector2(2045, 1445));
 	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(100, 100));
 	m_npcs.back()->Init();
+
+	m_events.emplace_back(new EventPass());
+	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
+	((EventPass*)m_events.back())->SetRect({ 2045, 1445 }, Vector2{ 2045, 1445 } +Vector2{200, 200});
+
+	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(200, 200));
+	m_objects.back()->UpdatePos(Vector2(2045, 1445));
+	m_objects.back()->Subscribe(m_events.back(), [](GameObject* o, Event* e) {GameWindow::instance()->ChangeState(GameWindow::LEVEL2); });
 
 
 	//m_npcs.emplace_back(new NPC(m_renderer, "npc1", ResourceManager::GOBJECT));
@@ -128,11 +139,11 @@ Level1::~Level1()
 	}
 	m_buttons.clear();
 	
-	// for (auto&& ev : m_events)
-	// {
-	// 	delete ev;
-	// }
-	// m_events.clear();
+	 for (auto&& ev : m_events)
+	 {
+	 	delete ev;
+	 }
+	 m_events.clear();
 
 	for (auto&& ev : m_npcs)
 	{

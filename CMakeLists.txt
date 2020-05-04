@@ -44,6 +44,7 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/Level2.h
 	sources/Game_sources/include/Level3.h
 	sources/Game_sources/include/Level4.h
+	sources/Game_sources/include/Start.h
 	sources/Game_sources/include/Menu.h
 )
 
@@ -54,6 +55,7 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/Level2.cpp
 	sources/Game_sources/src/Level3.cpp
 	sources/Game_sources/src/Level4.cpp
+	sources/Game_sources/src/Start.cpp
 	sources/Game_sources/src/Menu.cpp
 )
 
