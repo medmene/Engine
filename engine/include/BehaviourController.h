@@ -39,6 +39,7 @@ private:
 	MovingController		  * m_movingController = nullptr;
 	Vector2						m_anchorPoint;
 	Vector2						m_anchorArea;
+	map<int, string>			m_directionsOfAnimations;
 	
 	State						m_currentState;
 	float						m_waitingTime = 0.f;

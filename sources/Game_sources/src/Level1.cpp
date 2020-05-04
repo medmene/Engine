@@ -128,11 +128,11 @@ Level1::~Level1()
 	}
 	m_buttons.clear();
 	
-	for (auto&& ev : m_events)
-	{
-		delete ev;
-	}
-	m_events.clear();
+	// for (auto&& ev : m_events)
+	// {
+	// 	delete ev;
+	// }
+	// m_events.clear();
 
 	for (auto&& ev : m_npcs)
 	{

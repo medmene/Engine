@@ -15,6 +15,7 @@ MovingController::MovingController()
 	, m_searching(false)
 	, m_visualisation(false)
 	, m_pathIndex(0)
+	, m_lastDir(0)
 {
 }
 
@@ -37,33 +38,6 @@ MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float sp
 	m_dirs[2][0] = 3;
 	m_dirs[2][1] = 4;
 	m_dirs[2][2] = 5;
-	
-	map<int, string> tmp;
-	tmp[0] = "_left";
-	tmp[1] = "_top_left";
-	tmp[2] = "_top";
-	tmp[3] = "_top_right";
-	tmp[4] = "_right";
-	tmp[5] = "_bottom_right";
-	tmp[6] = "_bottom";
-	tmp[7] = "_bottom_left";
-
-	if (m_owner && m_owner->GetGameObject())
-	{
-		auto allAnims = m_owner->GetGameObject()->GetAnimator()->GetAllAnimations();
-		for (auto && item : tmp)
-		{
-			for (auto && anim : allAnims)
-			{
-				auto pos = anim->GetName().find(item.second);
-				if (pos != string::npos)
-				{
-					m_directionsOfAnimations[item.first] = anim->GetName();
-					break;
-				}
-			}
-		}
-	}
 	
 	m_finder = new PathFinder();
 }
@@ -121,7 +95,8 @@ void MovingController::Update(float dt)
 			int signX = (dir.x > 0) - (dir.x < 0) + 1; // 0 1 2
 			int signY = (dir.y > 0) - (dir.y < 0) + 1; // 0 1 2
 
-			string animName = m_directionsOfAnimations[m_dirs[signX][signY]];
+			m_lastDir = m_dirs[signX][signY];
+			string animName = m_directionsOfAnimations[m_lastDir];
 			if (!obj->GetAnimator()->IsAnimationPlaying(animName))
 			{
 				obj->GetAnimator()->PlayAnimation(animName);

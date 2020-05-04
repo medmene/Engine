@@ -18,8 +18,11 @@ public:
 
 	void SetSpeed(float speed) { m_speedModifier = speed; }
 	void SetVisualisation(bool visualisation) { m_visualisation = visualisation; }
+	void SetAnimationMap(map<int, string> mp) { m_directionsOfAnimations = mp; }
 
 	float GetNormalSpeed() { return m_speedModifier; }
+	float GetLastDir() { return m_lastDir; }
+	auto GetAnimationMap() { return m_directionsOfAnimations; }
 	
 	void Update(float dt);
 	void Render();
@@ -37,6 +40,7 @@ private:
 	int								m_pathIndex;
 
 	int								m_dirs[3][3];
+	int								m_lastDir;
 	ICharacter					  * m_owner = nullptr;
 	bool							m_visualisation;
 };

@@ -17,7 +17,7 @@
 #include "include/PassabilityMap.h"
 #include "include/EventManager.h"
 #include "include/SoundManager.h"
-
+#include "include/GameModeChangeController.h"
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
 
@@ -43,6 +43,7 @@ GameWindow::GameWindow()
 
 GameWindow::~GameWindow()
 {
+	delete GameModeChangeController::instance();
 	delete Camera::instance();
 	delete MouseInput::instance();
 	delete KeyboardInput::instance();
@@ -67,6 +68,7 @@ GameWindow::~GameWindow()
 
 void GameWindow::Initialize()
 {
+	GameModeChangeController::instance()->Init(m_renderer, m_windowSize);
 	SoundManager::instance()->PlaySound(ResourceManager::instance()->GetResource("mainTheme", ResourceManager::MP3));
 	SoundManager::instance()->PauseAll();
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
@@ -75,9 +77,7 @@ void GameWindow::Initialize()
 	m_interface = new GameInterface(m_renderer, m_windowSize);
 	m_interface->Init();
 	
-	m_player = new Player();
-	m_player->Init(m_renderer);
-
+	m_player = new Player(m_renderer);
 	ChangeState(MENU);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
@@ -143,7 +143,8 @@ void GameWindow::Update()
 	default:
 		break;
 	}
-
+	
+	GameModeChangeController::instance()->Update(FPS.dt);
 	PassabilityMap::instance()->Update();
 	Camera::instance()->Update(FPS.dt);
 	EventManager::instance()->Update();
@@ -163,27 +164,52 @@ void GameWindow::Render()
 		m_menu->Render();
 		break;
 	case GameWindow::LEVEL1:
-		m_level1->Render();
-		m_player->Render();
+	{
+		if (GameModeChangeController::instance()->IsShown() ||
+			GameModeChangeController::instance()->IsHiding())
+		{
+			m_level1->Render();
+			m_player->Render();
+		}
 		break;
+	}
 	case GameWindow::LEVEL2:
-		m_level2->Render();
-		m_player->Render();
+	{
+		if (GameModeChangeController::instance()->IsShown() ||
+			GameModeChangeController::instance()->IsHiding())
+		{
+			m_level2->Render();
+			m_player->Render();
+		}
 		break;
+	}
 	case GameWindow::LEVEL3:
-		m_level3->Render();
-		m_player->Render();
+	{
+		if (GameModeChangeController::instance()->IsShown() ||
+			GameModeChangeController::instance()->IsHiding())
+		{
+			m_level3->Render();
+			m_player->Render();
+		}
 		break;
+	}
 	case GameWindow::LEVEL4:
-		m_level4->Render();
-		m_player->Render();
+	{
+		if (GameModeChangeController::instance()->IsShown() ||
+			GameModeChangeController::instance()->IsHiding())
+		{
+			m_level4->Render();
+			m_player->Render();
+		}
 		break;
+	}
 	default:
 		break;
 	}
 
 	PassabilityMap::instance()->Render();
 	m_interface->Render();
+	GameModeChangeController::instance()->Render();
 
 	SDL_RenderPresent(m_renderer);
 }
@@ -223,34 +249,28 @@ void GameWindow::OnStateMenuEntering()
 
 void GameWindow::OnStateLevel1Entering()
 {
-	//if (m_menu)
-	//{
-	//	delete m_menu;
-	//}
-	
 	m_level1 = new Level1();
 	m_level1->Init(m_renderer, m_windowSize);
+	GameModeChangeController::instance()->StartShowing();
 }
 
 void GameWindow::OnStateLevel2Entering()
 {
-	//if (m_level1)
-	//{
-	//	delete m_level1;
-	//}
-	
 	m_level2 = new Level2();
 	m_level2->Init(m_renderer, m_windowSize);
+	GameModeChangeController::instance()->StartShowing();
 }
 
 void GameWindow::OnStateLevel3Entering()
 {
 	m_level3 = new Level3();
 	m_level3->Init(m_renderer, m_windowSize);
+	GameModeChangeController::instance()->StartShowing();
 }
 
 void GameWindow::OnStateLevel4Entering()
 {
 	m_level4 = new Level4();
 	m_level4->Init(m_renderer, m_windowSize);
+	GameModeChangeController::instance()->StartShowing();
 }

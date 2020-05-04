@@ -17,6 +17,8 @@ struct Menu
 
 //---------------------------------------------------------------//
 
+	bool						m_startFading = false;
+	
 	vector<GameObject*>			m_backgrounds;
 	vector<GameObject*>			m_grounds;
 	vector<GameObject*>			m_objects;

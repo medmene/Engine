@@ -19,7 +19,10 @@ public:
 	bool IsVisible() override;
 	void SetVisible(bool visible)override;
 	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
+	
 	GameObject * GetGameObject() override { return m_npcObject; }
+	TextBubble * GetTextObject() override { return m_bubble; }
+	PassabilityArea * GetPassabilityArea() override { return m_passabilityArea; }
 	
 	void Update(float dt) override;
 	void Render() override;

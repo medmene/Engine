@@ -7,6 +7,7 @@
 #include "include/EventPass.h"
 #include "Game_sources/include/GameWindow.h"
 #include "include/Player.h"
+#include "include/GameModeChangeController.h"
 
 
 void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
@@ -29,7 +30,7 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_buttons.back()->UpdateSize(Vector2(bSizeX, bSizeY));
 	m_buttons.back()->UpdatePos(Vector2(bPosX, 100));
 	m_buttons.back()->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
-	m_buttons.back()->SetOnclick([]() {GameWindow::instance()->ChangeState(GameWindow::LEVEL1); });
+	m_buttons.back()->SetOnclick([this]() {GameModeChangeController::instance()->StartHiding(); m_startFading = true; });
 
 	m_buttons.emplace_back(new Button(m_renderer, "button_menu", ResourceManager::GOBJECT));
 	m_buttons.back()->SetStaticObject(true);
@@ -74,6 +75,14 @@ Menu::~Menu()
 
 void Menu::Update(float dt)
 {
+	if (m_startFading)
+	{
+		if (GameModeChangeController::instance()->IsHidden())
+		{
+			GameWindow::instance()->ChangeState(GameWindow::LEVEL1);
+		}
+	}
+	
 	for (auto && background : m_backgrounds)
 	{
 		background->Update(dt);

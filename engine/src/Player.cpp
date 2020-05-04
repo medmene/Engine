@@ -8,25 +8,14 @@
 #include "include/TextBubble.h"
 
 
-Player::Player()
+Player::Player(SDL_Renderer * renderer)
 	: m_playerName("player")
 	, m_speed(0, 0)
 	, m_speedConst(0.16f, 0.12f)
 	, m_noclip(false)
 {
-}
-
-Player::~Player()
-{
-	if (m_playerObject) { delete m_playerObject; }
-	if (m_passabilityArea) { delete m_passabilityArea; }
-	if (m_bubble) { delete m_bubble; }
-}
-
-void Player::Init(SDL_Renderer * renderer)
-{
 	m_renderer = renderer;
-	
+
 	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_playerObject->SetAnimationEnable(true);
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
@@ -35,10 +24,17 @@ void Player::Init(SDL_Renderer * renderer)
 	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
 	m_bubble->SetParent(m_playerObject);
 	m_bubble->SetSide(TextBubble::LEFT);
-	
+
 	Vector2 pos = m_playerObject->GetCenterPos();
 	pos.y += m_passOffsetCoef * m_playerObject->GetSize().y;
 	m_passabilityArea = new PassabilityArea(pos, m_playerObject->GetSize().x * 0.25f);
+}
+
+Player::~Player()
+{
+	if (m_playerObject) { delete m_playerObject; }
+	if (m_passabilityArea) { delete m_passabilityArea; }
+	if (m_bubble) { delete m_bubble; }
 }
 
 bool Player::IsVisible()
