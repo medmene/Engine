@@ -82,7 +82,7 @@ void GameWindow::Initialize()
 	m_interface->Init();
 	
 	m_player = new Player(m_renderer);
-	ChangeState(LEVEL4);
+	ChangeState(MENU);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
