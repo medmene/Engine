@@ -15,6 +15,7 @@ struct Level2;
 struct Level3;
 struct Level4;
 struct Menu;
+struct Start;
 
 class GameWindow
 {
@@ -26,7 +27,8 @@ public:
 		LEVEL2,
 		LEVEL3,
 		LEVEL4,
-		UNDEFINED
+		UNDEFINED,
+		START
 	};
 
 	GameWindow();
@@ -58,6 +60,7 @@ private:
 	Level2						  * m_level2 = nullptr;
 	Level3						  * m_level3 = nullptr;
 	Level4						  * m_level4 = nullptr;
+	Start						  * m_start = nullptr;	
 	Player						  * m_player = nullptr;
 
 	static GameWindow			  * sm_instance;
@@ -67,4 +70,5 @@ private:
 	void OnStateLevel2Entering();
 	void OnStateLevel3Entering();
 	void OnStateLevel4Entering();
+	void OnStateStartEntering();
 };

@@ -12,6 +12,7 @@
 #include "Game_sources/include/Level2.h"
 #include "Game_sources/include/Level3.h"
 #include "Game_sources/include/Level4.h"
+#include "Game_sources/include/Start.h"
 #include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
@@ -52,9 +53,12 @@ GameWindow::~GameWindow()
 	delete EventManager::instance();
 	delete ResourceManager::instance();
 
+	if (m_start) { delete m_start; }
 	if (m_menu) { delete m_menu; }
 	if (m_level1) { delete m_level1; }
 	if (m_level2) { delete m_level2; }
+	if (m_level3) { delete m_level3; }
+	if (m_level4) { delete m_level4; }
 	if (m_player) { delete m_player; }
 	if (m_interface) { delete m_interface; }
 	
@@ -78,7 +82,7 @@ void GameWindow::Initialize()
 	m_interface->Init();
 	
 	m_player = new Player(m_renderer);
-	ChangeState(MENU);
+	ChangeState(LEVEL4);
 	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
@@ -121,6 +125,10 @@ void GameWindow::Update()
 	//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 	switch (m_state)
 	{
+	case GameWindow::START:
+		m_start->Update(FPS.dt);
+		m_player->Update(FPS.dt);
+		break;
 	case GameWindow::MENU:
 		m_menu->Update(FPS.dt);
 		break;
@@ -160,6 +168,16 @@ void GameWindow::Render()
 
 	switch (m_state)
 	{
+	case GameWindow::START:
+	{
+		if (GameModeChangeController::instance()->IsShown() ||
+			GameModeChangeController::instance()->IsHiding())
+		{
+			m_start->Render();
+			m_player->Render();
+		}
+		break;
+	}
 	case GameWindow::MENU:
 		m_menu->Render();
 		break;
@@ -222,6 +240,9 @@ void GameWindow::ChangeState(State newState)
 
 		switch (m_state)
 		{
+		case START:
+			OnStateMenuEntering();
+			break;
 		case MENU:
 			OnStateMenuEntering();
 			break;
@@ -272,5 +293,12 @@ void GameWindow::OnStateLevel4Entering()
 {
 	m_level4 = new Level4();
 	m_level4->Init(m_renderer, m_windowSize);
+	GameModeChangeController::instance()->StartShowing();
+}
+
+void GameWindow::OnStateStartEntering()
+{
+	m_start = new Start();
+	m_start->Init(m_renderer, m_windowSize);
 	GameModeChangeController::instance()->StartShowing();
 }
