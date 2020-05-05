@@ -2,9 +2,6 @@
 #include "include/Camera.h"
 #include "pugixml/pugixml.hpp"
 #include "include/Animator.h"
-#include "include/Event.h"
-#include "include/EventManager.h"
-#include "include/Reaction.h"
 
 
 
@@ -290,9 +287,4 @@ void GameObject::Render()
 
 		SDL_RenderCopy(m_renderer, m_texture, &m_animator->GetActiveAnimation()->GetCurrentState(), &localRect);
 	}
-}
-
-void GameObject::Subscribe(Event* e, function<void(GameObject*,Event*)> callback)
-{
-	EventManager::instance()->RegisterEvent(e, new Reaction(this, callback));
 }

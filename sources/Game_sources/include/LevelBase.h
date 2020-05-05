@@ -5,7 +5,6 @@
 
 class GameObject;
 class NPC;
-class Event;
 
 class LevelBase
 {
@@ -20,12 +19,9 @@ public:
 	//---------------------------------------------------------------//
 
 	vector<GameObject*>			m_objects;
-	// vector<GameObject*>			m_backgrounds;
-	// vector<GameObject*>			m_grounds;
-	// vector<Button*> 			m_buttons;
-	vector<Event*> 				m_events;
 	vector<NPC*> 				m_npcs;
 
 	Vector2						m_winSize;
 	SDL_Renderer			  * m_renderer = nullptr;
+	bool						m_deleteLater = false;
 };

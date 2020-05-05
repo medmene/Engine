@@ -10,12 +10,6 @@ LevelBase::~LevelBase()
 	}
 	m_objects.clear();
 
-	for (auto&& ev : m_events)
-	{
-		delete ev;
-	}
-	m_events.clear();
-
 	for (auto&& npc : m_npcs)
 	{
 		delete npc;

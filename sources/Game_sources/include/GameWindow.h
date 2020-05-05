@@ -60,7 +60,8 @@ private:
 	Level2						  * m_level2 = nullptr;
 	Level3						  * m_level3 = nullptr;
 	Level4						  * m_level4 = nullptr;
-	Start						  * m_start = nullptr;	
+	Start						  * m_start = nullptr;
+	bool							m_skipFrameToDelete = false;
 	Player						  * m_player = nullptr;
 
 	static GameWindow			  * sm_instance;

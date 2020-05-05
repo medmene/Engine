@@ -16,7 +16,6 @@
 #include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
-#include "include/EventManager.h"
 #include "include/SoundManager.h"
 #include "include/GameModeChangeController.h"
 
@@ -50,18 +49,17 @@ GameWindow::~GameWindow()
 	delete KeyboardInput::instance();
 	delete PassabilityMap::instance();
 	delete SoundManager::instance();
-	delete EventManager::instance();
 	delete ResourceManager::instance();
 
-	if (m_start) { delete m_start; }
-	if (m_menu) { delete m_menu; }
-	if (m_level1) { delete m_level1; }
-	if (m_level2) { delete m_level2; }
-	if (m_level3) { delete m_level3; }
-	if (m_level4) { delete m_level4; }
-	if (m_player) { delete m_player; }
-	if (m_interface) { delete m_interface; }
-	
+	delete m_start;
+	delete m_menu;
+	delete m_level1;
+	delete m_level2;
+	delete m_level3;
+	delete m_level4;
+	delete m_player;
+	delete m_interface;
+
 	if (m_renderer) { SDL_DestroyRenderer(m_renderer); }
 	if (m_window) { SDL_DestroyWindow(m_window); }
 
@@ -126,28 +124,58 @@ void GameWindow::Update()
 	switch (m_state)
 	{
 	case GameWindow::START:
-		m_start->Update(FPS.dt);
-		m_player->Update(FPS.dt);
+	{
+		if (m_start && m_player)
+		{
+			m_start->Update(FPS.dt);
+			m_player->Update(FPS.dt);
+		}
 		break;
+	}
 	case GameWindow::MENU:
-		m_menu->Update(FPS.dt);
+	{
+		if (m_menu)
+		{
+			m_menu->Update(FPS.dt);
+		}
 		break;
+	}
 	case GameWindow::LEVEL1:
-		m_level1->Update(FPS.dt);
-		m_player->Update(FPS.dt);
+	{
+		if (m_level1 && m_player)
+		{
+			m_level1->Update(FPS.dt);
+			m_player->Update(FPS.dt);
+		}
 		break;
+	}
 	case GameWindow::LEVEL2:
-		m_level2->Update(FPS.dt);
-		m_player->Update(FPS.dt);
+	{
+		if (m_level1 && m_player)
+		{
+			m_level2->Update(FPS.dt);
+			m_player->Update(FPS.dt);
+		}
 		break;
+	}
 	case GameWindow::LEVEL3:
-		m_level3->Update(FPS.dt);
-		m_player->Update(FPS.dt);
+	{
+		if (m_level1 && m_player)
+		{
+			m_level3->Update(FPS.dt);
+			m_player->Update(FPS.dt);
+		}
 		break;
+	}
 	case GameWindow::LEVEL4:
-		m_level4->Update(FPS.dt);
-		m_player->Update(FPS.dt);
+	{
+		if (m_level1 && m_player)
+		{
+			m_level4->Update(FPS.dt);
+			m_player->Update(FPS.dt);
+		}
 		break;
+	}
 	default:
 		break;
 	}
@@ -155,10 +183,8 @@ void GameWindow::Update()
 	GameModeChangeController::instance()->Update(FPS.dt);
 	PassabilityMap::instance()->Update();
 	Camera::instance()->Update(FPS.dt);
-	EventManager::instance()->Update();
 	SoundManager::instance()->Update();
 	m_interface->Update(FPS.dt);
-
 }
 
 void GameWindow::Render()

@@ -9,14 +9,14 @@
 Button::Button()
 	: GameObject()
 {
-	m_onClick = [] {};
+	m_onClick = [] {return false; };
 }
 
 Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
 	: GameObject(renderer, src, type)
 {
 	m_renderer = renderer;
-	m_onClick = [] {};
+	m_onClick = [] {return false; };
 }
 
 Button::~Button()
@@ -26,7 +26,7 @@ Button::~Button()
 
 void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
-	m_label = new Label(m_renderer, src, type);
+	m_label = new Label(m_renderer, "times", ResourceManager::TTF);
 	if (m_label)
 	{
 		m_label->SetVisible(true);
@@ -39,6 +39,12 @@ void Button::SetLabel(const string& text, int textFontSize, const string& src, R
 
 void Button::Update(float dt)
 {
+	GameObject::Update(dt);
+	if (m_label && m_label->IsVisible())
+	{
+		m_label->Update(dt);
+	}
+
 	if (IsMouseInside())
 	{
 		if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
@@ -47,15 +53,12 @@ void Button::Update(float dt)
 		}
 		else if (MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_UP)
 		{
-			m_onClick();
 			m_isPressed = false;
+			if (m_onClick())
+			{
+				return;
+			}
 		}
-	}
-	
-	GameObject::Update(dt);
-	if (m_label && m_label->IsVisible())
-	{
-		m_label->Update(dt);
 	}
 }
 

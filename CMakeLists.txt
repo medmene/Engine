@@ -40,25 +40,27 @@ target_sources(GameEngine PRIVATE
 target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameWindow.h
 	sources/Game_sources/include/GameInterface.h
+	sources/Game_sources/include/LevelBase.h
 	sources/Game_sources/include/Level1.h
 	sources/Game_sources/include/Level2.h
 	sources/Game_sources/include/Level3.h
 	sources/Game_sources/include/Level4.h
 	sources/Game_sources/include/Start.h
 	sources/Game_sources/include/Menu.h
-	sources/Game_sources/include/LevelBase.h
+	sources/Game_sources/include/LevelController.h
 )
 
 target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameWindow.cpp
 	sources/Game_sources/src/GameInterface.cpp
+	sources/Game_sources/src/LevelBase.cpp
 	sources/Game_sources/src/Level1.cpp
 	sources/Game_sources/src/Level2.cpp
 	sources/Game_sources/src/Level3.cpp
 	sources/Game_sources/src/Level4.cpp
 	sources/Game_sources/src/Start.cpp
 	sources/Game_sources/src/Menu.cpp
-	sources/Game_sources/src/LevelBase.cpp
+	sources/Game_sources/src/LevelController.cpp
 )
 
 # Include Engine
@@ -84,9 +86,6 @@ target_sources(GameEngine PRIVATE
 	engine/include/NPC.h
 	engine/include/PathFinder.h
 	engine/include/MovingController.h
-	engine/include/Event.h
-	engine/include/EventManager.h
-	engine/include/Reaction.h
 	engine/include/SoundManager.h
 	engine/include/KeyboardBinds.h
 	engine/include/BehaviourController.h
@@ -111,10 +110,6 @@ target_sources(GameEngine PRIVATE
 	engine/src/NPC.cpp
 	engine/src/PathFinder.cpp
 	engine/src/MovingController.cpp
-	engine/src/Event.cpp
-	engine/src/EventPass.cpp
-	engine/src/EventManager.cpp
-	engine/src/Reaction.cpp
 	engine/src/SoundManager.cpp
 	engine/src/BehaviourController.cpp
 	engine/src/TextBubble.cpp

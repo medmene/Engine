@@ -3,7 +3,6 @@
 #include "Vector2.h"
 #include "Color.h"
 #include "ResourceManager.h"
-#include "Event.h"
 
 
 class Animator;
@@ -49,8 +48,6 @@ public:
 	
 	virtual void Update(float dt);
 	virtual void Render();
-
-	void Subscribe(Event *e, function<void(GameObject*,Event*)> callback);
 	
 protected:
 	Resource				  * m_resourceSettings = nullptr;

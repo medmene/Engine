@@ -35,6 +35,7 @@ void GameInterface::Init()
 			if (item->GetName() == "infoScroll_settings")
 			{
 				item->SetVisible(!item->IsVisible());
+				return true;
 			}
 		}
 	});

@@ -4,7 +4,6 @@
 #include "include/Animator.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
-#include "include/EventPass.h"
 #include "Game_sources/include/GameWindow.h"
 #include "include/NPC.h"
 #include "include/Player.h"
@@ -50,12 +49,7 @@ void Level3::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_npcs.back()->GetGameObject()->UpdateSize(Vector2(90, 90));
 	m_npcs.back()->Init();
 
-	m_events.emplace_back(new EventPass());
-	((EventPass*)m_events.back())->SetObject(GameWindow::instance()->GetPlayer()->GetGameObject());
-	((EventPass*)m_events.back())->SetRect({ 386, 1478 }, Vector2{ 386, 1478 } +Vector2{ 200, 200 });
-
 	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
 	m_objects.back()->UpdateSize(Vector2(200, 200));
 	m_objects.back()->UpdatePos(Vector2(386, 1478));
-	m_objects.back()->Subscribe(m_events.back(), [](GameObject* o, Event* e) {GameWindow::instance()->ChangeState(GameWindow::LEVEL4); });
 }
