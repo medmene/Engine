@@ -46,6 +46,7 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/Level4.h
 	sources/Game_sources/include/Start.h
 	sources/Game_sources/include/Menu.h
+	sources/Game_sources/include/LevelBase.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -57,11 +58,13 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/Level4.cpp
 	sources/Game_sources/src/Start.cpp
 	sources/Game_sources/src/Menu.cpp
+	sources/Game_sources/src/LevelBase.cpp
 )
 
 # Include Engine
 target_sources(GameEngine PRIVATE
   	engine/include/Core.h
+  	engine/include/base_defs.h
   	engine/include/Fps.h
   	engine/include/MouseInput.h
   	engine/include/KeyboardInput.h

@@ -3,6 +3,7 @@
 #include "include/Animator.h"
 #include "pugixml/pugixml.hpp"
 #include "include/Label.h"
+#include "include/Utils.h"
 
 
 TextBubble::TextBubble(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
@@ -69,14 +70,7 @@ void TextBubble::SetText(const string& text)
 		if (m_text.size() > maxSymbolsInRow)
 		{
 			// Split
-			vector<string> elems;
-			std::stringstream ss(m_text + ' ');
-			string item;
-			
-			while (getline(ss, item, ' '))
-			{
-				elems.emplace_back(item);
-			}
+			vector<string> elems = Utils::split(m_text, ' ');
 			
 			int index = 0;
 			vector<string> labels;

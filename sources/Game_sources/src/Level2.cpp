@@ -20,9 +20,9 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 
 	float scale = 3;
 
-	m_backgrounds.emplace_back(new GameObject(m_renderer, "lvl_2", ResourceManager::PNG));
-	m_backgrounds.back()->UpdateSize(Vector2(scale * m_winSize.x, scale * m_winSize.y));
-	m_backgrounds.back()->UpdatePos(Vector2(0, 0)); // for non static
+	m_objects.emplace_back(new GameObject(m_renderer, "lvl_2", ResourceManager::PNG));
+	m_objects.back()->UpdateSize(Vector2(scale * m_winSize.x, scale * m_winSize.y));
+	m_objects.back()->UpdatePos(Vector2(0, 0)); // for non static
 
 	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
 	m_objects.back()->UpdateSize(Vector2(90, 90));
@@ -31,15 +31,6 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
 	m_objects.back()->UpdateSize(Vector2(90, 90));
 	m_objects.back()->UpdatePos(Vector2(574, 1427));
-
-
-	//+		m_player->m_playerObject->m_position	{x=981.162109 y=857.176514 eps=9.99999975e-06 }	Vector2 npc 1
-//+		m_player->m_playerObject->m_position	{x=2249.90259 y=1517.14966 eps=9.99999975e-06 }	Vector2 npc2
-
-
-	//m_objects.emplace_back(new GameObject(m_renderer, "blue1", ResourceManager::PNG));
-	//m_objects.back()->UpdateSize(Vector2(90, 90));
-	//m_objects.back()->UpdatePos(Vector2(1537, 1000));
 
 	//// Initialize NPC
 	m_npcs.emplace_back(new NPC(m_renderer, "alien1", ResourceManager::GOBJECT));
@@ -66,99 +57,4 @@ void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	m_objects.back()->UpdateSize(Vector2(200, 200));
 	m_objects.back()->UpdatePos(Vector2(2249, 1517));
 	m_objects.back()->Subscribe(m_events.back(), [](GameObject* o, Event* e) {GameWindow::instance()->ChangeState(GameWindow::LEVEL3); });
-}
-
-Level2::~Level2()
-{
-	for (auto && bg : m_backgrounds)
-	{
-		delete bg;
-	}
-	m_backgrounds.clear();
-
-	for (auto && gr : m_grounds)
-	{
-		delete gr;
-	}
-	m_grounds.clear();
-
-	for (auto && obj : m_objects)
-	{
-		delete obj;
-	}
-	m_objects.clear();
-
-	for (auto&& obj : m_buttons)
-	{
-		delete obj;
-	}
-	m_buttons.clear();
-
-	for (auto&& ev : m_buttons)
-	{
-		delete ev;
-	}
-	m_events.clear();
-
-	for (auto&& ev : m_npcs)
-	{
-		delete ev;
-	}
-	m_npcs.clear();
-}
-
-void Level2::Update(float dt)
-{
-	for (auto&& npc : m_npcs)
-	{
-		npc->Update(dt);
-	}
-
-	for (auto && background : m_backgrounds)
-	{
-		background->Update(dt);
-	}
-	
-	for (auto && ground : m_grounds)
-	{
-		ground->Update(dt);
-	}
-
-	for (auto && object : m_objects)
-	{
-		object->Update(dt);
-	}
-
-	for (auto && object : m_buttons)
-	{
-		object->Update(dt);
-	}
-}
-
-void Level2::Render()
-{
-	for (auto && background : m_backgrounds)
-	{
-		background->Render();
-	}
-	
-	for (auto && ground : m_grounds)
-	{
-		ground->Render();
-	}
-
-	for (auto && object : m_objects)
-	{
-		object->Render();
-	}
-
-	for (auto&& object : m_buttons)
-	{
-		object->Render();
-	}
-
-	for (auto&& npc : m_npcs)
-	{
-		npc->Render();
-	}
 }
