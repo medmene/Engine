@@ -6,6 +6,8 @@ class _FPS
 {
 public:
 	_FPS()
+		: dt(0.f)
+		, _dt(0)
 	{
 		t_start = std::chrono::high_resolution_clock::now();
 	}
