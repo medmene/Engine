@@ -16,7 +16,7 @@ Animation::Animation(Animator * animator, const string& name, const Vector2& obj
 {
 }
 
-inline void Animation::Stop()
+void Animation::Stop()
 {
 	m_playing = false;
 	m_index = 0;
@@ -29,14 +29,14 @@ inline void Animation::Stop()
 	// }
 }
 
-inline void Animation::Play()
+void Animation::Play()
 {
 	m_playing = true;
 	m_index = 0;
 	m_counter = 0.f;
 }
 
-inline void Animation::SetState(int state)
+void Animation::SetState(int state)
 {
 	if (state > -1 && state < m_state.size())
 	{

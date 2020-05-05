@@ -60,8 +60,8 @@ public:
 	bool IsPlaying() { return m_playing; }
 	bool IsLooped() { return m_looped; }
 	
-	inline void Stop();
-	inline void Play();
+	void Stop();
+	void Play();
 	void Pause() { m_playing = false; }
 	void Resume() { m_playing = true; }
 
