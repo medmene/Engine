@@ -15,7 +15,22 @@ endif()
 
 add_executable(GameEngine "")
 
+#set_target_properties(GameEngine
+#    PROPERTIES
+#    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+#    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+#    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+#)
 
+if(MSVC)
+	if("${MSVC_RUNTIME}" STREQUAL "")
+		set(MSVC_RUNTIME "static")
+	endif()
+    set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL")
+endif()
+
+set_property(TARGET GameEngine PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET GameEngine PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Release>:Release>")
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD 17)
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
@@ -23,12 +38,31 @@ set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
 target_include_directories(GameEngine PRIVATE sources)
 target_include_directories(GameEngine PRIVATE engine)
 
-target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
-target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
-target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
-target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_ttf.lib)
-target_link_libraries(GameEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_mixer.lib)
+add_library(SDL2 STATIC IMPORTED)
+add_library(SDL2main STATIC IMPORTED)
+add_library(SDL2_image STATIC IMPORTED)
+add_library(SDL2_ttf STATIC IMPORTED)
+add_library(SDL2_mixer STATIC IMPORTED)
 
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL)
+
+SET_TARGET_PROPERTIES(SDL2 PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2.lib)
+SET_TARGET_PROPERTIES(SDL2main PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2main.lib)
+SET_TARGET_PROPERTIES(SDL2_image PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_image.lib)
+SET_TARGET_PROPERTIES(SDL2_ttf PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_ttf.lib)
+SET_TARGET_PROPERTIES(SDL2_mixer PROPERTIES IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/engine/SDL/SDL2_mixer.lib)
+
+target_compile_features(SDL2 INTERFACE cxx_std_11)
+target_compile_features(SDL2main INTERFACE cxx_std_11)
+target_compile_features(SDL2_image INTERFACE cxx_std_11)
+target_compile_features(SDL2_ttf INTERFACE cxx_std_11)
+target_compile_features(SDL2_mixer INTERFACE cxx_std_11)
+
+target_link_libraries(GameEngine PRIVATE SDL2)
+target_link_libraries(GameEngine PRIVATE SDL2main)
+target_link_libraries(GameEngine PRIVATE SDL2_image)
+target_link_libraries(GameEngine PRIVATE SDL2_ttf)
+target_link_libraries(GameEngine PRIVATE SDL2_mixer)
 
 install(TARGETS GameEngine RUNTIME DESTINATION bin)
 

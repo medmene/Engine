@@ -24,7 +24,6 @@
 //#pragma comment(lib,"SDL/SDL2_image.lib")
 //#pragma comment(lib,"SDL/SDL2_ttf.lib")
 
-#undef main
 #define endl "\n"
 
 using std::string;
