@@ -3,9 +3,9 @@
 
 
 
-struct Start : public LevelBase
+struct Level5 : public LevelBase
 {
-	Start() = default;
+	Level5() = default;
 
 	void Init(SDL_Renderer * renderer, const Vector2 & winSize) override;
 };

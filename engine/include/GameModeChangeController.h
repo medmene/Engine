@@ -33,7 +33,7 @@ private:
 	State							m_curState;
 	Vector2							m_windowSize;
 	float							m_loadingTime = 3000.f;
-	float							m_fadeTime = 1000.f;
+	float							m_fadeTime = 2000.f;
 	float							m_counter = 0.f;
 
 	GameModeChangeController();

@@ -1,4 +1,6 @@
 #include "include/GameModeChangeController.h"
+#include "include/KeyboardInput.h"
+#include "include/MouseInput.h"
 
 
 GameModeChangeController * GameModeChangeController::sm_instance = nullptr;
@@ -28,26 +30,20 @@ void GameModeChangeController::StartHiding()
 {
 	m_counter = 0.f;
 	m_curState = HIDING;
+	MouseInput::instance()->LockInput();
+	KeyboardInput::instance()->LockInput();
 }
 
 void GameModeChangeController::StartShowing()
 {
 	m_counter = 0.f;
 	m_curState = SHOWING;
+	MouseInput::instance()->LockInput();
+	KeyboardInput::instance()->LockInput();
 }
 
 void GameModeChangeController::Update(float dt)
 {
-	if (m_loadingTime > 0)
-	{
-		m_loadingTime -= dt;
-		if (m_loadingTime <= 0)
-		{
-			StartShowing();
-		}
-		return; 
-	}
-	
 	if (m_curState == HIDING)
 	{
 		m_counter += dt;
@@ -63,6 +59,8 @@ void GameModeChangeController::Update(float dt)
 		m_counter += dt;
 		if (m_counter > m_fadeTime)
 		{
+			MouseInput::instance()->UnlockInput();
+			KeyboardInput::instance()->UnlockInput();
 			m_curState = SHOWN;
 			m_counter = 0.f;
 		}
@@ -71,7 +69,7 @@ void GameModeChangeController::Update(float dt)
 
 void GameModeChangeController::Render()
 {
-	if (m_loadingTime > 0 || m_curState == HIDDEN)
+	if (m_curState == HIDDEN)
 	{
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 		SDL_Rect rct = { 0, 0, (int)m_windowSize.x, (int)m_windowSize.y };
@@ -91,10 +89,6 @@ void GameModeChangeController::Render()
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * progress);
 		SDL_Rect rct = { 0, 0, (int)m_windowSize.x, (int)m_windowSize.y };
 		SDL_RenderFillRect(m_renderer, &rct);
-	}
-	else
-	{
-		return;
 	}
 }
 

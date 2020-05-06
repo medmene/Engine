@@ -8,6 +8,7 @@
 #include "include/Player.h"
 #include "include/Button.h"
 #include "include/GameModeChangeController.h"
+#include "Game_sources/include/LevelController.h"
 
 
 void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
@@ -31,7 +32,7 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	btn->UpdatePos(Vector2(bPosX, 100));
 	btn->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
 	btn->SetOnclick([this]() {
-		GameWindow::instance()->ChangeState(GameWindow::LEVEL1);
+		LevelController::instance()->ChangeState(LevelController::LEVEL3);
 		return true;
 	});
 	m_objects.emplace_back(btn);
@@ -43,4 +44,5 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	btn2->SetLabel("Exit", 30, "calibri", ResourceManager::TTF);
 	btn2->SetOnclick([]() { exit(0); return true; });
 	m_objects.emplace_back(btn2);
+	m_loadingFinished = true;
 }

@@ -75,12 +75,12 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/include/GameWindow.h
 	sources/Game_sources/include/GameInterface.h
 	sources/Game_sources/include/LevelBase.h
+	sources/Game_sources/include/Menu.h
 	sources/Game_sources/include/Level1.h
 	sources/Game_sources/include/Level2.h
 	sources/Game_sources/include/Level3.h
 	sources/Game_sources/include/Level4.h
-	sources/Game_sources/include/Start.h
-	sources/Game_sources/include/Menu.h
+	sources/Game_sources/include/Level5.h
 	sources/Game_sources/include/LevelController.h
 )
 
@@ -88,12 +88,12 @@ target_sources(GameEngine PRIVATE
 	sources/Game_sources/src/GameWindow.cpp
 	sources/Game_sources/src/GameInterface.cpp
 	sources/Game_sources/src/LevelBase.cpp
+	sources/Game_sources/src/Menu.cpp
 	sources/Game_sources/src/Level1.cpp
 	sources/Game_sources/src/Level2.cpp
 	sources/Game_sources/src/Level3.cpp
 	sources/Game_sources/src/Level4.cpp
-	sources/Game_sources/src/Start.cpp
-	sources/Game_sources/src/Menu.cpp
+	sources/Game_sources/src/Level5.cpp
 	sources/Game_sources/src/LevelController.cpp
 )
 

@@ -23,5 +23,5 @@ public:
 
 	Vector2						m_winSize;
 	SDL_Renderer			  * m_renderer = nullptr;
-	bool						m_deleteLater = false;
+	bool						m_loadingFinished = false;
 };

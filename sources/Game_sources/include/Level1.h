@@ -1,8 +1,7 @@
 #pragma once
 #include "LevelBase.h"
 
-class GameObject;
-class NPC;
+
 
 struct Level1 : public LevelBase
 {

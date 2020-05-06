@@ -12,6 +12,7 @@
 #include <thread>
 #include <map>
 #include <functional>
+#include <future>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"

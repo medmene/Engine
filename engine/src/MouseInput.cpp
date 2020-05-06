@@ -9,6 +9,7 @@ MouseInput::MouseInput()
 	, m_clicks(0)
 	, m_diff(0, 0)
 	, m_wheel(0)
+	, m_locked(false)
 {
 	m_button = MOUSE_UNDEFINED;
 	m_state = MOUSE_BUTTON_UNDEFINED;
@@ -32,8 +33,16 @@ Vector2 MouseInput::GetPosInMap()
 	return m_pos + Camera::instance()->GetPos() - Camera::instance()->GetPosInWnd();
 }
 
+void MouseInput::ResetDiffs()
+{
+	m_diff.x = 0; m_diff.y = 0;
+	m_wheel = 0; m_state = MOUSE_BUTTON_UNDEFINED;
+}
+
 void MouseInput::Update(SDL_Event * e)
 {
+	if (m_locked) { return; }
+	
 	switch (e->type)
 	{
 	case SDL_MOUSEMOTION:

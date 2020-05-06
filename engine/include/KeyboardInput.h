@@ -9,7 +9,6 @@ class KeyboardInput
 {
 	KeyboardInput();
 public:
-	~KeyboardInput(){}
 	static KeyboardInput * instance();
 
 	State GetState() { return m_state; }
@@ -20,19 +19,18 @@ public:
 	bool IsKeyPressed(int key);
 	bool IsModActive(int mod);
 
-	void Reset()
-	{
-		m_state = KEY_UNDEFINED;
-		m_key = (Key)-100;
-	}
+	void LockInput() { m_locked = true; }
+	void UnlockInput() { m_locked = false; }
+	bool IsLocked() { return m_locked; }
 	
+	void Reset();
 	void Update(SDL_Event * e);
 private:
 	vector<int>					m_keyMap;
 	vector<int>					m_keyModMap;
-
 	State						m_state;
 	Key							m_key;
+	bool						m_locked;
 
 	static KeyboardInput	  * sm_instance;
 };

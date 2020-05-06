@@ -7,6 +7,7 @@ KeyboardInput * KeyboardInput::sm_instance = nullptr;
 KeyboardInput::KeyboardInput()
 	: m_state(State::KEY_UNDEFINED)
 	, m_key(Key(0))
+	, m_locked(false)
 {
 }
 
@@ -31,8 +32,16 @@ bool KeyboardInput::IsModActive(int mod)
 	return it != m_keyModMap.end();
 }
 
+void KeyboardInput::Reset()
+{
+	m_state = KEY_UNDEFINED;
+	m_key = (Key)-100;
+}
+
 void KeyboardInput::Update(SDL_Event * e)
 {
+	if (m_locked) { return; }
+	
 	switch (e->type)
 	{
 	case SDL_KEYDOWN:
