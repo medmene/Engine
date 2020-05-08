@@ -5,19 +5,13 @@
 
 
 
-GameInterface::GameInterface(SDL_Renderer * r, const Vector2 & wSize)
-	: m_renderer(r)
+GameInterface::GameInterface(shared_ptr<WindowManager> w, SDL_Renderer * r, const Vector2 & wSize)
+	: Window(w, r, wSize)
 	, m_visible(true)
-	, m_windowSize(wSize)
 {
 }
 
-GameInterface::~GameInterface()
-{
-	m_elements.clear();
-}
-
-void GameInterface::Init()
+void GameInterface::Run()
 {
 	auto back = make_shared<GameObject>(m_renderer, "infoScroll_settings", ResourceManager::GOBJECT);
 	back->SetStaticObject(true);
@@ -100,8 +94,14 @@ void GameInterface::Init()
 	
 	auto btnStngs = make_shared<Button>(m_renderer, "gameSettingsBtn_settings", ResourceManager::GOBJECT);
 	btnStngs->SetStaticObject(true);
-	btnStngs->UpdatePos(Vector2(m_windowSize.x - btnStngs->GetSize().x - 10, 10));
+	btnStngs->UpdatePos(Vector2(m_winSize.x - btnStngs->GetSize().x - 10, 10));
 	m_elements.emplace_back(btnStngs);
+	Window::Run();
+}
+
+void GameInterface::Disappear()
+{
+	m_elements.clear();
 }
 
 void GameInterface::SetVisible(bool visible)

@@ -3,9 +3,14 @@
 
 
 
-struct Level1 : public LevelBase
+class Level1 : public LevelBase
 {
-	Level1(WindowManager * wm);
+public:
+	Level1(shared_ptr<WindowManager> wm, SDL_Renderer * renderer, const Vector2 & winSize);
 
-	void Init(SDL_Renderer * renderer, const Vector2 & winSize) override;
+	static string GetName() { return "level_1"; }
+	string GetWindowName() override { return GetName(); }
+	
+	void Run() override;
+private:
 };

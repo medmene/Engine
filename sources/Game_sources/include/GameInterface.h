@@ -1,25 +1,28 @@
 #pragma once
 #include "include/Core.h"
 #include "include/Vector2.h"
+#include "include/Window.h"
 
 class GameObject;
 
-class GameInterface
+class GameInterface : public Window
 {
 public:
+	GameInterface(shared_ptr<WindowManager> w, SDL_Renderer * r, const Vector2 & wSize);
 	
-	GameInterface(SDL_Renderer * r, const Vector2 & wSize);
-	~GameInterface();
-	void Init();
+	void Run() override;
+	void Disappear() override;
+
+	static string GetName() { return "game_interface"; }
+	
+	string GetWindowName() override { return GetName(); }
 	
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible);
 	
-	void Update(float dt);
-	void Render();
+	void Update(float dt) override;
+	void Render() override;
 private:
-	Vector2								m_windowSize;
-	SDL_Renderer					  * m_renderer;
 	bool								m_visible;
 	vector<shared_ptr<GameObject>>		m_elements;
 };

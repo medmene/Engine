@@ -1,20 +1,55 @@
 #pragma once
-#include "base_defs.h"
+#include "Core.h"
 #include "Vector2.h"
 
 class Window;
 
-class WindowManager
+class WindowManager : public std::enable_shared_from_this<WindowManager>
 {
 public:
-	WindowManager();
+	WindowManager(SDL_Renderer *r, const Vector2 & wSize);
 	~WindowManager();
 
-	void AddWindow(Window *w);
+	template <typename TWindowType>
+	shared_ptr<TWindowType> CreateAndRunWindow();
+	template <typename TWindowType>
+	shared_ptr<TWindowType> CreateWindow();
+
+	void SetWindowLevel(const string & name, int layer);
 	
 	void Render();
 	void Update(float dt);
 private:
-	Vector2					m_layersRange;
-	vector<Window*>			m_windows;
+	SDL_Renderer					  * m_renderer = nullptr;
+	Vector2								m_windowSize;
+	vector<shared_ptr<Window>>			m_windows;
+	bool								m_breakUpdate;
+	bool								m_breakRender;
+
+	static bool SortComparer(const shared_ptr<Window> &lhs, const shared_ptr<Window> &rhs);
+	void SortWindows();
+	int GetUniqLayer();
 };
+
+template <typename TWindowType>
+shared_ptr<TWindowType> WindowManager::CreateAndRunWindow()
+{
+	auto window = CreateWindow<TWindowType>();
+	window->Run();
+	return window;
+}
+
+template <typename TWindowType>
+shared_ptr<TWindowType> WindowManager::CreateWindow()
+{
+	shared_ptr<TWindowType> window;
+	window = make_shared<TWindowType>(shared_from_this(), m_renderer, m_windowSize);
+	window->m_layer = GetUniqLayer();
+	m_windows.emplace_back(window);
+	
+	m_breakUpdate = true;
+	m_breakRender = true;
+	SortWindows();
+	
+	return window;
+}

@@ -10,19 +10,15 @@ class NPC;
 class LevelBase : public Window
 {
 public:
-	LevelBase(WindowManager * wm);
-	~LevelBase();
+	LevelBase(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSize);
 
-	virtual void Init(SDL_Renderer * renderer, const Vector2 & winSize) = 0;
-	void Update(float dt);
+	void Run() override;
+	void Disappear() override;
+	void Update(float dt) override;
 	void Render() override;
-
-	//---------------------------------------------------------------//
-
+	
+protected:
 	vector<GameObject*>			m_objects;
 	vector<NPC*> 				m_npcs;
-
-	Vector2						m_winSize;
-	SDL_Renderer			  * m_renderer = nullptr;
 	bool						m_loadingFinished = false;
 };

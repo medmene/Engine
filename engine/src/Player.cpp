@@ -19,7 +19,7 @@ Player::Player(SDL_Renderer * renderer)
 	m_playerObject = new GameObject(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_playerObject->SetAnimationEnable(true);
 	m_playerObject->GetAnimator()->GetActiveAnimation()->Play();
-	m_playerObject->UpdatePos(Vector2(500, 1400));
+	m_playerObject->UpdatePos(Vector2(500, 500));
 
 	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
 	m_bubble->SetParent(m_playerObject);

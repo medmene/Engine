@@ -3,23 +3,12 @@
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
-#include "include/Label.h"
 #include "include/Player.h"
-#include "include/NPC.h"
-#include "include/GameObject.h"
 #include "Game_sources/include/Menu.h"
-#include "Game_sources/include/Level1.h"
-#include "Game_sources/include/Level2.h"
-#include "Game_sources/include/Level3.h"
-#include "Game_sources/include/Level4.h"
-#include "Game_sources/include/Level5.h"
 #include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/SoundManager.h"
-#include "include/GameModeChangeController.h"
-#include "Game_sources/include/Level5.h"
-#include "Game_sources/include/LevelController.h"
 
 GameWindow * GameWindow::sm_instance = new GameWindow();
 
@@ -53,7 +42,6 @@ GameWindow::~GameWindow()
 	delete ResourceManager::instance();
 
 	delete m_player;
-	delete m_interface;
 
 	if (m_renderer) { SDL_DestroyRenderer(m_renderer); }
 	if (m_window) { SDL_DestroyWindow(m_window); }
@@ -65,23 +53,23 @@ GameWindow::~GameWindow()
 
 void GameWindow::Initialize()
 {
-	// LevelController::instance()->Init(m_renderer, m_windowSize);
 	SoundManager::instance()->PlaySound(ResourceManager::instance()->
 		GetResource("mainTheme", ResourceManager::MP3));
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_interface = new GameInterface(m_renderer, m_windowSize);
-	m_interface->Init();
-	
 	m_player = new Player(m_renderer);
 	m_player->SetVisible(false);
 	
-	// LevelController::instance()->RunStartState();
+	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);
+	m_windowManager->CreateAndRunWindow<Menu>();
+	m_windowManager->CreateAndRunWindow<GameInterface>();
+	m_windowManager->SetWindowLevel(GameInterface::GetName(), 15);
+	
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
-void GameWindow::Processing(bool manually /*= false*/)
+void GameWindow::Processing()
 {
 	while (true)
 	{
@@ -111,10 +99,6 @@ void GameWindow::Processing(bool manually /*= false*/)
 
 		////////////////  Render  ////////////////
 		Render();
-		if (manually)
-		{
-			break;
-		}
 	}
 }
 
@@ -124,10 +108,9 @@ void GameWindow::Update()
 
 	SoundManager::instance()->Update();
 	PassabilityMap::instance()->Update();
-	// LevelController::instance()->Update(FPS.dt);
-	m_player->Update(FPS.dt);
+	
+	m_windowManager->Update(FPS.dt);
 	Camera::instance()->Update(FPS.dt);
-	m_interface->Update(FPS.dt);
 }
 
 void GameWindow::Render()
@@ -135,11 +118,8 @@ void GameWindow::Render()
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(m_renderer);
 
-	// LevelController::instance()->Render();
-	m_player->Render();
-	
 	PassabilityMap::instance()->Render();
-	m_interface->Render();
+	m_windowManager->Render();
 
 	SDL_RenderPresent(m_renderer);
 }

@@ -1,23 +1,23 @@
 #include "Game_sources/include/Menu.h"
 #include "include/Label.h"
 #include "include/GameObject.h"
-#include "include/Animator.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "Game_sources/include/GameWindow.h"
 #include "include/Player.h"
 #include "include/Button.h"
-#include "include/GameModeChangeController.h"
-#include "Game_sources/include/LevelController.h"
+#include "Game_sources/include/Level1.h"
 
 
-void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
+Menu::Menu(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSize)
+	: LevelBase(wm, r, winSize)
+{
+}
+
+void Menu::Run()
 {
 	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
 	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
-	
-	m_winSize = winSize;
-	m_renderer = renderer;
 
 	m_objects.emplace_back(new GameObject(m_renderer, "menu", ResourceManager::JPG));
 	m_objects.back()->SetStaticObject(true);
@@ -32,7 +32,8 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	btn->UpdatePos(Vector2(bPosX, 100));
 	btn->SetLabel("Start", 30, "calibri", ResourceManager::TTF);
 	btn->SetOnclick([this]() {
-		LevelController::instance()->ChangeState(LevelController::LEVEL3);
+		GameWindow::instance()->GetWindowManager()->CreateAndRunWindow<Level1>();
+		this->Stop();
 		return true;
 	});
 	m_objects.emplace_back(btn);
@@ -45,4 +46,5 @@ void Menu::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 	btn2->SetOnclick([]() { exit(0); return true; });
 	m_objects.emplace_back(btn2);
 	m_loadingFinished = true;
+	LevelBase::Run();
 }

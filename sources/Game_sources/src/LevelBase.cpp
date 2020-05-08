@@ -4,12 +4,17 @@
 
 
 
-LevelBase::LevelBase(WindowManager * wm)
-	: Window(wm)
+LevelBase::LevelBase(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSize)
+	: Window(wm, r, winSize)
 {
 }
 
-LevelBase::~LevelBase()
+void LevelBase::Run()
+{
+	Window::Run();
+}
+
+void LevelBase::Disappear()
 {
 	for (auto && obj : m_objects)
 	{
