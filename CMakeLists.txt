@@ -125,6 +125,8 @@ target_sources(GameEngine PRIVATE
 	engine/include/BehaviourController.h
 	engine/include/TextBubble.h
 	engine/include/GameModeChangeController.h
+	engine/include/Window.h
+	engine/include/WindowManager.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -148,6 +150,8 @@ target_sources(GameEngine PRIVATE
 	engine/src/BehaviourController.cpp
 	engine/src/TextBubble.cpp
 	engine/src/GameModeChangeController.cpp
+	engine/src/Window.cpp
+	engine/src/WindowManager.cpp
 )
 
 # Include lib pugi XML

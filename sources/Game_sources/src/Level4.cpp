@@ -9,6 +9,11 @@
 #include "include/Player.h"
 
 
+Level4::Level4(WindowManager* wm)
+	: LevelBase(wm)
+{
+}
+
 void Level4::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passability3", ResourceManager::PMAP);

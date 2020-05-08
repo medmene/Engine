@@ -9,6 +9,11 @@
 #include "include/NPC.h"
 
 
+Level2::Level2(WindowManager* wm)
+	: LevelBase(wm)
+{
+}
+
 void Level2::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passability1", ResourceManager::PMAP);

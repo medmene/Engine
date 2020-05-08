@@ -2,6 +2,13 @@
 #include "include/GameObject.h"
 #include "include/NPC.h"
 
+
+
+LevelBase::LevelBase(WindowManager * wm)
+	: Window(wm)
+{
+}
+
 LevelBase::~LevelBase()
 {
 	for (auto && obj : m_objects)

@@ -1,6 +1,8 @@
 #include "include/GameModeChangeController.h"
 #include "include/KeyboardInput.h"
 #include "include/MouseInput.h"
+#include "Game_sources/include/GameWindow.h"
+#include "Game_sources/include/LevelBase.h"
 
 
 GameModeChangeController * GameModeChangeController::sm_instance = nullptr;
@@ -9,15 +11,6 @@ GameModeChangeController::GameModeChangeController()
 	: m_curState(HIDDEN)
 	, m_windowSize(Vector2::uno)
 {
-}
-
-GameModeChangeController* GameModeChangeController::instance()
-{
-	if (!sm_instance)
-	{
-		sm_instance = new GameModeChangeController();
-	}
-	return sm_instance;
 }
 
 void GameModeChangeController::Init(SDL_Renderer* r, const Vector2& wSize)

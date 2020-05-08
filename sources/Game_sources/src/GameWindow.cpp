@@ -45,7 +45,6 @@ GameWindow::GameWindow()
 
 GameWindow::~GameWindow()
 {
-	delete GameModeChangeController::instance();
 	delete Camera::instance();
 	delete MouseInput::instance();
 	delete KeyboardInput::instance();
@@ -53,12 +52,6 @@ GameWindow::~GameWindow()
 	delete SoundManager::instance();
 	delete ResourceManager::instance();
 
-	// delete m_menu;
-	// delete m_level1;
-	// delete m_level2;
-	// delete m_level3;
-	// delete m_level4;
-	// delete m_level5;
 	delete m_player;
 	delete m_interface;
 
@@ -72,8 +65,7 @@ GameWindow::~GameWindow()
 
 void GameWindow::Initialize()
 {
-	GameModeChangeController::instance()->Init(m_renderer, m_windowSize);
-	LevelController::instance()->Init(m_renderer, m_windowSize);
+	// LevelController::instance()->Init(m_renderer, m_windowSize);
 	SoundManager::instance()->PlaySound(ResourceManager::instance()->
 		GetResource("mainTheme", ResourceManager::MP3));
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
@@ -85,11 +77,11 @@ void GameWindow::Initialize()
 	m_player = new Player(m_renderer);
 	m_player->SetVisible(false);
 	
-	LevelController::instance()->RunStartState();
+	// LevelController::instance()->RunStartState();
 	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
 }
 
-void GameWindow::Processing()
+void GameWindow::Processing(bool manually /*= false*/)
 {
 	while (true)
 	{
@@ -119,6 +111,10 @@ void GameWindow::Processing()
 
 		////////////////  Render  ////////////////
 		Render();
+		if (manually)
+		{
+			break;
+		}
 	}
 }
 
@@ -126,12 +122,11 @@ void GameWindow::Update()
 {
 	//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 
-	LevelController::instance()->Update(FPS.dt);
-	m_player->Update(FPS.dt);
-	GameModeChangeController::instance()->Update(FPS.dt);
-	PassabilityMap::instance()->Update();
-	Camera::instance()->Update(FPS.dt);
 	SoundManager::instance()->Update();
+	PassabilityMap::instance()->Update();
+	// LevelController::instance()->Update(FPS.dt);
+	m_player->Update(FPS.dt);
+	Camera::instance()->Update(FPS.dt);
 	m_interface->Update(FPS.dt);
 }
 
@@ -139,12 +134,12 @@ void GameWindow::Render()
 {
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(m_renderer);
-	
-	LevelController::instance()->Render();
-	PassabilityMap::instance()->Render();
+
+	// LevelController::instance()->Render();
 	m_player->Render();
+	
+	PassabilityMap::instance()->Render();
 	m_interface->Render();
-	GameModeChangeController::instance()->Render();
 
 	SDL_RenderPresent(m_renderer);
 }

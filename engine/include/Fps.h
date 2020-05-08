@@ -23,8 +23,6 @@ public:
 		fps += "\tdt: " + _s2.str();
 		t_start = std::chrono::high_resolution_clock::now();
 		dt = static_cast<float>(_dt);
-		// Slowing the game, for fix up crashes =)
-		//std::this_thread::sleep_for(std::chrono::microseconds(1000));
 	}
 
 	float													dt;

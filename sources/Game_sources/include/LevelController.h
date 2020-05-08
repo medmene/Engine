@@ -4,6 +4,13 @@
 
 class LevelController
 {
+	enum ChangingState
+	{
+		HIDDEN,
+		HIDING,
+		SHOWN,
+		SHOWING
+	};
 	LevelController();
 public:
 	enum LevelState

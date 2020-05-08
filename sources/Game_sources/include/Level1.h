@@ -5,7 +5,7 @@
 
 struct Level1 : public LevelBase
 {
-	Level1() = default;
+	Level1(WindowManager * wm);
 
 	void Init(SDL_Renderer * renderer, const Vector2 & winSize) override;
 };

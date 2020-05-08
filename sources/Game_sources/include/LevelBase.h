@@ -1,20 +1,21 @@
 #pragma once
 #include "include/Core.h"
 #include "include/Vector2.h"
+#include "include/Window.h"
 
 
 class GameObject;
 class NPC;
 
-class LevelBase
+class LevelBase : public Window
 {
 public:
-	LevelBase() = default;
-	virtual ~LevelBase();
+	LevelBase(WindowManager * wm);
+	~LevelBase();
 
 	virtual void Init(SDL_Renderer * renderer, const Vector2 & winSize) = 0;
 	void Update(float dt);
-	void Render();
+	void Render() override;
 
 	//---------------------------------------------------------------//
 

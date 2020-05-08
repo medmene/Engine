@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Core.h"
 #include "Vector2.h"
 
@@ -15,8 +14,7 @@ class GameModeChangeController
 		LOADING
 	};
 public:
-	static GameModeChangeController * instance();
-
+	GameModeChangeController();
 	void Init(SDL_Renderer * r, const Vector2& wSize);
 
 	bool IsHiding() { return m_curState == HIDING; }
@@ -32,11 +30,9 @@ private:
 	SDL_Renderer				  * m_renderer = nullptr;
 	State							m_curState;
 	Vector2							m_windowSize;
-	float							m_loadingTime = 3000.f;
 	float							m_fadeTime = 2000.f;
 	float							m_counter = 0.f;
 
-	GameModeChangeController();
 	GameModeChangeController(const GameModeChangeController&) = default;
 	static GameModeChangeController			  * sm_instance;
 };

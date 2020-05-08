@@ -16,7 +16,7 @@ public:
 	static GameWindow * instance() { return sm_instance; }
 
 	void Initialize();
-	void Processing();
+	void Processing(bool manually = false);
 	
 	Player * GetPlayer() { return m_player; }
 
@@ -33,4 +33,6 @@ private:
 	Player						  * m_player = nullptr;
 
 	static GameWindow			  * sm_instance;
+
+	friend class GameModeChangeController;
 };

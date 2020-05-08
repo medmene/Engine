@@ -6,6 +6,11 @@
 #include "include/PassabilityMap.h"
 
 
+Level1::Level1(WindowManager * wm)
+	: LevelBase(wm)
+{
+}
+
 void Level1::Init(SDL_Renderer * renderer, const Vector2 & winSize)
 {
 	PassabilityMap::instance()->SetMap("passabilitystart", ResourceManager::PMAP);
