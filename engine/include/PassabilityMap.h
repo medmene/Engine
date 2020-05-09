@@ -34,7 +34,7 @@ public:
 
 	static PassabilityMap * instance();
 	void Init(SDL_Renderer * renderer);
-	void SetMap(const string & src, ResourceManager::Type type);
+	void SetMap(const string & src);
 
 	Vector2 WorldToNodeIndex(const Vector2 & pos);
 	Vector2 NodeIndexToWorld(const Vector2 & pos);

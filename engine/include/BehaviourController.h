@@ -4,6 +4,7 @@
 #include "Vector2.h"
 
 class MovingController;
+class GameObject;
 
 class BehaviourController
 {
@@ -39,6 +40,7 @@ public:
 private:
 	SDL_Renderer			  *	m_renderer = nullptr;
 	ICharacter				  * m_owner = nullptr;
+	GameObject				  * m_ownerObj = nullptr;
 	MovingController		  * m_movingController = nullptr;
 	Vector2						m_anchorPoint;
 	Vector2						m_anchorArea;

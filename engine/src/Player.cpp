@@ -8,8 +8,8 @@
 #include "include/TextBubble.h"
 
 
-Player::Player(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
-	: GameObject(renderer, src, type)
+Player::Player(SDL_Renderer * renderer, const string & src)
+	: GameObject(renderer, src)
 	, m_playerName("player")
 	, m_velocity(0, 0)
 	, m_velocityConst(0.16f, 0.12f)
@@ -19,7 +19,7 @@ Player::Player(SDL_Renderer * renderer, const string & src, ResourceManager::Typ
 	GetAnimator()->GetActiveAnimation()->Play();
 	UpdatePos(Vector2(500, 500));
 
-	m_bubble = new TextBubble(renderer, "playerTextBubble_settings", ResourceManager::GOBJECT);
+	m_bubble = new TextBubble(renderer, "playerTextBubble_settings.gobj");
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);

@@ -8,7 +8,7 @@
 #include "include/TextBubble.h"
 
 
-BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
+BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner/*, GameObject * o*/)
 	: m_renderer(r)
 	, m_owner(owner)
 	, m_anchorArea(Vector2(20, 20))
@@ -27,9 +27,11 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	tmp[6] = "_bottom";
 	tmp[7] = "_bottom_left";
 
-	if (m_owner && m_owner->GetGameObject())
+	m_ownerObj = dynamic_cast<GameObject *>(owner);
+	
+	if (m_owner && m_ownerObj)
 	{
-		auto allAnims = m_owner->GetGameObject()->GetAnimator()->GetAllAnimations();
+		auto allAnims = m_ownerObj->GetAnimator()->GetAllAnimations();
 		for (auto && item : tmp)
 		{
 			for (auto && anim : allAnims)
@@ -43,11 +45,11 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 			}
 		}
 	}
-
+	
 	m_movingController = new MovingController(r, owner, m_normalSpeed);
 	m_movingController->SetAnimationMap(m_directionsOfAnimations);
 	m_currentState = UNDEFINED;
-	m_anchorPoint = owner->GetGameObject()->GetCenterPos();
+	m_anchorPoint = m_ownerObj->GetCenterPos();
 	
 	ChangeState(WAIT);
 }

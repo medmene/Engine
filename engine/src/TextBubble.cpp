@@ -6,8 +6,8 @@
 #include "include/Utils.h"
 
 
-TextBubble::TextBubble(SDL_Renderer* renderer, const string& src, ResourceManager::Type type)
-	: GameObject(renderer, src, type)
+TextBubble::TextBubble(SDL_Renderer* renderer, const string& src)
+	: GameObject(renderer, src)
 	, m_defaultRelPos(Vector2::zero)
 	, m_fontSize(16)
 {
@@ -94,7 +94,7 @@ void TextBubble::SetText(const string& text)
 			// Add to labels
 			for (int i = 0, j = 0; i < maxRows && j < labels.size(); ++i, ++j)
 			{
-				m_labels.emplace_back(new Label(m_renderer, "times", ResourceManager::TTF));
+				m_labels.emplace_back(new Label(m_renderer, "times.ttf"));
 				m_labels.back()->SetParent(this);
 				m_labels.back()->Init(labels[j], m_fontSize);
 				m_labels.back()->SetVisible(true);
@@ -114,7 +114,7 @@ void TextBubble::SetText(const string& text)
 		}
 		else
 		{
-			m_labels.emplace_back(new Label(m_renderer, "times", ResourceManager::TTF));
+			m_labels.emplace_back(new Label(m_renderer, "times.ttf"));
 			m_labels.back()->Init(m_text, m_fontSize);
 			m_labels.back()->SetParent(this);
 			m_labels.back()->SetVisible(true);

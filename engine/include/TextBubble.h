@@ -14,7 +14,7 @@ public:
 		LEFT
 	};
 	
-	TextBubble(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	TextBubble(SDL_Renderer * renderer, const string & src);
 	~TextBubble();
 	
 	void SetSide(Side s);

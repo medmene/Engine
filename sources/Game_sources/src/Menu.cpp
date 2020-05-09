@@ -16,16 +16,16 @@ Menu::Menu(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSiz
 
 void Menu::Run()
 {
-	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
+	PassabilityMap::instance()->SetMap("passability2.pmap");
 
-	m_objects.emplace_back(new GameObject(m_renderer, "menu", ResourceManager::JPG));
+	m_objects.emplace_back(new GameObject(m_renderer, "menu.jpg"));
 	m_objects.back()->SetStaticObject(true);
 	m_objects.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y));
 	m_objects.back()->UpdatePos(Vector2(0, 0));
 
 	float bSizeX = 200, bSizeY = 50, bPosX = m_winSize.x / 2 - bSizeX / 2;
 
-	Button* btn = new Button(m_renderer, "button_menu", ResourceManager::GOBJECT);
+	Button* btn = new Button(m_renderer, "button_menu.gobj");
 	btn->SetStaticObject(true);
 	btn->UpdateSize(Vector2(bSizeX, bSizeY));
 	btn->UpdatePos(Vector2(bPosX, 100));
@@ -37,7 +37,7 @@ void Menu::Run()
 	});
 	m_objects.emplace_back(btn);
 
-	Button* btn2 = new Button(m_renderer, "button_menu", ResourceManager::GOBJECT);
+	Button* btn2 = new Button(m_renderer, "button_menu.gobj");
 	btn2->SetStaticObject(true);
 	btn2->UpdateSize(Vector2(bSizeX, bSizeY));
 	btn2->UpdatePos(Vector2(bPosX, 300));

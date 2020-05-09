@@ -13,13 +13,13 @@ GameInterface::GameInterface(shared_ptr<WindowManager> w, SDL_Renderer * r, cons
 
 void GameInterface::Run()
 {
-	auto back = make_shared<GameObject>(m_renderer, "infoScroll_settings", ResourceManager::GOBJECT);
+	auto back = make_shared<GameObject>(m_renderer, "infoScroll_settings.gobj");
 	back->SetStaticObject(true);
 	back->UpdatePos(Vector2(45, 10));
 	back->SetVisible(false);
 	m_elements.emplace_back(back);
 	
-	auto btn = make_shared<Button>(m_renderer, "infoBtn_settings", ResourceManager::GOBJECT);
+	auto btn = make_shared<Button>(m_renderer, "infoBtn_settings.gobj");
 	btn->SetStaticObject(true);
 	btn->UpdatePos(Vector2(10, 10));	
 	btn->SetOnclick([this]()
@@ -36,7 +36,7 @@ void GameInterface::Run()
 	});
 	m_elements.emplace_back(btn);
 	
-	auto lbl = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl = make_shared<Label>(m_renderer, "times.ttf");
 	lbl->Init("P-character area", 16);
 	lbl->SetStaticObject(true);
 	lbl->SetParent(back.get());
@@ -45,7 +45,7 @@ void GameInterface::Run()
 	lbl->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl);
 	
-	auto lbl2 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl2 = make_shared<Label>(m_renderer, "times.ttf");
 	lbl2->Init("L-not passible map", 16);
 	lbl2->SetStaticObject(true);
 	lbl2->SetParent(back.get());
@@ -54,7 +54,7 @@ void GameInterface::Run()
 	lbl2->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl2);
 
-	auto lbl3 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl3 = make_shared<Label>(m_renderer, "times.ttf");
 	lbl3->Init("O-save map (with L)", 16);
 	lbl3->SetStaticObject(true);
 	lbl3->SetParent(back.get());
@@ -64,7 +64,7 @@ void GameInterface::Run()
 	lbl3->SetVisible(false);
 	m_elements.emplace_back(lbl3);
 
-	auto lbl4 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl4 = make_shared<Label>(m_renderer, "times.ttf");
 	lbl4->Init("J-music", 16);
 	lbl4->SetStaticObject(true);
 	lbl4->SetParent(back.get());
@@ -73,7 +73,7 @@ void GameInterface::Run()
 	lbl4->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl4);
 
-	auto lbl5 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl5 = make_shared<Label>(m_renderer, "times.ttf");
 	lbl5->Init("I-NPC way", 16);
 	lbl5->SetStaticObject(true);
 	lbl5->SetParent(back.get());
@@ -82,7 +82,7 @@ void GameInterface::Run()
 	lbl5->UpdateColor(Color(0, 0, 0, 255));
 	m_elements.emplace_back(lbl5);
 
-	auto lbl6 = make_shared<Label>(m_renderer, "times", ResourceManager::TTF);
+	auto lbl6 = make_shared<Label>(m_renderer, "times.ttf");
 	lbl6->Init("U - noclip", 16);
 	lbl6->SetStaticObject(true);
 	lbl6->SetParent(back.get());
@@ -93,7 +93,7 @@ void GameInterface::Run()
 
 	// ----------------------------------------------------------------------------------- //
 	
-	auto btnStngs = make_shared<Button>(m_renderer, "gameSettingsBtn_settings", ResourceManager::GOBJECT);
+	auto btnStngs = make_shared<Button>(m_renderer, "gameSettingsBtn_settings.gobj");
 	btnStngs->SetStaticObject(true);
 	btnStngs->UpdatePos(Vector2(m_winSize.x - btnStngs->GetSize().x - 10, 10));
 	m_elements.emplace_back(btnStngs);

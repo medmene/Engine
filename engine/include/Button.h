@@ -12,7 +12,7 @@ class Button : public GameObject
 {
 	explicit Button();
 public:
-	Button(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	Button(SDL_Renderer * renderer, const string & src);
 	~Button();
 
 	void SetOnclick(function<bool()> onClick) { m_onClick = onClick; }

@@ -168,9 +168,9 @@ bool PassabilityMap::LoadMap()
 	return false;
 }
 
-void PassabilityMap::SetMap(const string& src, ResourceManager::Type type)
+void PassabilityMap::SetMap(const string& src)
 {
-	m_resource = ResourceManager::instance()->GetResource(src, type);
+	m_resource = ResourceManager::instance()->GetResource(src);
 
 	if (m_resource)
 	{

@@ -11,7 +11,7 @@ class Label : public GameObject
 public:
 	explicit Label();
 	
-	Label(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	Label(SDL_Renderer * renderer, const string & src);
 	~Label();
 
 	void Init(const string & text, int fontSize = 24);

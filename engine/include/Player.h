@@ -9,7 +9,7 @@ class TextBubble;
 class Player : public GameObject
 {
 public:
-	Player(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	Player(SDL_Renderer * renderer, const string & src);
 	virtual ~Player();
 
 	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
@@ -27,7 +27,7 @@ private:
 	PassabilityArea				  * m_passabilityArea = nullptr;
 	bool							m_drawPassability = false;
 	float							m_passOffsetCoef = 0.33f;
-	TextBubble					  * m_bubble;
+	TextBubble					  * m_bubble = nullptr;
 	bool							m_noclip;
 
 	void UpdateVelocity();

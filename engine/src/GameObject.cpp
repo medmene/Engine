@@ -17,9 +17,9 @@ GameObject::GameObject()
 {
 }
 
-bool GameObject::CreateSettings(const string & src, ResourceManager::Type type)
+bool GameObject::CreateSettings(const string & src)
 {
-	m_resourceTexture = ResourceManager::instance()->GetResource(src, type);
+	m_resourceTexture = ResourceManager::instance()->GetResource(src);
 	if (m_resourceTexture)
 	{
 		if (m_resourceTexture)
@@ -84,9 +84,9 @@ bool GameObject::CreateSettings(const string & src, ResourceManager::Type type)
 	return false;
 }
 
-bool GameObject::LoadSettings(const string & src, ResourceManager::Type type)
+bool GameObject::LoadSettings(const string & src)
 {
-	m_resourceSettings = ResourceManager::instance()->GetResource(src, type);
+	m_resourceSettings = ResourceManager::instance()->GetResource(src);
 
 	if (m_resourceSettings)
 	{
@@ -128,7 +128,7 @@ bool GameObject::LoadSettings()
 	return false;
 }
 
-GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type)
+GameObject::GameObject(SDL_Renderer * renderer, const string & src)
 	: m_position(0, 0)
 	, m_relativePos(0, 0)
 	, m_visible(true)
@@ -136,15 +136,17 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 {
 	m_renderer = renderer;
 
-	if (type != ResourceManager::GOBJECT)
+	auto res = ResourceManager::instance()->GetResource(src);
+	
+	if (res->GetType() != ResourceManager::GOBJECT)
 	{
 		// Try to find resource with settings
-		m_resourceSettings = ResourceManager::instance()->GetResource(src + "_settings", ResourceManager::GOBJECT);
+		m_resourceSettings = ResourceManager::instance()->GetResource(src + "_settings.gobj");
 		if (!m_resourceSettings)
 		{
 			// If trying loading gameObject without .gobj res
 			// Create it
-			if (CreateSettings(src, type))
+			if (CreateSettings(src))
 			{
 				return;
 			}
@@ -157,7 +159,7 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 			}
 		}
 	}
-	else if (LoadSettings(src, type))
+	else if (LoadSettings(src))
 	{
 		return;
 	}

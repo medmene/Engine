@@ -11,25 +11,29 @@
 MovingController::MovingController()
 	: m_speedModifier(0.16f)
 	, m_curSpeed(Vector2::zero)
-	, m_moving(false)
 	, m_searching(false)
-	, m_visualisation(false)
+	, m_moving(false)
+	, m_hasPath(false)
 	, m_pathIndex(0)
 	, m_lastDir(0)
+	, m_visualisation(false)
 {
 }
 
 MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float speedMod)
 	: m_speedModifier(speedMod)
 	, m_curSpeed(Vector2::zero)
-	, m_moving(false)
 	, m_searching(false)
-	, m_visualisation(false)
-	, m_owner(owner)
+	, m_moving(false)
+	, m_hasPath(false)
 	, m_pathIndex(0)
+	, m_owner(owner)
+	, m_visualisation(false)
 {
 	m_renderer = r;
 
+	m_ownerObj = dynamic_cast<GameObject *>(owner);
+	
 	m_dirs[0][0] = 1;
 	m_dirs[0][1] = 0;
 	m_dirs[0][2] = 7;
@@ -44,7 +48,7 @@ MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float sp
 
 MovingController::~MovingController()
 {
-	if (m_finder) { delete m_finder; }
+	delete m_finder;
 }
 
 void MovingController::MoveToPos(const Vector2 &pos)
@@ -52,7 +56,7 @@ void MovingController::MoveToPos(const Vector2 &pos)
 	if (m_finder && m_owner && !IsMoving())
 	{
 		m_searching = true;
-		m_finder->StartFinding(m_owner->GetGameObject()->GetCenterPos(), pos);
+		m_finder->StartFinding(m_ownerObj->GetCenterPos(), pos);
 	}
 }
 
@@ -85,10 +89,10 @@ void MovingController::Update(float dt)
 
 	if (m_moving)
 	{
-		if (auto obj = m_owner->GetGameObject())
+		if (m_ownerObj)
 		{
 			
-			auto oldPos = obj->GetCenterPos();
+			auto oldPos = m_ownerObj->GetCenterPos();
 			auto dir = m_movingPath[m_pathIndex] - oldPos;
 			float dirLen = dir.length();
 
@@ -97,9 +101,9 @@ void MovingController::Update(float dt)
 
 			m_lastDir = m_dirs[signX][signY];
 			string animName = m_directionsOfAnimations[m_lastDir];
-			if (!obj->GetAnimator()->IsAnimationPlaying(animName))
+			if (!m_ownerObj->GetAnimator()->IsAnimationPlaying(animName))
 			{
-				obj->GetAnimator()->PlayAnimation(animName);
+				m_ownerObj->GetAnimator()->PlayAnimation(animName);
 			}
 			
 			float coef = m_speedModifier / dirLen;
@@ -107,7 +111,7 @@ void MovingController::Update(float dt)
 			dir *= coef;
 
 			auto newPos = oldPos + dir;
-			obj->UpdateCenterPos(newPos);
+			m_ownerObj->UpdateCenterPos(newPos);
 
 			if (dirLen < m_speedModifier)
 			{

@@ -11,12 +11,12 @@ class GameObject
 {
 protected:
 	explicit GameObject();
-	bool CreateSettings(const string & src, ResourceManager::Type type);
-	bool LoadSettings(const string & src, ResourceManager::Type type);
+	bool CreateSettings(const string & src);
+	bool LoadSettings(const string & src);
 	bool LoadSettings();
 public:
 	virtual ~GameObject();
-	GameObject(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);
+	GameObject(SDL_Renderer * renderer, const string & src);
 
 	bool IsVisible() { return m_visible; }
 	bool IsFollowVisibility() { return m_followVisibility; }

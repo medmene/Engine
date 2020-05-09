@@ -58,7 +58,7 @@ void GameWindow::Initialize()
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_player = new Player(m_renderer, "Player", ResourceManager::GOBJECT);
+	m_player = new Player(m_renderer, "Player.gobj");
 	m_player->SetVisible(false);
 	
 	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);

@@ -4,6 +4,7 @@
 
 class ICharacter;
 class PathFinder;
+class GameObject;
 
 class MovingController
 {
@@ -27,7 +28,7 @@ public:
 	void Update(float dt);
 	void Render();
 private:
-	SDL_Renderer				  * m_renderer;
+	SDL_Renderer				  * m_renderer = nullptr;
 	float							m_speedModifier;
 	Vector2							m_curSpeed;
 	map<int, string>				m_directionsOfAnimations;
@@ -35,12 +36,13 @@ private:
 	PathFinder					  * m_finder = nullptr;
 	bool							m_searching;
 	bool							m_moving;
-	bool							m_hasPath = false;
+	bool							m_hasPath;
 	vector<Vector2>					m_movingPath;
 	int								m_pathIndex;
 
 	int								m_dirs[3][3];
 	int								m_lastDir;
 	ICharacter					  * m_owner = nullptr;
+	GameObject					  * m_ownerObj = nullptr;
 	bool							m_visualisation;
 };
