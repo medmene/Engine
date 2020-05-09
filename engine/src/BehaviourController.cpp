@@ -8,7 +8,7 @@
 #include "include/TextBubble.h"
 
 
-BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner/*, GameObject * o*/)
+BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	: m_renderer(r)
 	, m_owner(owner)
 	, m_anchorArea(Vector2(20, 20))
