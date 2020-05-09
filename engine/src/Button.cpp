@@ -21,7 +21,7 @@ Button::Button(SDL_Renderer* renderer, const string& src, ResourceManager::Type 
 
 Button::~Button()
 {
-	if (m_label) { delete m_label; }
+	delete m_label;
 }
 
 void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
@@ -82,28 +82,20 @@ void Button::Render()
 		// Apply camera moving
 		if (!m_staticObject)
 		{
+			// Apply zoom
+			localRect.x *= Camera::instance()->GetZoom();
+			localRect.y *= Camera::instance()->GetZoom();
+			localRect.w *= Camera::instance()->GetZoom();
+			localRect.h *= Camera::instance()->GetZoom();
+			
 			auto diff = Camera::instance()->GetDiff();
 			localRect.x = localRect.x + diff.x;
 			localRect.y = localRect.y + diff.y;
 		}
 
-		// Apply zoom
-		localRect.x *= Camera::instance()->GetZoom();
-		localRect.y *= Camera::instance()->GetZoom();
-		localRect.w *= Camera::instance()->GetZoom();
-		localRect.h *= Camera::instance()->GetZoom();
-		
-		if (m_isPressed)
-		{
-			m_animator->GetActiveAnimation()->SetState(1);
-		}
-		else
-		{
-			m_animator->GetActiveAnimation()->SetState(0);
-		}
-		
-		SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
-		SDL_RenderCopy(m_renderer, m_texture, &a, &localRect);
+		m_animator->GetActiveAnimation()->SetState(m_isPressed ? 1 : 0);
+		SDL_RenderCopy(m_renderer, m_texture, 
+			&m_animator->GetActiveAnimation()->GetCurrentState(), &localRect);
 
 		if (m_label && m_label->IsVisible())
 		{

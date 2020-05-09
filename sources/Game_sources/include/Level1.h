@@ -1,7 +1,7 @@
 #pragma once
 #include "LevelBase.h"
 
-
+class Player;
 
 class Level1 : public LevelBase
 {
@@ -13,4 +13,5 @@ public:
 	
 	void Run() override;
 private:
+	Player * p = nullptr;
 };

@@ -58,7 +58,7 @@ void GameWindow::Initialize()
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_player = new Player(m_renderer);
+	m_player = new Player(m_renderer, "Player", ResourceManager::GOBJECT);
 	m_player->SetVisible(false);
 	
 	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);
@@ -66,7 +66,7 @@ void GameWindow::Initialize()
 	m_windowManager->CreateAndRunWindow<GameInterface>();
 	m_windowManager->SetWindowLevel(GameInterface::GetName(), 15);
 	
-	Camera::instance()->SetFollowingObject(m_player->GetGameObject());
+	Camera::instance()->SetFollowingObject(m_player);
 }
 
 void GameWindow::Processing()
@@ -104,7 +104,7 @@ void GameWindow::Processing()
 
 void GameWindow::Update()
 {
-	//Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
+	Camera::instance()->UpdateZoom(MouseInput::instance()->GetWheel());
 
 	SoundManager::instance()->Update();
 	PassabilityMap::instance()->Update();
@@ -118,8 +118,8 @@ void GameWindow::Render()
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	SDL_RenderClear(m_renderer);
 
-	PassabilityMap::instance()->Render();
 	m_windowManager->Render();
+	PassabilityMap::instance()->Render();
 
 	SDL_RenderPresent(m_renderer);
 }

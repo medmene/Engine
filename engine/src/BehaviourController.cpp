@@ -11,11 +11,11 @@
 BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	: m_renderer(r)
 	, m_owner(owner)
-	, m_normalSpeed(0.07f)
-	, m_anchorArea(Vector2(20,20))
-	, m_runSpeed(0.15f)
-	, m_running(false)
+	, m_anchorArea(Vector2(20, 20))
 	, m_freeBehaviour(true)
+	, m_running(false)
+	, m_normalSpeed(0.07f)
+	, m_runSpeed(0.15f)
 {
 	map<int, string> tmp;
 	tmp[0] = "_left";
@@ -184,8 +184,14 @@ void BehaviourController::Render()
 
 		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
 		SDL_Rect rct = { (int)m_anchorPoint.x - 7, (int)m_anchorPoint.y - 7 , 15, 15 };
+
+		rct.x *= Camera::instance()->GetZoom();
+		rct.y *= Camera::instance()->GetZoom();
+		rct.w *= Camera::instance()->GetZoom();
+		rct.h *= Camera::instance()->GetZoom();
 		rct.x = rct.x + diff.x;
 		rct.y = rct.y + diff.y;
+		
 		SDL_RenderFillRect(m_renderer, &rct);
 
 		auto pos = m_anchorPoint;
@@ -200,8 +206,14 @@ void BehaviourController::Render()
 
 		SDL_SetRenderDrawColor(m_renderer, 0, 150, 150, 100);
 		rct = { (int)pos.x, (int)pos.y, (int)size.x, (int)size.y };
+		
+		rct.x *= Camera::instance()->GetZoom();
+		rct.y *= Camera::instance()->GetZoom();
+		rct.w *= Camera::instance()->GetZoom();
+		rct.h *= Camera::instance()->GetZoom();
 		rct.x = rct.x + diff.x;
 		rct.y = rct.y + diff.y;
+		
 		SDL_RenderFillRect(m_renderer, &rct);
 	}
 }

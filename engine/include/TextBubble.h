@@ -10,8 +10,8 @@ class TextBubble : public GameObject
 public:
 	enum Side
 	{
-		LEFT = 0,
-		RIGHT
+		RIGHT = 0,
+		LEFT
 	};
 	
 	TextBubble(SDL_Renderer * renderer, const string & src, ResourceManager::Type type);

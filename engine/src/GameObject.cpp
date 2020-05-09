@@ -8,9 +8,9 @@
 GameObject::GameObject()
 	: m_rect({ 0, 0, 0, 0 })
 	, m_center(0, 0)
-	, m_relativePos(0, 0)
 	, m_color({ 255, 255, 255, 255 })
 	, m_position(0, 0)
+	, m_relativePos(0, 0)
 	, m_size(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
@@ -167,7 +167,7 @@ GameObject::GameObject(SDL_Renderer * renderer, const string & src, ResourceMana
 GameObject::~GameObject()
 {
 	if (m_texture) { SDL_DestroyTexture(m_texture); }
-	if (m_animator) { delete m_animator; }
+	delete m_animator;
 }
 
 bool GameObject::IsAnimationEnabled()
@@ -270,21 +270,21 @@ void GameObject::Render()
 	if (IsVisible()) 
 	{
 		SDL_Rect localRect = m_rect;
-
-		// Apply camera moving
+		
 		if (!m_staticObject)
 		{
+			// Apply zoom
+			localRect.x *= Camera::instance()->GetZoom();
+			localRect.y *= Camera::instance()->GetZoom();
+			localRect.w *= Camera::instance()->GetZoom();
+			localRect.h *= Camera::instance()->GetZoom();
+
+			// Apply camera moving
 			auto diff = Camera::instance()->GetDiff();
 			localRect.x = localRect.x + diff.x;
 			localRect.y = localRect.y + diff.y;
 		}
 		
-		// Apply zoom
-		localRect.x *= Camera::instance()->GetZoom();
-		localRect.y *= Camera::instance()->GetZoom();
-		localRect.w *= Camera::instance()->GetZoom();
-		localRect.h *= Camera::instance()->GetZoom();
-
 		SDL_RenderCopy(m_renderer, m_texture, &m_animator->GetActiveAnimation()->GetCurrentState(), &localRect);
 	}
 }

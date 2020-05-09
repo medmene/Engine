@@ -31,13 +31,21 @@ void PassabilityNode::UpdateRect()
 PassabilityArea::PassabilityArea()
 	: m_pos(Vector2::zero)
 	, m_radius(0.f)
+	, m_verticalOffset(0,2.f)
 {
 }
 
-PassabilityArea::PassabilityArea(const Vector2& pos, float rad)
-	: m_pos(pos)
-	, m_radius(rad)
+PassabilityArea::PassabilityArea(const Vector2 & pos, float rad, const Vector2 & verticalOffset)
+	: m_radius(rad)
+	, m_verticalOffset(verticalOffset)
 {
+	UpdatePos(pos);
+}
+
+void PassabilityArea::UpdatePos(const Vector2& pos)
+{
+	m_pos = pos;
+	m_pos += m_verticalOffset;
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -330,6 +338,7 @@ void PassabilityMap::Render()
 		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
 		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
 
+		auto diff = Camera::instance()->GetDiff();
 		SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 		for (int x = stPosX; x < endPosX; ++x)
 		{
@@ -337,8 +346,13 @@ void PassabilityMap::Render()
 			{
 				PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
 				SDL_Rect localRect = nd->m_rect;
+				
+				// Apply zoom
+				localRect.x *= Camera::instance()->GetZoom();
+				localRect.y *= Camera::instance()->GetZoom();
+				localRect.w *= Camera::instance()->GetZoom();
+				localRect.h *= Camera::instance()->GetZoom();
 
-				auto diff = Camera::instance()->GetDiff();
 				localRect.x = localRect.x + diff.x;
 				localRect.y = localRect.y + diff.y;
 				

@@ -55,7 +55,8 @@ protected:
 	SDL_Renderer			  * m_renderer = nullptr;
 	SDL_Texture 			  * m_texture = nullptr;
 	GameObject				  * m_parent = nullptr;
-	
+
+	string						m_name;
 	SDL_Rect					m_rect;
 	Vector2						m_center;
 	Color						m_color;

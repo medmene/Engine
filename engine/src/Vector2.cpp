@@ -148,6 +148,11 @@ Vector2 operator*(const Vector2& lhs, const Vector2& rhs)
 	return Vector2(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
+Vector2 operator*(const Vector2& lhs, float rhs)
+{
+	return Vector2(lhs.x * rhs, lhs.y * rhs);
+}
+
 Vector2 operator/(const Vector2& lhs, const Vector2& rhs)
 {
 	return Vector2(lhs.x / rhs.x, lhs.y / rhs.y);

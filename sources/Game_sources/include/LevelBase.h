@@ -20,5 +20,4 @@ public:
 protected:
 	vector<GameObject*>			m_objects;
 	vector<NPC*> 				m_npcs;
-	bool						m_loadingFinished = false;
 };

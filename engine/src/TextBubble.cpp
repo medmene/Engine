@@ -141,31 +141,21 @@ void TextBubble::Render()
 	{
 		SDL_Rect localRect = m_rect;
 
-		// Apply camera moving
 		if (!m_staticObject)
 		{
+			// Apply zoom
+			localRect.x *= Camera::instance()->GetZoom();
+			localRect.y *= Camera::instance()->GetZoom();
+			localRect.w *= Camera::instance()->GetZoom();
+			localRect.h *= Camera::instance()->GetZoom();
+
+			// Apply camera moving
 			auto diff = Camera::instance()->GetDiff();
 			localRect.x = localRect.x + diff.x;
 			localRect.y = localRect.y + diff.y;
 		}
-
-		// Apply zoom
-		localRect.x *= Camera::instance()->GetZoom();
-		localRect.y *= Camera::instance()->GetZoom();
-		localRect.w *= Camera::instance()->GetZoom();
-		localRect.h *= Camera::instance()->GetZoom();
-
-		switch (m_currentSide)
-		{
-		case LEFT:
-			m_animator->GetActiveAnimation()->SetState(1);
-			break;
-		case RIGHT:
-			m_animator->GetActiveAnimation()->SetState(0);
-			break;
-		}
-
-		// SDL_Rect a = m_animator->GetActiveAnimation()->GetCurrentState();
+		
+		m_animator->GetActiveAnimation()->SetState(m_currentSide);
 		SDL_RenderCopy(m_renderer, m_texture, &m_animator->GetActiveAnimation()->GetCurrentState(), &localRect);
 	}
 	

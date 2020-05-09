@@ -132,6 +132,10 @@ void MovingController::Render()
 
 			SDL_SetRenderDrawColor(m_renderer, 250, 0, 0, 100);
 			SDL_Rect rct = { (int)m_movingPath[0].x - 7, (int)m_movingPath[0].y - 7 , 15, 15 };
+			rct.x *= Camera::instance()->GetZoom();
+			rct.y *= Camera::instance()->GetZoom();
+			rct.w *= Camera::instance()->GetZoom();
+			rct.h *= Camera::instance()->GetZoom();
 			rct.x = rct.x + diff.x;
 			rct.y = rct.y + diff.y;
 			SDL_RenderFillRect(m_renderer, &rct);
@@ -140,15 +144,27 @@ void MovingController::Render()
 			for (int i = 1; i < m_movingPath.size(); ++i)
 			{
 				rct = { (int)m_movingPath[i].x - 5, (int)m_movingPath[i].y -5 , 10, 10};
+
+				rct.x *= Camera::instance()->GetZoom();
+				rct.y *= Camera::instance()->GetZoom();
+				rct.w *= Camera::instance()->GetZoom();
+				rct.h *= Camera::instance()->GetZoom();
 				rct.x = rct.x + diff.x;
 				rct.y = rct.y + diff.y;
+				
 				SDL_RenderFillRect(m_renderer, &rct);
 			}
 			
 			SDL_SetRenderDrawColor(m_renderer, 250, 0, 0, 100);
 			rct = { (int)m_movingPath[m_movingPath.size() - 1].x - 7, (int)m_movingPath[m_movingPath.size() - 1].y - 7 , 15, 15 };
+
+			rct.x *= Camera::instance()->GetZoom();
+			rct.y *= Camera::instance()->GetZoom();
+			rct.w *= Camera::instance()->GetZoom();
+			rct.h *= Camera::instance()->GetZoom();
 			rct.x = rct.x + diff.x;
 			rct.y = rct.y + diff.y;
+			
 			SDL_RenderFillRect(m_renderer, &rct);
 
 			SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);

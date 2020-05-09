@@ -90,18 +90,18 @@ void Label::Render()
 	{
 		SDL_Rect localRect = m_rect;
 		
-		// Apply camera moving
 		if (!m_staticObject)
 		{
+			localRect.x *= Camera::instance()->GetZoom();
+			localRect.y *= Camera::instance()->GetZoom();
+			localRect.w *= Camera::instance()->GetZoom();
+			localRect.h *= Camera::instance()->GetZoom();
+			
+			// Apply camera moving
 			auto diff = Camera::instance()->GetDiff();
 			localRect.x = localRect.x + diff.x;
 			localRect.y = localRect.y + diff.y;
 		}
-
-		localRect.x *= Camera::instance()->GetZoom();
-		localRect.y *= Camera::instance()->GetZoom();
-		localRect.w *= Camera::instance()->GetZoom();
-		localRect.h *= Camera::instance()->GetZoom();
 
 		SDL_RenderCopy(m_renderer, m_texture, nullptr, &localRect);
 	}

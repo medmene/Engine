@@ -17,7 +17,6 @@ Menu::Menu(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSiz
 void Menu::Run()
 {
 	PassabilityMap::instance()->SetMap("passability2", ResourceManager::PMAP);
-	GameWindow::instance()->GetPlayer()->GetGameObject()->UpdatePos({ 500,500 });
 
 	m_objects.emplace_back(new GameObject(m_renderer, "menu", ResourceManager::JPG));
 	m_objects.back()->SetStaticObject(true);
@@ -45,6 +44,5 @@ void Menu::Run()
 	btn2->SetLabel("Exit", 30, "calibri", ResourceManager::TTF);
 	btn2->SetOnclick([]() { exit(0); return true; });
 	m_objects.emplace_back(btn2);
-	m_loadingFinished = true;
 	LevelBase::Run();
 }

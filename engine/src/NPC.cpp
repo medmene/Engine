@@ -44,9 +44,8 @@ void NPC::Init()
 
 	m_behaviourController = new BehaviourController(m_renderer, this);
 
-	Vector2 pos = m_npcObject->GetCenterPos();
-	pos.y += m_passOffsetCoef * m_npcObject->GetSize().y;
-	m_passabilityArea = new PassabilityArea(pos, m_npcObject->GetSize().x * 0.25f);
+	m_passabilityArea = new PassabilityArea(m_npcObject->GetCenterPos(), m_npcObject->GetSize().x * 0.25f,
+		Vector2(0, m_passOffsetCoef * m_npcObject->GetSize().y));
 }
 
 void NPC::Update(float dt)
@@ -88,6 +87,6 @@ void NPC::Render()
 		localPos.x = localPos.x + diff.x;
 		localPos.y = localPos.y + diff.y;
 
-		SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->m_radius);
+		SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->m_radius* Camera::instance()->GetZoom());
 	}
 }

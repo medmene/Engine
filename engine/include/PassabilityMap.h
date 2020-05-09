@@ -19,9 +19,11 @@ struct PassabilityArea
 {
 	Vector2		m_pos;
 	float		m_radius;
+	Vector2		m_verticalOffset;
 	
 	PassabilityArea();
-	PassabilityArea(const Vector2 & pos, float rad);
+	PassabilityArea(const Vector2 & pos, float rad, const Vector2 & verticalOffset);
+	void UpdatePos(const Vector2 & pos);
 };
 
 class PassabilityMap
