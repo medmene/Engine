@@ -32,6 +32,7 @@ void GameInterface::Run()
 				return true;
 			}
 		}
+		return false;
 	});
 	m_elements.emplace_back(btn);
 	

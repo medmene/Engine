@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 project(GameEngine)
 
 set(DEFAULT_CMAKE_BUILD_TYPE Release)
@@ -23,17 +23,18 @@ add_executable(GameEngine "")
 #)
 
 if(MSVC)
-	if("${MSVC_RUNTIME}" STREQUAL "")
-		set(MSVC_RUNTIME "static")
-	endif()
-    set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL")
+	set(MSVC_STATIC_RUNTIME ON CACHE BOOL "Visual Studio runtime type" FORCE)
+	#add_definitions(-DEXCLUDE_ENTRY_POINT)
+    set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL /LTCG")
 endif()
 
-set_property(TARGET GameEngine PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDebugDLL$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET GameEngine PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Release>:Release>")
+#TODO add /MT && /MTd into project after configure and "Link library dependences"
+
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD 17)
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET GameEngine PROPERTY CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+set_property(TARGET GameEngine PROPERTY CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
 target_include_directories(GameEngine PRIVATE sources)
 target_include_directories(GameEngine PRIVATE engine)
