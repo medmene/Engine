@@ -24,7 +24,9 @@ add_executable(GameEngine "")
 
 if(MSVC)
 	set(MSVC_STATIC_RUNTIME ON CACHE BOOL "Visual Studio runtime type" FORCE)
-	#add_definitions(-DEXCLUDE_ENTRY_POINT)
+	add_definitions(/D "_CRT_SECURE_NO_WARNINGS")
+	
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL /LTCG")
 endif()
 
@@ -67,40 +69,40 @@ target_link_libraries(GameEngine PRIVATE SDL2_mixer)
 
 install(TARGETS GameEngine RUNTIME DESTINATION bin)
 
-# Include Game sources
-target_sources(GameEngine PRIVATE
-	sources/Game_sources/main.cpp
-)
-
-target_sources(GameEngine PRIVATE
+#########################################
+# make MSVC folders for client
+set(GAME_SOURCES_INK "")
+list(APPEND GAME_SOURCES_INK
 	sources/Game_sources/include/GameWindow.h
 	sources/Game_sources/include/GameInterface.h
 	sources/Game_sources/include/LevelBase.h
 	sources/Game_sources/include/Menu.h
 	sources/Game_sources/include/Level1.h
-	#sources/Game_sources/include/Level2.h
-	#sources/Game_sources/include/Level3.h
-	#sources/Game_sources/include/Level4.h
-	#sources/Game_sources/include/Level5.h
-	#sources/Game_sources/include/LevelController.h
 )
-
-target_sources(GameEngine PRIVATE
+set(GAME_SOURCES_SRC "")
+list(APPEND GAME_SOURCES_SRC
 	sources/Game_sources/src/GameWindow.cpp
 	sources/Game_sources/src/GameInterface.cpp
 	sources/Game_sources/src/LevelBase.cpp
 	sources/Game_sources/src/Menu.cpp
 	sources/Game_sources/src/Level1.cpp
-	#sources/Game_sources/src/Level2.cpp
-	#sources/Game_sources/src/Level3.cpp
-	#sources/Game_sources/src/Level4.cpp
-	#sources/Game_sources/src/Level5.cpp
-	#sources/Game_sources/src/LevelController.cpp
 )
 
-# Include Engine
-target_sources(GameEngine PRIVATE
-  	engine/include/Core.h
+# Include Game sources
+source_group(Game_sources FILES sources/Game_sources/main.cpp)
+source_group(Game_sources\\include FILES ${GAME_SOURCES_INK} *.h)
+source_group(Game_sources\\src FILES ${GAME_SOURCES_SRC} *.cpp)
+target_sources(GameEngine PRIVATE sources/Game_sources/main.cpp )
+target_sources(GameEngine PRIVATE ${GAME_SOURCES_INK})
+target_sources(GameEngine PRIVATE ${GAME_SOURCES_SRC})
+#########################################
+
+
+#########################################
+# make MSVC folders for engine
+set(ENGINE_SOURCES_INK "")
+list(APPEND ENGINE_SOURCES_INK
+	engine/include/Core.h
   	engine/include/base_defs.h
   	engine/include/Fps.h
   	engine/include/MouseInput.h
@@ -131,9 +133,9 @@ target_sources(GameEngine PRIVATE
 	engine/include/BaseObject.h
 	engine/include/BaseWindow.h
 )
-
-target_sources(GameEngine PRIVATE
-  	engine/src/MouseInput.cpp
+set(ENGINE_SOURCES_SRC "")
+list(APPEND ENGINE_SOURCES_SRC
+	engine/src/MouseInput.cpp
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
   	engine/src/Label.cpp
@@ -159,13 +161,120 @@ target_sources(GameEngine PRIVATE
 	engine/src/BaseWindow.cpp
 )
 
+# Include Engine
+source_group(Engine_sources\\include FILES ${ENGINE_SOURCES_INK} *.h)
+source_group(Engine_sources\\src FILES ${ENGINE_SOURCES_SRC} *.cpp)
+target_sources(GameEngine PRIVATE ${ENGINE_SOURCES_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_SOURCES_SRC})
+#########################################
+
+#########################################
 # Include lib pugi XML
-target_sources(GameEngine PRIVATE
+set(LIB_PUGIXML "")
+list(APPEND LIB_PUGIXML
 	engine/pugixml/pugiconfig.hpp
 	engine/pugixml/pugixml.cpp
 	engine/pugixml/pugixml.hpp
 )
 
+source_group(pugixml_lib FILES ${LIB_PUGIXML} *.h)
+target_sources(GameEngine PRIVATE ${LIB_PUGIXML})
+#########################################
+
+#########################################
+# Include lib SDL
+set(LIB_SDL2 "")
+list(APPEND LIB_SDL2
+	engine/SDL/begin_code.h
+	engine/SDL/close_code.h
+	engine/SDL/SDL.h
+	engine/SDL/SDL_assert.h
+	engine/SDL/SDL_atomic.h
+	engine/SDL/SDL_audio.h
+	engine/SDL/SDL_bits.h
+	engine/SDL/SDL_blendmode.h
+	engine/SDL/SDL_clipboard.h
+	engine/SDL/SDL_config.h
+	engine/SDL/SDL_config_android.h
+	engine/SDL/SDL_config_iphoneos.h
+	engine/SDL/SDL_config_macosx.h
+	engine/SDL/SDL_config_minimal.h
+	engine/SDL/SDL_config_pandora.h
+	engine/SDL/SDL_config_psp.h
+	engine/SDL/SDL_config_windows.h
+	engine/SDL/SDL_config_winrt.h
+	engine/SDL/SDL_config_wiz.h
+	engine/SDL/SDL_copying.h
+	engine/SDL/SDL_cpuinfo.h
+	engine/SDL/SDL_egl.h
+	engine/SDL/SDL_endian.h
+	engine/SDL/SDL_error.h
+	engine/SDL/SDL_events.h
+	engine/SDL/SDL_filesystem.h
+	engine/SDL/SDL_gamecontroller.h
+	engine/SDL/SDL_gesture.h
+	engine/SDL/SDL_haptic.h
+	engine/SDL/SDL_hints.h
+	engine/SDL/SDL_image.h
+	engine/SDL/SDL_joystick.h
+	engine/SDL/SDL_keyboard.h
+	engine/SDL/SDL_keycode.h
+	engine/SDL/SDL_loadso.h
+	engine/SDL/SDL_log.h
+	engine/SDL/SDL_main.h
+	engine/SDL/SDL_messagebox.h
+	engine/SDL/SDL_mixer.h
+	engine/SDL/SDL_mouse.h
+	engine/SDL/SDL_mutex.h
+	engine/SDL/SDL_name.h
+	engine/SDL/SDL_opengl.h
+	engine/SDL/SDL_opengl_glext.h
+	engine/SDL/SDL_opengles.h
+	engine/SDL/SDL_opengles2.h
+	engine/SDL/SDL_opengles2_gl2.h
+	engine/SDL/SDL_opengles2_gl2ext.h
+	engine/SDL/SDL_opengles2_gl2platform.h
+	engine/SDL/SDL_opengles2_khrplatform.h
+	engine/SDL/SDL_pixels.h
+	engine/SDL/SDL_platform.h
+	engine/SDL/SDL_power.h
+	engine/SDL/SDL_quit.h
+	engine/SDL/SDL_rect.h
+	engine/SDL/SDL_render.h
+	engine/SDL/SDL_revision.h
+	engine/SDL/SDL_rwops.h
+	engine/SDL/SDL_scancode.h
+	engine/SDL/SDL_sensor.h
+	engine/SDL/SDL_shape.h
+	engine/SDL/SDL_stdinc.h
+	engine/SDL/SDL_surface.h
+	engine/SDL/SDL_system.h
+	engine/SDL/SDL_syswm.h
+	engine/SDL/SDL_test.h
+	engine/SDL/SDL_test_assert.h
+	engine/SDL/SDL_test_common.h
+	engine/SDL/SDL_test_crc32.h
+	engine/SDL/SDL_test_font.h
+	engine/SDL/SDL_test_fuzzer.h
+	engine/SDL/SDL_test_harness.h
+	engine/SDL/SDL_test_images.h
+	engine/SDL/SDL_test_log.h
+	engine/SDL/SDL_test_md5.h
+	engine/SDL/SDL_test_memory.h
+	engine/SDL/SDL_test_random.h
+	engine/SDL/SDL_thread.h
+	engine/SDL/SDL_timer.h
+	engine/SDL/SDL_touch.h
+	engine/SDL/SDL_ttf.h
+	engine/SDL/SDL_types.h
+	engine/SDL/SDL_version.h
+	engine/SDL/SDL_video.h
+	engine/SDL/SDL_vulkan.h
+)
+
+source_group(SDL_lib FILES ${LIB_SDL2} *.h)
+target_sources(GameEngine PRIVATE ${LIB_SDL2})
+#########################################
 
 ###################################################
 ###################################################
