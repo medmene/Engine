@@ -5,6 +5,7 @@
 
 Vector2 Vector2::uno = Vector2(1, 1);
 Vector2 Vector2::zero = Vector2(0, 0);
+float Vector2::eps = 1E-5;
 
 Vector2::Vector2()
 	: x(0)
@@ -67,7 +68,7 @@ bool Vector2::operator==(const Vector2& other) const
 
 bool Vector2::operator!=(const Vector2& other) const
 {
-	return abs(this->x - other.x) > eps || abs(this->y - other.y) > eps;
+	return !(abs(this->x - other.x) < eps && abs(this->y - other.y) < eps);
 }
 
 Vector2& Vector2::operator+=(const Vector2& other)

@@ -39,5 +39,5 @@ public:
 	Vector2& operator/=(float other);
 
 private:
-	float eps = 1E-5;
+	static float eps;
 };
