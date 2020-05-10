@@ -23,20 +23,14 @@ add_executable(GameEngine "")
 #)
 
 if(MSVC)
-	set(MSVC_STATIC_RUNTIME ON CACHE BOOL "Visual Studio runtime type" FORCE)
 	add_definitions(/D "_CRT_SECURE_NO_WARNINGS")
-	
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-    set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL /LTCG")
+    #set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL /LTCG")
 endif()
-
-#TODO add /MT && /MTd into project after configure and "Link library dependences"
 
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD 17)
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD_REQUIRED ON)
 set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
-set_property(TARGET GameEngine PROPERTY CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-set_property(TARGET GameEngine PROPERTY CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 
 target_include_directories(GameEngine PRIVATE sources)
 target_include_directories(GameEngine PRIVATE engine)
