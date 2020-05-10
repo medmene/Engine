@@ -2,11 +2,13 @@
 #include "include/Camera.h"
 #include "pugixml/pugixml.hpp"
 #include "include/Animator.h"
+#include "include/ResourceManager.h"
 
 
 
 GameObject::GameObject()
-	: m_rect({ 0, 0, 0, 0 })
+	: BaseObject()
+	, m_rect({ 0, 0, 0, 0 })
 	, m_center(0, 0)
 	, m_color({ 255, 255, 255, 255 })
 	, m_position(0, 0)
@@ -128,14 +130,13 @@ bool GameObject::LoadSettings()
 	return false;
 }
 
-GameObject::GameObject(SDL_Renderer * renderer, const string & src)
-	: m_position(0, 0)
+GameObject::GameObject(const string & src)
+	: BaseObject()
+	, m_position(0, 0)
 	, m_relativePos(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
 {
-	m_renderer = renderer;
-
 	auto res = ResourceManager::instance()->GetResource(src);
 	
 	if (res->GetType() != ResourceManager::GOBJECT)

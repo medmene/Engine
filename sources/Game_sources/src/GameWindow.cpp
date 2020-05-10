@@ -1,5 +1,4 @@
 #include "Game_sources/include/GameWindow.h"
-#include <iostream>
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
@@ -53,18 +52,20 @@ GameWindow::~GameWindow()
 
 void GameWindow::Initialize()
 {
+	BaseObject::SetupRendered(m_renderer);
+	BaseWindow::Setup(m_renderer, m_windowSize);
 	SoundManager::instance()->PlaySound(ResourceManager::instance()->
 		GetResource("mainTheme", ResourceManager::MP3));
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_player = new Player(m_renderer, "Player.gobj");
+	m_player = new Player("Player.gobj");
 	m_player->SetVisible(false);
 	
 	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);
 	m_windowManager->CreateAndRunWindow<Menu>();
-	m_windowManager->CreateAndRunWindow<GameInterface>();
-	m_windowManager->SetWindowLevel(GameInterface::GetName(), 15);
+	auto interface = m_windowManager->CreateAndRunWindow<GameInterface>();
+	m_windowManager->SetWindowLevel(interface->GetWindowName(), 15);
 	
 	Camera::instance()->SetFollowingObject(m_player);
 }

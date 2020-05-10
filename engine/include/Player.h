@@ -1,6 +1,4 @@
 #pragma once
-#include "Core.h"
-#include "Vector2.h"
 #include "GameObject.h"
 
 class PassabilityArea;
@@ -9,7 +7,7 @@ class TextBubble;
 class Player : public GameObject
 {
 public:
-	Player(SDL_Renderer * renderer, const string & src);
+	Player(const string & src);
 	virtual ~Player();
 
 	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }

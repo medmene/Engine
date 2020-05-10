@@ -3,6 +3,7 @@
 #include "include/Camera.h"
 #include "include/MouseInput.h"
 #include "include/KeyboardInput.h"
+#include "include/ResourceManager.h"
 
 
 PassabilityMap * PassabilityMap::sm_instance = nullptr;

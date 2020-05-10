@@ -11,7 +11,7 @@ class TextBubble;
 class NPC: public GameObject, public ICharacter
 {
 public:
-	NPC(SDL_Renderer * renderer, const string & src);
+	NPC(const string & src);
 	virtual ~NPC();
 
 	void Init();

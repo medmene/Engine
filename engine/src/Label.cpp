@@ -11,12 +11,11 @@ Label::Label()
 {
 }
 
-Label::Label(SDL_Renderer* renderer, const string& src)
+Label::Label(const string& src)
 	: GameObject()
 	, m_fontSize(24)
 	, m_text("_")
 {
-	m_renderer = renderer;
 	m_resourceSettings = ResourceManager::instance()->GetResource(src);
 
 	if (m_resourceSettings)

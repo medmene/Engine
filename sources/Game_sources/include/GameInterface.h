@@ -1,6 +1,5 @@
 #pragma once
 #include "include/Core.h"
-#include "include/Vector2.h"
 #include "include/Window.h"
 
 class GameObject;
@@ -8,14 +7,10 @@ class GameObject;
 class GameInterface : public Window
 {
 public:
-	GameInterface(shared_ptr<WindowManager> w, SDL_Renderer * r, const Vector2 & wSize);
+	GameInterface(shared_ptr<WindowManager> w);
 	
 	void Run() override;
 	void Disappear() override;
-
-	static string GetName() { return "game_interface"; }
-	
-	string GetWindowName() override { return GetName(); }
 	
 	bool IsVisible() { return m_visible; }
 	void SetVisible(bool visible);

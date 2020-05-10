@@ -8,8 +8,8 @@
 #include "include/TextBubble.h"
 
 
-NPC::NPC(SDL_Renderer * renderer, const string & src)
-	: GameObject(renderer, src)
+NPC::NPC(const string & src)
+	: GameObject(src)
 	, m_npcName("npc")
 {
 }
@@ -23,7 +23,7 @@ NPC::~NPC()
 
 void NPC::Init()
 {
-	m_bubble = new TextBubble(m_renderer, "textBubble_settings.gobj");
+	m_bubble = new TextBubble("textBubble_settings.gobj");
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);

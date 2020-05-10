@@ -1,5 +1,5 @@
 #pragma once
-#include "Core.h"
+#include "base_defs.h"
 
 using std::stringstream;
 using std::ostringstream;

@@ -1,7 +1,5 @@
 #pragma once
 #include "Core.h"
-#include "Vector2.h"
-#include "Color.h"
 #include "ResourceManager.h"
 #include "GameObject.h"
 
@@ -11,7 +9,7 @@ class Label : public GameObject
 public:
 	explicit Label();
 	
-	Label(SDL_Renderer * renderer, const string & src);
+	Label(const string & src);
 	~Label();
 
 	void Init(const string & text, int fontSize = 24);

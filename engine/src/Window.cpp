@@ -2,12 +2,12 @@
 #include "include/WindowManager.h"
 
 
-Window::Window(shared_ptr<WindowManager> wm, SDL_Renderer * r, const Vector2 & wSize)
-	: m_wManager(wm)
-	, m_renderer(r)
-	, m_winSize(wSize)
+Window::Window(shared_ptr<WindowManager> wm)
+	: BaseWindow()
+	, m_wManager(wm)
 	, m_framesBeforeStop(0)
 	, m_stopped(false)
+	, m_runned(false)
 	, m_layer(0)
 {
 }

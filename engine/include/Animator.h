@@ -1,7 +1,6 @@
 #pragma once
 #include "Core.h"
 #include "Vector2.h"
-#include "ResourceManager.h"
 
 
 class Animation;

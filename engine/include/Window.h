@@ -1,16 +1,15 @@
 #pragma once
-#include "Core.h"
-#include "Vector2.h"
+#include "BaseWindow.h"
 
 class WindowManager;
 
-class Window
+class Window : public BaseWindow
 {
 public:
-	Window(shared_ptr<WindowManager> wm, SDL_Renderer * r, const Vector2 & wSize);
+	Window(shared_ptr<WindowManager> wm);
 	virtual ~Window() = default;
 
-	virtual string GetWindowName() { return ""; }
+	virtual string GetWindowName() { return m_windowName; }
 	
 	virtual void Run();
 	virtual void Stop();
@@ -20,8 +19,7 @@ public:
 	virtual void Update(float dt){}
 protected:
 	shared_ptr<WindowManager>		m_wManager;
-	SDL_Renderer				  * m_renderer = nullptr;
-	Vector2							m_winSize;
+	string							m_windowName;
 	
 private:
 	int								m_framesBeforeStop;

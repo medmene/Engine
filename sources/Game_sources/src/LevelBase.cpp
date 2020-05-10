@@ -4,9 +4,10 @@
 
 
 
-LevelBase::LevelBase(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSize)
-	: Window(wm, r, winSize)
+LevelBase::LevelBase(shared_ptr<WindowManager> wm)
+	: Window(wm)
 {
+	m_windowName = "level_base";
 }
 
 void LevelBase::Run()
@@ -21,12 +22,6 @@ void LevelBase::Disappear()
 		delete obj;
 	}
 	m_objects.clear();
-
-	for (auto&& npc : m_npcs)
-	{
-		delete npc;
-	}
-	m_npcs.clear();
 }
 
 void LevelBase::Update(float dt)
@@ -35,11 +30,6 @@ void LevelBase::Update(float dt)
 	{
 		obj->Update(dt);
 	}
-
-	for (auto&& npc : m_npcs)
-	{
-		npc->Update(dt);
-	}
 }
 
 void LevelBase::Render()
@@ -47,10 +37,5 @@ void LevelBase::Render()
 	for (auto && obj : m_objects)
 	{
 		obj->Render();
-	}
-
-	for (auto&& npc : m_npcs)
-	{
-		npc->Render();
 	}
 }

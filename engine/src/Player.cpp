@@ -1,15 +1,14 @@
 #include "include/Player.h"
 #include "include/GameObject.h"
 #include "include/KeyboardInput.h"
-#include "include/ResourceManager.h"
 #include "include/Animator.h"
 #include "include/PassabilityMap.h"
 #include "include/Camera.h"
 #include "include/TextBubble.h"
 
 
-Player::Player(SDL_Renderer * renderer, const string & src)
-	: GameObject(renderer, src)
+Player::Player(const string & src)
+	: GameObject(src)
 	, m_playerName("player")
 	, m_velocity(0, 0)
 	, m_velocityConst(0.16f, 0.12f)
@@ -19,7 +18,7 @@ Player::Player(SDL_Renderer * renderer, const string & src)
 	GetAnimator()->GetActiveAnimation()->Play();
 	UpdatePos(Vector2(500, 500));
 
-	m_bubble = new TextBubble(renderer, "playerTextBubble_settings.gobj");
+	m_bubble = new TextBubble("playerTextBubble_settings.gobj");
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);

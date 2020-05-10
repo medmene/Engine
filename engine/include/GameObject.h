@@ -1,13 +1,13 @@
 #pragma once
-#include "Core.h"
 #include "Vector2.h"
 #include "Color.h"
-#include "ResourceManager.h"
+#include "BaseObject.h"
 
 
 class Animator;
+class Resource;
 
-class GameObject
+class GameObject : public BaseObject
 {
 protected:
 	explicit GameObject();
@@ -16,7 +16,7 @@ protected:
 	bool LoadSettings();
 public:
 	virtual ~GameObject();
-	GameObject(SDL_Renderer * renderer, const string & src);
+	GameObject(const string & src);
 
 	bool IsVisible() { return m_visible; }
 	bool IsFollowVisibility() { return m_followVisibility; }
@@ -52,7 +52,6 @@ public:
 protected:
 	Resource				  * m_resourceSettings = nullptr;
 	Resource				  * m_resourceTexture = nullptr;
-	SDL_Renderer			  * m_renderer = nullptr;
 	SDL_Texture 			  * m_texture = nullptr;
 	GameObject				  * m_parent = nullptr;
 

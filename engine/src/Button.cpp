@@ -12,10 +12,9 @@ Button::Button()
 	m_onClick = [] {return false; };
 }
 
-Button::Button(SDL_Renderer* renderer, const string& src)
-	: GameObject(renderer, src)
+Button::Button(const string& src)
+	: GameObject(src)
 {
-	m_renderer = renderer;
 	m_onClick = [] {return false; };
 }
 
@@ -26,7 +25,7 @@ Button::~Button()
 
 void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
-	m_label = new Label(m_renderer, "times.ttf");
+	m_label = new Label("times.ttf");
 	if (m_label)
 	{
 		m_label->SetVisible(true);

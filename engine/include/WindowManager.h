@@ -42,8 +42,7 @@ shared_ptr<TWindowType> WindowManager::CreateAndRunWindow()
 template <typename TWindowType>
 shared_ptr<TWindowType> WindowManager::CreateWindow()
 {
-	shared_ptr<TWindowType> window;
-	window = make_shared<TWindowType>(shared_from_this(), m_renderer, m_windowSize);
+	shared_ptr<TWindowType> window = make_shared<TWindowType>(shared_from_this());
 	window->m_layer = GetUniqLayer();
 	m_windows.emplace_back(window);
 	

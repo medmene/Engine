@@ -128,6 +128,8 @@ target_sources(GameEngine PRIVATE
 	engine/include/GameModeChangeController.h
 	engine/include/Window.h
 	engine/include/WindowManager.h
+	engine/include/BaseObject.h
+	engine/include/BaseWindow.h
 )
 
 target_sources(GameEngine PRIVATE
@@ -153,6 +155,8 @@ target_sources(GameEngine PRIVATE
 	engine/src/GameModeChangeController.cpp
 	engine/src/Window.cpp
 	engine/src/WindowManager.cpp
+	engine/src/BaseObject.cpp
+	engine/src/BaseWindow.cpp
 )
 
 # Include lib pugi XML

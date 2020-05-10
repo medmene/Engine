@@ -1,7 +1,8 @@
 #pragma once
 #include "Core.h"
-#include "ResourceManager.h"
 #include "Vector2.h"
+
+class Resource;
 
 struct PassabilityNode
 {

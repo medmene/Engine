@@ -10,7 +10,7 @@ class NPC;
 class LevelBase : public Window
 {
 public:
-	LevelBase(shared_ptr<WindowManager> wm, SDL_Renderer *r, const Vector2 & winSize);
+	LevelBase(shared_ptr<WindowManager> wm);
 
 	void Run() override;
 	void Disappear() override;
@@ -19,5 +19,4 @@ public:
 	
 protected:
 	vector<GameObject*>			m_objects;
-	vector<NPC*> 				m_npcs;
 };
