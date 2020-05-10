@@ -17,34 +17,9 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	, m_normalSpeed(0.07f)
 	, m_runSpeed(0.15f)
 {
-	map<int, string> tmp;
-	tmp[0] = "_left";
-	tmp[1] = "_top_left";
-	tmp[2] = "_top";
-	tmp[3] = "_top_right";
-	tmp[4] = "_right";
-	tmp[5] = "_bottom_right";
-	tmp[6] = "_bottom";
-	tmp[7] = "_bottom_left";
-
 	m_ownerObj = dynamic_cast<GameObject *>(owner);
 	
-	if (m_owner && m_ownerObj)
-	{
-		auto allAnims = m_ownerObj->GetAnimator()->GetAllAnimations();
-		for (auto && item : tmp)
-		{
-			for (auto && anim : allAnims)
-			{
-				auto pos = anim->GetName().find(item.second);
-				if (pos != string::npos)
-				{
-					m_directionsOfAnimations[item.first] = anim->GetName();
-					break;
-				}
-			}
-		}
-	}
+	CollectAnimations();
 	
 	m_movingController = new MovingController(r, owner, m_normalSpeed);
 	m_movingController->SetAnimationMap(m_directionsOfAnimations);
@@ -165,10 +140,10 @@ void BehaviourController::OnStateMoveEntering()
 void BehaviourController::OnStateTalkEntering()
 {
 	m_waitingTime = 2000.f + rand() % 2000;
-	if (auto textObj = m_owner->GetTextObject())
+	if (m_owner->GetTextObject())
 	{
-		textObj->SetVisible(true);
-		textObj->SetText("Xocesh eshe etix magkix fransuzkix bulochek");
+		m_owner->GetTextObject()->SetVisible(true);
+		m_owner->GetTextObject()->SetText("Xocesh eshe etix magkix fransuzkix bulochek");
 	}
 }
 
@@ -217,5 +192,35 @@ void BehaviourController::Render()
 		rct.y = rct.y + diff.y;
 		
 		SDL_RenderFillRect(m_renderer, &rct);
+	}
+}
+
+void BehaviourController::CollectAnimations()
+{
+	map<int, string> tmp;
+	tmp[0] = "_left";
+	tmp[1] = "_top_left";
+	tmp[2] = "_top";
+	tmp[3] = "_top_right";
+	tmp[4] = "_right";
+	tmp[5] = "_bottom_right";
+	tmp[6] = "_bottom";
+	tmp[7] = "_bottom_left";
+
+	if (m_owner && m_ownerObj)
+	{
+		auto allAnims = m_ownerObj->GetAnimator()->GetAllAnimations();
+		for (auto && item : tmp)
+		{
+			for (auto && anim : allAnims)
+			{
+				auto pos = anim->GetName().find(item.second);
+				if (pos != string::npos)
+				{
+					m_directionsOfAnimations[item.first] = anim->GetName();
+					break;
+				}
+			}
+		}
 	}
 }

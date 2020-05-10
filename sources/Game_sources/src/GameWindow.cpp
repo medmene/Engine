@@ -9,7 +9,7 @@
 #include "include/PassabilityMap.h"
 #include "include/SoundManager.h"
 
-GameWindow * GameWindow::sm_instance = new GameWindow();
+GameWindow * GameWindow::sm_instance = nullptr;
 
 GameWindow::GameWindow()
 {
@@ -17,7 +17,7 @@ GameWindow::GameWindow()
 	TTF_Init();
 
 	SDL_GetDesktopDisplayMode(0, &m_displayMode);
-	m_windowSize = Vector2(960, 640);
+	m_windowSize = Vector2(1333, 750);
 	m_window = SDL_CreateWindow(
 		"Window",									// window title
 		SDL_WINDOWPOS_UNDEFINED,						// initial x position
@@ -48,6 +48,15 @@ GameWindow::~GameWindow()
 	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
+}
+
+GameWindow* GameWindow::instance()
+{
+	if (!sm_instance)
+	{
+		sm_instance = new GameWindow();
+	}
+	return sm_instance;
 }
 
 void GameWindow::Initialize()

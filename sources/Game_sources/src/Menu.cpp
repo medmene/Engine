@@ -4,7 +4,6 @@
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "Game_sources/include/GameWindow.h"
-#include "include/Player.h"
 #include "include/Button.h"
 #include "Game_sources/include/Level1.h"
 

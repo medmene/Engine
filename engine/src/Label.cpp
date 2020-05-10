@@ -20,6 +20,10 @@ Label::Label(const string& src)
 
 	if (m_resourceSettings)
 	{
+		if (m_font)
+		{
+			TTF_CloseFont(m_font);
+		}
 		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
@@ -42,6 +46,10 @@ void Label::Init(const string & text, int fontSize)
 		m_fontSize = fontSize;
 		if (m_resourceSettings)
 		{
+			if (m_font)
+			{
+				TTF_CloseFont(m_font);
+			}
 			m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 			if (m_font)
 			{
@@ -66,6 +74,10 @@ void Label::SetFont(const string & src, ResourceManager::Type type)
 
 	if (m_resourceSettings)
 	{
+		if (m_font)
+		{
+			TTF_CloseFont(m_font);
+		}
 		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
@@ -79,6 +91,10 @@ void Label::SetFont(const string & src, ResourceManager::Type type)
 void Label::SetFontSize(int fontSize)
 {
 	m_fontSize = fontSize;
+	if (m_font)
+	{
+		TTF_CloseFont(m_font);
+	}
 	m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
 	CreateTexture();
 }

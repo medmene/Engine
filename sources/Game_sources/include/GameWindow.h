@@ -11,10 +11,10 @@ class GameInterface;
 
 class GameWindow
 {
-public:
 	GameWindow();
+public:
 	~GameWindow();
-	static GameWindow * instance() { return sm_instance; }
+	static GameWindow * instance();
 
 	void Initialize();
 	void Processing();

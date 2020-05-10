@@ -47,8 +47,8 @@ string PathFinder::pathFind(const int& xStart, const int& yStart, const int& xFi
 	
 	static std::priority_queue<node> pq[2]; // list of open (not-yet-tried) nodes
 	static int pqi; // pq index
-	static node* n0;
-	static node* m0;
+	static node* n0 = nullptr;
+	static node* m0 = nullptr;
 	static int i, j, x, y, xdx, ydy;
 	static char c;
 	pqi = 0;
@@ -64,11 +64,10 @@ string PathFinder::pathFind(const int& xStart, const int& yStart, const int& xFi
 	}
 
 	// create the start node and push into list of open nodes
-	n0 = new node(xStart, yStart, 0, 0);
-	n0->updatePriority(xFinish, yFinish);
-	pq[pqi].push(*n0);
-	open_nodes_map[xStart][yStart] = n0->getPriority(); ; // mark it on the open nodes map
-	// open_nodes_map[x][y] = n0->getPriority();
+	node strt(xStart, yStart, 0, 0);
+	strt.updatePriority(xFinish, yFinish);
+	pq[pqi].push(strt);
+	open_nodes_map[xStart][yStart] = strt.getPriority(); ; // mark it on the open nodes map
 
 	// A* search
 	while (!pq[pqi].empty())
@@ -86,7 +85,6 @@ string PathFinder::pathFind(const int& xStart, const int& yStart, const int& xFi
 		closed_nodes_map[x][y] = 1;
 
 		// quit searching when the goal state is reached
-		//if((*n0).estimate(xFinish, yFinish) == 0)
 		if (x == xFinish && y == yFinish)
 		{
 			// generate the path from finish to start

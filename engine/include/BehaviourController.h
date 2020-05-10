@@ -60,4 +60,6 @@ private:
 	void OnStateMoveEntering();
 	void OnStateTalkEntering();
 	void OnStateBattleEntering();
+
+	void CollectAnimations();
 };

@@ -91,7 +91,6 @@ void MovingController::Update(float dt)
 	{
 		if (m_ownerObj)
 		{
-			
 			auto oldPos = m_ownerObj->GetCenterPos();
 			auto dir = m_movingPath[m_pathIndex] - oldPos;
 			float dirLen = dir.length();

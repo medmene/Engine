@@ -178,42 +178,60 @@ void Animator::PlayAnimation(Animation* anim)
 
 void Animator::StopAnimation(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		anim->Stop();
+		if (anim->GetName() == name)
+		{
+			anim->Stop();
+			break;
+		}
 	}
 }
 
 void Animator::PauseAnimation(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		anim->Pause();
+		if (anim->GetName() == name)
+		{
+			anim->Pause();
+			break;
+		}
 	}
 }
 
 void Animator::ResumeAnimation(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		anim->Resume();
+		if (anim->GetName() == name)
+		{
+			anim->Resume();
+			break;
+		}
 	}
 }
 
 bool Animator::IsAnimationPlaying(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		return anim->IsPlaying();
+		if (anim->GetName() == name)
+		{
+			return anim->IsPlaying();
+		}
 	}
 	return false;
 }
 
 bool Animator::IsAnimationLooped(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		return anim->IsLooped();
+		if (anim->GetName() == name)
+		{
+			return anim->IsLooped();
+		}
 	}
 	return false;
 }
@@ -232,9 +250,12 @@ Animation* Animator::GetAnimation(const string& name)
 
 int Animator::GetAnimationStateCount(const string& name)
 {
-	if (auto anim = GetAnimation(name))
+	for (auto && anim : m_animations)
 	{
-		return anim->GetStateCount();
+		if (anim->GetName() == name)
+		{
+			return anim->GetStateCount();
+		}
 	}
 	return 0;
 }

@@ -27,6 +27,7 @@ private:
 		int priority;  // smaller: higher priority
 
 	public:
+		node() = default;
 		node(int xp, int yp, int d, int p);
 
 		int getxPos() const { return xPos; }
