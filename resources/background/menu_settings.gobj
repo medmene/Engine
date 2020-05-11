@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<object>
-	<source name="menu.jpg" />
-	<objSize x="3000" y="2000" annotation="This is size for saving" />
-	<animSize x="3000" y="2000" annotation="This is size of real frame in image" />
-	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
-</object>

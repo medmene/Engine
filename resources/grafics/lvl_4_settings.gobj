@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<object>
-	<source name="lvl_4.png" />
-	<objSize x="2100" y="1500" annotation="This is size for saving" />
-	<animSize x="2100" y="1500" annotation="This is size of real frame in image" />
-	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
-</object>
