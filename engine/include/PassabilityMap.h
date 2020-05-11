@@ -8,19 +8,26 @@ struct PassabilityNode
 {
 	Vector2		m_pos;
 	Vector2		m_size;
-	bool		m_passible;
-	SDL_Rect	m_rect;
 	
-	PassabilityNode(const Vector2 & pos, const Vector2 & size, bool passible);
+	/* Types:
+	 * 0 - passible area
+	 * 1 - impassible area
+	 * 2 - trigger area
+	 */
+	int			m_type;
+	SDL_Rect	m_rect;
+
+	PassabilityNode(const Vector2 & pos, const Vector2 & size, int type);
 	bool IsInside(const Vector2 & pos);
 	void UpdateRect();
 };
 
 struct PassabilityArea
 {
-	Vector2		m_pos;
-	float		m_radius;
-	Vector2		m_verticalOffset;
+	Vector2				m_pos;
+	float				m_radius;
+	Vector2				m_verticalOffset;
+	vector<Vector2>		m_worldPos;
 	
 	PassabilityArea();
 	PassabilityArea(const Vector2 & pos, float rad, const Vector2 & verticalOffset);
@@ -39,6 +46,7 @@ public:
 
 	Vector2 WorldToNodeIndex(const Vector2 & pos);
 	Vector2 NodeIndexToWorld(const Vector2 & pos);
+	void FillPMap(vector<vector<int>> & pMap);
 	
 	bool IsAreaPossible(PassabilityArea * area);
 	auto GetAllNodes() { return m_nodes; }
@@ -50,6 +58,7 @@ public:
 	
 private:
 	bool inline IsInMap(int x, int y);
+	bool inline IsInMap(const Vector2 & pos);
 	bool SaveMap();
 	bool LoadMap();
 	

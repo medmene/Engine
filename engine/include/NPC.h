@@ -14,22 +14,22 @@ public:
 	NPC(const string & src);
 	virtual ~NPC();
 
-	void Init();
-
 	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
-	
-	TextBubble * GetTextObject() { return m_bubble; }
-	PassabilityArea * GetPassabilityArea() { return m_passabilityArea; }
+
+	void UpdatePos(const Vector2 & pos) override;
+	TextBubble * GetTextObject() override { return m_bubble; }
+	PassabilityArea * GetPassabilityArea() override { return m_passabilityArea; }
+	shared_ptr<BehaviourController> GetBehviourController() { return m_behaviourController; }
 	
 	void Update(float dt) override;
 	void Render() override;
 private:
-	string							m_npcName;
-	PassabilityArea				  * m_passabilityArea = nullptr;
-	bool							m_drawPassability = false;
-	float							m_passOffsetCoef = 0.1f;
-	TextBubble					  * m_bubble = nullptr;
+	string								m_npcName;
+	PassabilityArea					  * m_passabilityArea = nullptr;
+	bool								m_drawPassability = false;
+	float								m_passOffsetCoef = 0.1f;
+	TextBubble						  * m_bubble = nullptr;
 	
-	BehaviourController			  * m_behaviourController = nullptr;
+	shared_ptr<BehaviourController>		m_behaviourController;
 	void ManageDebugInfo();
 };

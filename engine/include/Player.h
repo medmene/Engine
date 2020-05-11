@@ -1,19 +1,21 @@
 #pragma once
 #include "GameObject.h"
+#include "Character.h"
 
 class PassabilityArea;
 class TextBubble;
 
-class Player : public GameObject
+class Player : public GameObject, public ICharacter
 {
 public:
 	Player(const string & src);
 	virtual ~Player();
 
 	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
-	
-	TextBubble * GetTextObject() { return m_bubble; }
-	PassabilityArea * GetPassabilityArea() { return m_passabilityArea; }
+
+	void UpdatePos(const Vector2 & pos) override;
+	TextBubble * GetTextObject() override { return m_bubble; }
+	PassabilityArea * GetPassabilityArea() override { return m_passabilityArea; }
 
 	void Update(float dt) override;
 	void Render() override;

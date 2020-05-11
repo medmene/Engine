@@ -187,16 +187,8 @@ void PathFinder::StartFinding(const Vector2& startPos, const Vector2& endPos)
 	m_working = true;
 	m_startNodeIndex = PassabilityMap::instance()->WorldToNodeIndex(startPos);
 	m_endNodeIndex = PassabilityMap::instance()->WorldToNodeIndex(endPos);
-
-	auto pMap = PassabilityMap::instance()->GetAllNodes();
 	
-	for (int x = 0; x < m_mapSize.x; ++x)
-	{
-		for (int y = 0; y < m_mapSize.y; ++y)
-		{
-			map[x][y] = !pMap[x][y]->m_passible;
-		}
-	}
+	PassabilityMap::instance()->FillPMap(map);
 
 	m_resultPath.clear();
 	

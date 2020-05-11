@@ -16,8 +16,8 @@ Player::Player(const string & src)
 {
 	SetAnimationEnable(true);
 	GetAnimator()->GetActiveAnimation()->Play();
-	UpdatePos(Vector2(500, 500));
-
+	Player::UpdatePos(Vector2(500, 500));
+	
 	m_bubble = new TextBubble("playerTextBubble_settings.gobj");
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
@@ -31,6 +31,15 @@ Player::~Player()
 {
 	delete m_passabilityArea;
 	delete m_bubble;
+}
+
+void Player::UpdatePos(const Vector2& pos)
+{
+	GameObject::UpdatePos(pos);
+	if (m_passabilityArea)
+	{
+		m_passabilityArea->UpdatePos(GetCenterPos());
+	}
 }
 
 void Player::Update(float dt)

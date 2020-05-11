@@ -12,26 +12,30 @@ NPC::NPC(const string & src)
 	: GameObject(src)
 	, m_npcName("npc")
 {
+	m_bubble = new TextBubble("textBubble_settings.gobj");
+	m_bubble->SetParent(this);
+	m_bubble->SetVisible(false);
+	m_bubble->SetSide(TextBubble::LEFT);
+
+	m_behaviourController = make_shared<BehaviourController>(m_renderer, this);
+
+	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.1f,
+		Vector2(0, m_passOffsetCoef * GetSize().y));
 }
 
 NPC::~NPC()
 {
 	delete m_bubble;
 	delete m_passabilityArea;
-	delete m_behaviourController;
 }
 
-void NPC::Init()
+void NPC::UpdatePos(const Vector2& pos)
 {
-	m_bubble = new TextBubble("textBubble_settings.gobj");
-	m_bubble->SetParent(this);
-	m_bubble->SetVisible(false);
-	m_bubble->SetSide(TextBubble::LEFT);
-
-	m_behaviourController = new BehaviourController(m_renderer, this);
-
-	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.25f,
-		Vector2(0, m_passOffsetCoef * GetSize().y));
+	GameObject::UpdatePos(pos);
+	if (m_passabilityArea)
+	{
+		m_passabilityArea->UpdatePos(pos);
+	}
 }
 
 void NPC::Update(float dt)
@@ -40,6 +44,7 @@ void NPC::Update(float dt)
 	{
 		return;
 	}
+	ManageDebugInfo();
 	
 	m_passabilityArea->UpdatePos(GetCenterPos());
 	m_behaviourController->Update(dt);

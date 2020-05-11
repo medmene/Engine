@@ -42,7 +42,7 @@ public:
 
 	void UpdateColor(const Color & clr);
 	void UpdateSize(const Vector2 & size);
-	void UpdatePos(const Vector2 & pos);
+	virtual void UpdatePos(const Vector2 & pos);
 	void UpdateCenterPos(const Vector2 & pos);
 	void UpdateRelativePos(const Vector2 & pos);
 	
