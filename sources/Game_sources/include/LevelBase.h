@@ -1,6 +1,5 @@
 #pragma once
 #include "include/Core.h"
-#include "include/Vector2.h"
 #include "include/Window.h"
 
 

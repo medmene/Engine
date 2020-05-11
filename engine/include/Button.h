@@ -1,7 +1,5 @@
 #pragma once
 #include "Core.h"
-#include "Vector2.h"
-#include "Color.h"
 #include "Label.h"
 #include "GameObject.h"
 #include "ResourceManager.h"
@@ -16,7 +14,7 @@ public:
 	~Button();
 
 	void SetOnclick(function<bool()> onClick) { m_onClick = onClick; }
-	void SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type);
+	void SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type);
 
 	void Update(float dt) override;
 	void Render() override;

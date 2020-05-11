@@ -57,7 +57,7 @@ void TextBubble::SetSide(BubbleSide s)
 	}
 }
 
-void TextBubble::SetText(const string& text)
+void TextBubble::SetText(const u16string& text)
 {
 	if (!text.empty())
 	{
@@ -70,23 +70,23 @@ void TextBubble::SetText(const string& text)
 		if (m_text.size() > maxSymbolsInRow)
 		{
 			// Split
-			vector<string> elems = Utils::split(m_text, ' ');
+			vector<u16string> elems = Utils::split(m_text, u' ');
 			
 			int index = 0;
-			vector<string> labels;
-			labels.emplace_back("");
+			vector<u16string> labels;
+			labels.emplace_back(u"");
 			
 			while (index < elems.size())
 			{
 				if ((labels.back() + elems[index]).size() + 1 < maxSymbolsInRow)
 				{
 					labels.back() += elems[index];
-					labels.back() += " ";
+					labels.back() += u" ";
 				}
 				else
 				{
 					index--;
-					labels.emplace_back("");
+					labels.emplace_back(u"");
 				}
 				index++;
 			}

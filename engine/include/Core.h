@@ -39,3 +39,4 @@ using std::weak_ptr;
 using std::function;
 using std::find;
 using std::wstring;
+using std::u16string;

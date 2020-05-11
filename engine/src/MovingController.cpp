@@ -4,7 +4,6 @@
 #include "include/GameObject.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
-#include "include/PassabilityMap.h"
 #include "include/Animator.h"
 
 

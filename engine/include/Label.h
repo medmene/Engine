@@ -12,20 +12,19 @@ public:
 	Label(const string & src);
 	~Label();
 
-	void Init(const string & text, int fontSize = 24);
+	void Init(const u16string & text, int fontSize = 24);
 
-	void SetText(const string & text);
+	void SetText(const u16string & text);
 	void SetFont(const string & src, ResourceManager::Type type);
 	void SetFontSize(int fontSize);
 
-	string GetText() { return m_text; }
 	int GetFontSize() { return m_fontSize; }
 	
 	void Render() override;
 private:
 	TTF_Font						  * m_font = nullptr;
 	int									m_fontSize;
-	string								m_text;
+	u16string 							m_text;
 
 	void CreateTexture();
 };

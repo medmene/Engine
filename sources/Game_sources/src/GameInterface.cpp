@@ -38,7 +38,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(btn);
 	
 	auto lbl = make_shared<Label>("times.ttf");
-	lbl->Init("P-character area", 16);
+	lbl->Init(u"P-character area", 16);
 	lbl->SetStaticObject(true);
 	lbl->SetParent(back.get());
 	lbl->SetFollowVisibility(true);
@@ -47,7 +47,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(lbl);
 	
 	auto lbl2 = make_shared<Label>("times.ttf");
-	lbl2->Init("L-not passible map", 16);
+	lbl2->Init(u"L-not passible map", 16);
 	lbl2->SetStaticObject(true);
 	lbl2->SetParent(back.get());
 	lbl2->SetFollowVisibility(true);
@@ -56,7 +56,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(lbl2);
 
 	auto lbl3 = make_shared<Label>("times.ttf");
-	lbl3->Init("O-save map (with L)", 16);
+	lbl3->Init(u"O-save map (with L)", 16);
 	lbl3->SetStaticObject(true);
 	lbl3->SetParent(back.get());
 	lbl3->SetFollowVisibility(true);
@@ -66,7 +66,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(lbl3);
 
 	auto lbl4 = make_shared<Label>("times.ttf");
-	lbl4->Init("J-music", 16);
+	lbl4->Init(u"J-music", 16);
 	lbl4->SetStaticObject(true);
 	lbl4->SetParent(back.get());
 	lbl4->SetFollowVisibility(true);
@@ -75,7 +75,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(lbl4);
 
 	auto lbl5 = make_shared<Label>("times.ttf");
-	lbl5->Init("I-NPC way", 16);
+	lbl5->Init(u"I-NPC way", 16);
 	lbl5->SetStaticObject(true);
 	lbl5->SetParent(back.get());
 	lbl5->SetFollowVisibility(true);
@@ -84,7 +84,7 @@ void GameInterface::Run()
 	m_elements.emplace_back(lbl5);
 
 	auto lbl6 = make_shared<Label>("times.ttf");
-	lbl6->Init("U - noclip", 16);
+	lbl6->Init(u"U - noclip", 16);
 	lbl6->SetStaticObject(true);
 	lbl6->SetParent(back.get());
 	lbl6->SetFollowVisibility(true);

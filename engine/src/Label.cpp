@@ -7,14 +7,14 @@
 Label::Label()
 	: GameObject()
 	, m_fontSize(24)
-	, m_text("_")
+	, m_text(u"_")
 {
 }
 
 Label::Label(const string& src)
 	: GameObject()
 	, m_fontSize(24)
-	, m_text("_")
+	, m_text(u"_")
 {
 	m_resourceSettings = ResourceManager::instance()->GetResource(src);
 
@@ -39,7 +39,7 @@ Label::~Label()
 	if (m_font) { TTF_CloseFont(m_font); }
 }
 
-void Label::Init(const string & text, int fontSize)
+void Label::Init(const u16string & text, int fontSize)
 {
 	if (fontSize != m_fontSize)
 	{
@@ -62,7 +62,7 @@ void Label::Init(const string & text, int fontSize)
 	CreateTexture();
 }
 
-void Label::SetText(const string & text)
+void Label::SetText(const u16string & text)
 {
 	m_text = text;
 	CreateTexture();
@@ -127,11 +127,7 @@ void Label::CreateTexture()
 	if (m_renderer && m_font)
 	{
 		SDL_Color clr = { m_color.GetR(), m_color.GetG(), m_color.GetB() };
-		
-		// std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-		// wstring str = converter.from_bytes(m_text.c_str());
-		// SDL_Surface* surfaceMessage = TTF_RenderUNICODE_Blended(m_font, (Uint16*)str.c_str(), clr);
-		SDL_Surface* surfaceMessage = TTF_RenderText_Solid(m_font, m_text.c_str(), clr);
+		SDL_Surface* surfaceMessage = TTF_RenderUNICODE_Solid(m_font, (Uint16*)m_text.c_str(), clr);
 		if (surfaceMessage)
 		{
 			if (m_texture)

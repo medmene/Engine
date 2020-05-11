@@ -23,7 +23,7 @@ Button::~Button()
 	delete m_label;
 }
 
-void Button::SetLabel(const string& text, int textFontSize, const string& src, ResourceManager::Type type)
+void Button::SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
 	m_label = new Label("times.ttf");
 	if (m_label)
