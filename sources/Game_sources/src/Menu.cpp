@@ -16,33 +16,5 @@ Menu::Menu(shared_ptr<WindowManager> wm)
 
 void Menu::Run()
 {
-	PassabilityMap::instance()->SetMap("passability2.pmap");
-
-	m_objects.emplace_back(new GameObject("menu.jpg"));
-	m_objects.back()->SetStaticObject(true);
-	m_objects.back()->UpdateSize(Vector2(m_winSize.x, m_winSize.y));
-	m_objects.back()->UpdatePos(Vector2(0, 0));
-
-	float bSizeX = 200, bSizeY = 50, bPosX = m_winSize.x / 2 - bSizeX / 2;
-
-	Button* btn = new Button("button_menu.gobj");
-	btn->SetStaticObject(true);
-	btn->UpdateSize(Vector2(bSizeX, bSizeY));
-	btn->UpdatePos(Vector2(bPosX, 100));
-	btn->SetLabel(u"Start", 30, "calibri", ResourceManager::TTF);
-	btn->SetOnclick([this]() {
-		GameWindow::instance()->GetWindowManager()->CreateAndRunWindow<Level1>();
-		this->Stop();
-		return true;
-	});
-	m_objects.emplace_back(btn);
-
-	Button* btn2 = new Button("button_menu.gobj");
-	btn2->SetStaticObject(true);
-	btn2->UpdateSize(Vector2(bSizeX, bSizeY));
-	btn2->UpdatePos(Vector2(bPosX, 300));
-	btn2->SetLabel(u"Exit", 30, "calibri", ResourceManager::TTF);
-	btn2->SetOnclick([]() { exit(0); return true; });
-	m_objects.emplace_back(btn2);
 	LevelBase::Run();
 }

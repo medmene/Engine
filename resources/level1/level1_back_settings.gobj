@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<object>
+	<source name="level1_back.png" />
+	<objSize x="1202" y="895" annotation="This is size for saving" />
+	<animSize x="1202" y="895" annotation="This is size of real frame in image" />
+	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
+</object>

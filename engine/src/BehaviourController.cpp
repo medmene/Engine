@@ -21,7 +21,7 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	
 	CollectAnimations();
 	
-	m_movingController = new MovingController(r, owner, m_normalSpeed);
+	m_movingController = make_shared<MovingController>(r, owner, m_normalSpeed);
 	m_movingController->SetAnimationMap(m_directionsOfAnimations);
 	m_currentState = UNDEFINED;
 	m_anchorPoint = m_ownerObj->GetCenterPos();
@@ -31,7 +31,6 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 
 BehaviourController::~BehaviourController()
 {
-	delete m_movingController;
 }
 
 void BehaviourController::Update(float dt)
@@ -144,7 +143,7 @@ void BehaviourController::OnStateTalkEntering()
 	{
 		m_owner->GetTextObject()->SetVisible(true);
 		// m_owner->GetTextObject()->SetText("Xocesh eshe etix magkix fransuzkix bulochek");
-		m_owner->GetTextObject()->SetText(u"Хочешь ещё этих булочек");
+		m_owner->GetTextObject()->SetText(u"Хочешь ещё этих сладких булочек");
 	}
 }
 

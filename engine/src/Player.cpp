@@ -17,6 +17,7 @@ Player::Player(const string & src)
 	SetAnimationEnable(true);
 	GetAnimator()->GetActiveAnimation()->Play();
 	Player::UpdatePos(Vector2(500, 500));
+	UpdateSize(Vector2(70, 100));
 	
 	m_bubble = new TextBubble("playerTextBubble_settings.gobj");
 	m_bubble->SetParent(this);

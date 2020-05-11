@@ -3,11 +3,11 @@
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
 #include "include/Player.h"
-#include "Game_sources/include/Menu.h"
 #include "Game_sources/include/GameInterface.h"
 #include "include/ResourceManager.h"
 #include "include/PassabilityMap.h"
 #include "include/SoundManager.h"
+#include "Game_sources/include/Level1.h"
 
 GameWindow * GameWindow::sm_instance = nullptr;
 
@@ -72,7 +72,7 @@ void GameWindow::Initialize()
 	m_player->SetVisible(false);
 	
 	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);
-	m_windowManager->CreateAndRunWindow<Menu>();
+	m_windowManager->CreateAndRunWindow<Level1>();
 	auto interface = m_windowManager->CreateAndRunWindow<GameInterface>();
 	m_windowManager->SetWindowLevel(interface->GetWindowName(), 15);
 	

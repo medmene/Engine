@@ -13,18 +13,35 @@ Resource* Resource::FindResource(const string& resource, ResourceManager::Type t
 {
 	if (!resource.empty())
 	{
-		auto path = current_path().generic_string() + "/../resources/";
-		string typeName = ResourceManager::instance()->GetType(type);
-		string resName = resource + typeName;
-		
+		// At first find resource dir
+		auto path = current_path().generic_string() + "/../../";
+		bool finded = false;
 		for (auto && p : recursive_directory_iterator(path.c_str()))
 		{
 			auto resPath = p.path().generic_string();
 
-			if (resPath.find(resName) != string::npos)
+			if (resPath.find("resources") != string::npos)
 			{
-				Resource * res = new Resource(resPath, resource, type);
-				return res;
+				path = resPath;
+				finded = true;
+				break;
+			}
+		}
+		
+		if (finded)
+		{
+			string typeName = ResourceManager::instance()->GetType(type);
+			string resName = resource + typeName;
+
+			for (auto && p : recursive_directory_iterator(path.c_str()))
+			{
+				auto resPath = p.path().generic_string();
+
+				if (resPath.find(resName) != string::npos)
+				{
+					Resource * res = new Resource(resPath, resource, type);
+					return res;
+				}
 			}
 		}
 	}
