@@ -18,8 +18,8 @@ PassabilityNode::PassabilityNode(const Vector2& pos, const Vector2& size, int ty
 
 bool PassabilityNode::IsInside(const Vector2& pos)
 {
-	return pos.x >= m_pos.x && pos.x <= m_pos.x + m_size.x
-		&& pos.y >= m_pos.y && pos.y <= m_pos.y + m_size.y;
+	return pos.x >= m_pos.x - 0.01f && pos.x <= m_pos.x + m_size.x + 0.01f
+		&& pos.y >= m_pos.y - 0.01f && pos.y <= m_pos.y + m_size.y + 0.01f;
 }
 
 void PassabilityNode::UpdateRect()
