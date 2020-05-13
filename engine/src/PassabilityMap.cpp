@@ -8,7 +8,7 @@
 
 PassabilityMap * PassabilityMap::sm_instance = nullptr;
 
-PassabilityNode::PassabilityNode(const Vector2& pos, const Vector2& size, int type)
+PassabilityNode::PassabilityNode(const Vector2& pos, const Vector2& size, PassabilityMap::AreaTypes type)
 	: m_pos(pos)
 	, m_size(size)
 	, m_type(type)
@@ -25,50 +25,6 @@ bool PassabilityNode::IsInside(const Vector2& pos)
 void PassabilityNode::UpdateRect()
 {
 	m_rect = { (int)m_pos.x, (int)m_pos.y, (int)m_size.x, (int)m_size.y };
-}
-
-// --------------------------------------------------------------------------------------------- //
-
-PassabilityArea::PassabilityArea()
-	: m_pos(Vector2::zero)
-	, m_radius(0.f)
-	, m_verticalOffset(0,2.f)
-{
-}
-
-PassabilityArea::PassabilityArea(const Vector2& pos, float rad)
-	: m_pos(pos)
-	, m_radius(rad)
-{
-	const int cornerOffset = (int)sqrt(m_radius * m_radius / 2);
-
-	Vector2 posLeft = m_pos; posLeft.x -= m_radius;
-	Vector2 posTopLeft = m_pos; posTopLeft.x -= cornerOffset; posTopLeft.y -= cornerOffset;
-	Vector2 posTop = m_pos; posTop.y -= m_radius;
-	Vector2 posTopRight = m_pos; posTopRight.x += cornerOffset; posTopRight.y -= cornerOffset;
-	Vector2 posRight = m_pos; posRight.x += m_radius;
-	Vector2 posBottomRight = m_pos; posBottomRight.x += cornerOffset; posBottomRight.y += cornerOffset;
-	Vector2 posBottom = m_pos; posBottom.y += m_radius;
-	Vector2 posBottomLeft = m_pos; posBottomLeft.x -= cornerOffset; posBottomLeft.y += cornerOffset;
-
-	m_worldPos.emplace_back(posLeft);
-	m_worldPos.emplace_back(posTopLeft);
-	m_worldPos.emplace_back(posTop);
-	m_worldPos.emplace_back(posTopRight);
-	m_worldPos.emplace_back(posRight);
-	m_worldPos.emplace_back(posBottomRight);
-	m_worldPos.emplace_back(posBottom);
-	m_worldPos.emplace_back(posBottomLeft);
-}
-
-void PassabilityArea::UpdatePos(const Vector2& pos)
-{
-	auto oldPos = m_pos;
-	m_pos = pos;
-	for (auto && corner : m_worldPos)
-	{
-		corner += m_pos - oldPos;
-	}
 }
 
 // --------------------------------------------------------------------------------------------- //
@@ -131,8 +87,9 @@ bool PassabilityMap::SaveMap()
 				{
 					PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
 					out << x + endPosX << " " << y + endPosY << " ";		// index in map same with position
-					out << nd->m_size.x << " " << nd->m_size.y << " ";
-					out << nd->m_type;
+					auto sz = nd->GetSize();
+					out << sz.x << " " << sz.y << " ";
+					out << nd->GetType();
 					out << "\n";
 				}
 			}
@@ -173,15 +130,14 @@ bool PassabilityMap::LoadMap()
 			{
 				in >> tx >> ty;
 				in >> sx >> sy;
-				m_nodes[tx][ty] = new PassabilityNode(Vector2((tx + stPosX) * sx, (ty + stPosY) * sy),
-					Vector2(sx, sy), true);
-
 				in >> p;
-				m_nodes[tx][ty]->m_type = p;
+				m_nodes[tx][ty] = new PassabilityNode(Vector2((tx + stPosX) * sx, (ty + stPosY) * sy),
+					Vector2(sx, sy), static_cast<AreaTypes>(p));
+				
 				m_nodes[tx][ty]->UpdateRect();
 			}
 
-			m_nodeSize = Vector2(m_nodes[0][0]->m_size.x, m_nodes[0][0]->m_size.y);
+			m_nodeSize = m_nodes[0][0]->GetSize();
 
 			in.close();
 
@@ -215,8 +171,7 @@ Vector2 PassabilityMap::WorldToNodeIndex(const Vector2& pos)
 Vector2 PassabilityMap::NodeIndexToWorld(const Vector2& pos)
 {
 	auto nd = m_nodes[pos.x][pos.y];
-	return Vector2(nd->m_pos.x + nd->m_size.x / 2,
-		nd->m_pos.y + nd->m_size.y / 2);
+	return nd->GetPos() + (nd->GetSize() / 2);
 }
 
 void PassabilityMap::FillPMap(vector<vector<int>>& pMap)
@@ -225,7 +180,16 @@ void PassabilityMap::FillPMap(vector<vector<int>>& pMap)
 	{
 		for (int y = 0; y < m_mapSize.y; ++y)
 		{
-			pMap[x][y] = m_nodes[x][y]->m_type == 0 ? 0 : 1;
+			// pMap[x][y] = m_nodes[x][y]->m_type == 0 ? 0 : 1;
+			// pMap[x][y] = m_nodes[x][y]->GetType() == PASSIBLE_AREA ? 0 : 1;
+			if (m_nodes[x][y]->GetType() == IMPASSIBLE_AREA)
+			{
+				pMap[x][y] = 1;
+			}
+			else
+			{
+				pMap[x][y] = 0;
+			}
 		}
 	}
 }
@@ -233,21 +197,28 @@ void PassabilityMap::FillPMap(vector<vector<int>>& pMap)
 bool PassabilityMap::IsAreaPossible(PassabilityArea * area)
 {
 	vector<Vector2> nodePoses;
-	for (auto && worldPos : area->m_worldPos)
+	auto worldPoses = area->GetWorldPoses();
+	for (auto && worldPos : worldPoses)
 	{
 		nodePoses.emplace_back(WorldToNodeIndex(worldPos));
 	}
 
-	for (int i = 0; i < area->m_worldPos.size(); ++i)
+	for (int i = 0; i < worldPoses.size(); ++i)
 	{
 		if (!(IsInMap(nodePoses[i]) && 
-			m_nodes[nodePoses[i].x][nodePoses[i].y]->IsInside(area->m_worldPos[i]) &&
-			m_nodes[nodePoses[i].x][nodePoses[i].y]->m_type == 0))
+			m_nodes[nodePoses[i].x][nodePoses[i].y]->IsInside(worldPoses[i]) &&
+			m_nodes[nodePoses[i].x][nodePoses[i].y]->GetType() != IMPASSIBLE_AREA))
 		{
 			return false;
 		}
 	}
 	return true;
+}
+
+PassabilityMap::AreaTypes PassabilityMap::GetAreaTypeInPos(const Vector2& pos)
+{
+	auto node = WorldToNodeIndex(pos);
+	return m_nodes[node.x][node.y]->GetType();
 }
 
 void PassabilityMap::Update()
@@ -283,11 +254,26 @@ void PassabilityMap::Update()
 				{
 					if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_LEFT)
 					{
-						m_nodes[x + endPosX][y + endPosY]->m_type = 1;
+						auto keys = KeyboardInput::instance()->GetKeyMap();
+						if (keys.empty())
+						{
+							m_nodes[x + endPosX][y + endPosY]->SetType(IMPASSIBLE_AREA);
+						}
+						else
+						{
+							if (KeyboardInput::instance()->IsKeyPressed(Key1))
+							{
+								m_nodes[x + endPosX][y + endPosY]->SetType(TRIGGER_AREA);
+							}
+							else if (KeyboardInput::instance()->IsKeyPressed(Key2))
+							{
+								m_nodes[x + endPosX][y + endPosY]->SetType(LADDER_AREA);
+							}
+						}
 					}
 					else if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
 					{
-						m_nodes[x + endPosX][y + endPosY]->m_type = 0;
+						m_nodes[x + endPosX][y + endPosY]->SetType(PASSIBLE_AREA);
 					}
 				}
 			}
@@ -303,13 +289,13 @@ void PassabilityMap::Render()
 		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
 
 		auto diff = Camera::instance()->GetDiff();
-		SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 		for (int x = stPosX; x < endPosX; ++x)
 		{
 			for (int y = stPosY; y < endPosY; ++y)
 			{
+				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
 				PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
-				SDL_Rect localRect = nd->m_rect;
+				SDL_Rect localRect = nd->GetRenderRect();
 				
 				// Apply zoom
 				localRect.x *= Camera::instance()->GetZoom();
@@ -322,8 +308,18 @@ void PassabilityMap::Render()
 				
 				SDL_RenderDrawRect(m_renderer, &localRect);
 
-				if (nd->m_type == 1)
+				if (nd->GetType() != PASSIBLE_AREA)
 				{
+					switch (nd->GetType())
+					{
+					case IMPASSIBLE_AREA: break;
+					case TRIGGER_AREA:
+						SDL_SetRenderDrawColor(m_renderer, 205, 24, 255, 100);
+						break;
+					case LADDER_AREA:
+						SDL_SetRenderDrawColor(m_renderer, 24, 121, 221, 230);
+						break;
+					}
 					SDL_RenderFillRect(m_renderer, &localRect);
 				}
 			}
@@ -331,12 +327,6 @@ void PassabilityMap::Render()
 
 		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
 	}
-}
-
-bool inline PassabilityMap::IsInMap(int x, int y)
-{
-	return x >= 0 && x < m_mapSize.x
-		&& y >= 0 && y <= m_mapSize.y;
 }
 
 bool PassabilityMap::IsInMap(const Vector2& pos)

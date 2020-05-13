@@ -80,6 +80,11 @@ void Player::Update(float dt)
 
 				if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))
 				{
+					if (PassabilityMap::instance()->GetAreaTypeInPos(GetPivotPos()) == PassabilityMap::LADDER_AREA)
+					{
+						m_velocity *= LadderArea::GetMovingSpeedDebuff();
+					}
+					
 					UpdateCenterPos(GetCenterPos() + m_velocity);
 				}
 				else
@@ -100,7 +105,7 @@ void Player::Render()
 
 		if (m_drawPassability)
 		{
-			Vector2 localPos = m_passabilityArea->m_pos;
+			Vector2 localPos = m_passabilityArea->GetPos();
 			
 			localPos.x *= Camera::instance()->GetZoom();
 			localPos.y *= Camera::instance()->GetZoom();
@@ -109,7 +114,7 @@ void Player::Render()
 			localPos.x = localPos.x + diff.x;
 			localPos.y = localPos.y + diff.y;
 			
-			SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->m_radius * Camera::instance()->GetZoom());
+			SDL_DrawCircle(m_renderer, localPos, m_passabilityArea->GetRadius() * Camera::instance()->GetZoom());
 		}
 	}
 }

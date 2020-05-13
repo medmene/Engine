@@ -5,6 +5,7 @@
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
 #include "include/Animator.h"
+#include "include/PassabilityMap.h"
 
 
 MovingController::MovingController()
@@ -91,11 +92,11 @@ void MovingController::Update(float dt)
 		if (m_ownerObj)
 		{
 			auto oldPos = m_ownerObj->GetCenterPos();
-			auto dir = m_movingPath[m_pathIndex] - oldPos;
-			float dirLen = dir.length();
+			auto velocity = m_movingPath[m_pathIndex] - oldPos;
+			float velocityLen = velocity.length();
 
-			int signX = (dir.x > 0) - (dir.x < 0) + 1; // 0 1 2
-			int signY = (dir.y > 0) - (dir.y < 0) + 1; // 0 1 2
+			int signX = (velocity.x > 0) - (velocity.x < 0) + 1; // 0 1 2
+			int signY = (velocity.y > 0) - (velocity.y < 0) + 1; // 0 1 2
 
 			m_lastDir = m_dirs[signX][signY];
 			string animName = m_directionsOfAnimations[m_lastDir];
@@ -103,15 +104,18 @@ void MovingController::Update(float dt)
 			{
 				m_ownerObj->GetAnimator()->PlayAnimation(animName);
 			}
+
+			velocity *= m_speedModifier / velocityLen;
 			
-			float coef = m_speedModifier / dirLen;
-
-			dir *= coef;
-
-			auto newPos = oldPos + dir;
+			if (PassabilityMap::instance()->GetAreaTypeInPos(m_ownerObj->GetPivotPos()) == PassabilityMap::LADDER_AREA)
+			{
+				velocity *= LadderArea::GetMovingSpeedDebuff();
+			}
+			
+			auto newPos = oldPos + velocity;
 			m_ownerObj->UpdateCenterPos(newPos);
 
-			if (dirLen < m_speedModifier)
+			if (velocityLen < m_speedModifier)
 			{
 				m_pathIndex++;
 				if (m_pathIndex == m_movingPath.size())

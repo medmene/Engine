@@ -36,7 +36,7 @@ void Level1::Run()
 	npc1->UpdatePos(Vector2(1200, 300));
 	npc1->UpdateSize(Vector2(100, 100));
 	npc1->GetBehviourController()->SetAnchorPoint(Vector2(1200, 300));
-	npc1->GetBehviourController()->SetAnchorArea(Vector2(7, 7));
+	npc1->GetBehviourController()->SetAnchorArea(Vector2(8, 8));
 	m_objects.emplace_back(npc1);
 	
 	auto npc2 = new NPC("alien2.gobj");
@@ -45,7 +45,7 @@ void Level1::Run()
 	npc2->UpdatePos(Vector2(600, 1000));
 	npc2->UpdateSize(Vector2(100, 100));
 	npc2->GetBehviourController()->SetAnchorPoint(Vector2(600, 1000));
-	npc2->GetBehviourController()->SetAnchorArea(Vector2(7, 7));
+	npc2->GetBehviourController()->SetAnchorArea(Vector2(8, 8));
 	m_objects.emplace_back(npc2);
 
 	m_objects.emplace_back(p);

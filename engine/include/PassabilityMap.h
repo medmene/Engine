@@ -1,43 +1,28 @@
 #pragma once
-#include "Core.h"
-#include "Vector2.h"
+#include "Areas.h"
 
 class Resource;
+class PassabilityNode;
 
-struct PassabilityNode
-{
-	Vector2		m_pos;
-	Vector2		m_size;
-	
-	/* Types:
-	 * 0 - passible area
-	 * 1 - impassible area
-	 * 2 - trigger area
-	 */
-	int			m_type;
-	SDL_Rect	m_rect;
-
-	PassabilityNode(const Vector2 & pos, const Vector2 & size, int type);
-	bool IsInside(const Vector2 & pos);
-	void UpdateRect();
-};
-
-struct PassabilityArea
-{
-	Vector2				m_pos;
-	float				m_radius;
-	Vector2				m_verticalOffset;
-	vector<Vector2>		m_worldPos;
-	
-	PassabilityArea();
-	PassabilityArea(const Vector2 & pos, float rad);
-	void UpdatePos(const Vector2 & pos);
-};
 
 class PassabilityMap
 {
 	PassabilityMap();
 public:
+	/* Types:
+	 * 0 - passible area
+	 * 1 - impassible area
+	 * 2 - trigger area
+	 * 3 - slowing area
+	 */
+	enum AreaTypes
+	{
+		PASSIBLE_AREA = 0,
+		IMPASSIBLE_AREA,
+		TRIGGER_AREA,
+		LADDER_AREA
+	};
+	
 	~PassabilityMap();
 
 	static PassabilityMap * instance();
@@ -52,12 +37,12 @@ public:
 	auto GetAllNodes() { return m_nodes; }
 	auto GetMapSize() { return m_mapSize; }
 	auto GetNodeSize() { return m_nodeSize; }
+	AreaTypes GetAreaTypeInPos(const Vector2 & pos);
 	
 	void Update();
 	void Render();
 	
 private:
-	bool inline IsInMap(int x, int y);
 	bool inline IsInMap(const Vector2 & pos);
 	bool SaveMap();
 	bool LoadMap();
@@ -75,5 +60,23 @@ private:
 	static PassabilityMap			  * sm_instance;
 };
 
-
 void SDL_DrawCircle(SDL_Renderer * renderer, const Vector2& centre, int32_t radius);
+
+class PassabilityNode
+{
+public:
+	PassabilityNode(const Vector2 & pos, const Vector2 & size, PassabilityMap::AreaTypes type);
+	bool IsInside(const Vector2 & pos);
+	void UpdateRect();
+	Vector2 GetSize() { return m_size; }
+	Vector2 GetPos() { return m_pos; }
+	PassabilityMap::AreaTypes GetType() { return m_type; }
+	SDL_Rect GetRenderRect() { return m_rect; }
+	void SetType(PassabilityMap::AreaTypes tp) { m_type = tp; }
+	
+private:
+	Vector2							m_pos;
+	Vector2							m_size;
+	PassabilityMap::AreaTypes		m_type;
+	SDL_Rect						m_rect;
+};
