@@ -16,16 +16,15 @@ Player::Player(const string & src)
 {
 	SetAnimationEnable(true);
 	GetAnimator()->GetActiveAnimation()->Play();
-	Player::UpdatePos(Vector2(500, 500));
 	UpdateSize(Vector2(70, 100));
+	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.25f);
 	
 	m_bubble = new TextBubble("playerTextBubble_settings.gobj");
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
 
-	m_passabilityArea = new PassabilityArea (GetCenterPos(), GetSize().x * 0.25f, 
-		Vector2(0,m_passOffsetCoef * GetSize().y));
+	Player::UpdatePos(Vector2(500, 500));
 }
 
 Player::~Player()
@@ -39,7 +38,7 @@ void Player::UpdatePos(const Vector2& pos)
 	GameObject::UpdatePos(pos);
 	if (m_passabilityArea)
 	{
-		m_passabilityArea->UpdatePos(GetCenterPos());
+		m_passabilityArea->UpdatePos(GetPivotPos());
 	}
 }
 
@@ -71,13 +70,13 @@ void Player::Update(float dt)
 		{
 			if (m_noclip)
 			{
-				m_passabilityArea->UpdatePos(GetCenterPos());
+				m_passabilityArea->UpdatePos(GetPivotPos());
 				UpdatePos(GetPosition() + m_velocity * 2.f);
 			}
 			else
 			{
 				auto oldArea = *m_passabilityArea;
-				m_passabilityArea->UpdatePos(GetCenterPos() + m_velocity);
+				m_passabilityArea->UpdatePos(GetPivotPos() + m_velocity);
 
 				if (PassabilityMap::instance()->IsAreaPossible(m_passabilityArea))
 				{

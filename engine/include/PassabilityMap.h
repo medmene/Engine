@@ -30,7 +30,7 @@ struct PassabilityArea
 	vector<Vector2>		m_worldPos;
 	
 	PassabilityArea();
-	PassabilityArea(const Vector2 & pos, float rad, const Vector2 & verticalOffset);
+	PassabilityArea(const Vector2 & pos, float rad);
 	void UpdatePos(const Vector2 & pos);
 };
 

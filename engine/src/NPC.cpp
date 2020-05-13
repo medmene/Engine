@@ -16,11 +16,10 @@ NPC::NPC(const string & src)
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
+	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.1f);
 
 	m_behaviourController = make_shared<BehaviourController>(m_renderer, this);
 
-	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.1f,
-		Vector2(0, m_passOffsetCoef * GetSize().y));
 }
 
 NPC::~NPC()
@@ -34,7 +33,7 @@ void NPC::UpdatePos(const Vector2& pos)
 	GameObject::UpdatePos(pos);
 	if (m_passabilityArea)
 	{
-		m_passabilityArea->UpdatePos(pos);
+		m_passabilityArea->UpdatePos(GetPivotPos());
 	}
 }
 
@@ -46,7 +45,7 @@ void NPC::Update(float dt)
 	}
 	ManageDebugInfo();
 	
-	m_passabilityArea->UpdatePos(GetCenterPos());
+	m_passabilityArea->UpdatePos(GetPivotPos());
 	m_behaviourController->Update(dt);
 	m_bubble->Update(dt);
 	GameObject::Update(dt);

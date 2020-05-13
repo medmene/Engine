@@ -63,8 +63,8 @@ void GameWindow::Initialize()
 {
 	BaseObject::SetupRendered(m_renderer);
 	BaseWindow::Setup(m_renderer, m_windowSize);
-	SoundManager::instance()->PlaySound(ResourceManager::instance()->
-		GetResource("mainTheme", ResourceManager::MP3));
+	// SoundManager::instance()->PlaySound(ResourceManager::instance()->
+		// GetResource("mainTheme", ResourceManager::MP3));
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 

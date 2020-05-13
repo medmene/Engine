@@ -14,8 +14,6 @@ public:
 	NPC(const string & src);
 	virtual ~NPC();
 
-	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
-
 	void UpdatePos(const Vector2 & pos) override;
 	TextBubble * GetTextObject() override { return m_bubble; }
 	PassabilityArea * GetPassabilityArea() override { return m_passabilityArea; }
@@ -27,7 +25,6 @@ private:
 	string								m_npcName;
 	PassabilityArea					  * m_passabilityArea = nullptr;
 	bool								m_drawPassability = false;
-	float								m_passOffsetCoef = 0.1f;
 	TextBubble						  * m_bubble = nullptr;
 	
 	shared_ptr<BehaviourController>		m_behaviourController;

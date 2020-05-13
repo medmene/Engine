@@ -116,8 +116,8 @@ bool GameObject::LoadSettings()
 	m_size.y = std::stoi(sizeNode.attribute("y").value());
 
 	auto pivotNode = rootNode.child("pivot_offset");
-	m_pivot.x = std::stoi(pivotNode.attribute("x").value());
-	m_pivot.y = std::stoi(pivotNode.attribute("y").value());
+	m_pivotOffset.x = std::stoi(pivotNode.attribute("x").value());
+	m_pivotOffset.y = std::stoi(pivotNode.attribute("y").value());
 
 	auto sourceNode = rootNode.child("source");
 	m_resourceTexture = ResourceManager::instance()->GetResource(sourceNode.attribute("name").value());

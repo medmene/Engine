@@ -11,8 +11,6 @@ public:
 	Player(const string & src);
 	virtual ~Player();
 
-	void SetPassabilityOffsetCoef(float offset) { m_passOffsetCoef = offset; }
-
 	void UpdatePos(const Vector2 & pos) override;
 	TextBubble * GetTextObject() override { return m_bubble; }
 	PassabilityArea * GetPassabilityArea() override { return m_passabilityArea; }
@@ -26,7 +24,6 @@ private:
 	Vector2							m_velocityConst;
 	PassabilityArea				  * m_passabilityArea = nullptr;
 	bool							m_drawPassability = false;
-	float							m_passOffsetCoef = 0.33f;
 	TextBubble					  * m_bubble = nullptr;
 	bool							m_noclip;
 

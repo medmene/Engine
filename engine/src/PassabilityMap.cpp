@@ -36,9 +36,9 @@ PassabilityArea::PassabilityArea()
 {
 }
 
-PassabilityArea::PassabilityArea(const Vector2 & pos, float rad, const Vector2 & verticalOffset)
-	: m_radius(rad)
-	, m_verticalOffset(verticalOffset)
+PassabilityArea::PassabilityArea(const Vector2& pos, float rad)
+	: m_pos(pos)
+	, m_radius(rad)
 {
 	const int cornerOffset = (int)sqrt(m_radius * m_radius / 2);
 
@@ -59,15 +59,12 @@ PassabilityArea::PassabilityArea(const Vector2 & pos, float rad, const Vector2 &
 	m_worldPos.emplace_back(posBottomRight);
 	m_worldPos.emplace_back(posBottom);
 	m_worldPos.emplace_back(posBottomLeft);
-	
-	UpdatePos(pos);
 }
 
 void PassabilityArea::UpdatePos(const Vector2& pos)
 {
 	auto oldPos = m_pos;
 	m_pos = pos;
-	m_pos += m_verticalOffset;
 	for (auto && corner : m_worldPos)
 	{
 		corner += m_pos - oldPos;
