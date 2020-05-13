@@ -31,12 +31,13 @@ public:
 	void SetStaticObject(bool stObj) { m_staticObject = stObj; }
 	void SetAnimationEnable(bool anim);
 
-	GameObject * GetParent() { return m_parent; }
-	const Vector2 & GetCenterPos() { return m_center; }
-	const Vector2 & GetPosition() { return m_position; }
-	const Vector2 & GetRelativePos() { return m_relativePos; }
-	const Vector2 & GetSize() { return m_size; }
-	const Color & GetColor() { return m_color; }
+	GameObject * GetParent() const { return m_parent; }
+	Vector2 GetCenterPos() const { return m_center; }
+	Vector2 GetPosition() const { return m_position; }
+	Vector2 GetRelativePos() const { return m_relativePos; }
+	Vector2 GetSize() const { return m_size; }
+	Vector2 GetPivotPos() const { return m_pivot; }
+	Color GetColor() const { return m_color; }
 	string GetName();
 	Animator * GetAnimator() { return m_animator; }
 
@@ -60,8 +61,10 @@ protected:
 	Vector2						m_center;
 	Color						m_color;
 	Vector2						m_position;
-	Vector2						m_relativePos; // relative pos of center parent
+	Vector2						m_relativePos;	// relative pos of center parent
 	Vector2						m_size;
+	Vector2						m_pivot;		// position of connecting with ground
+	Vector2						m_pivotOffset;	// offset relative center
 	bool						m_visible;
 	bool						m_staticObject;
 	bool						m_followVisibility = false;

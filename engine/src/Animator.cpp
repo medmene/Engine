@@ -87,7 +87,7 @@ void Animation::Update(float dt)
 Animator::Animator(pugi::xml_document * doc)
 {
 	auto rootNode = doc->child("object");
-	auto sizeNode = rootNode.child("animSize");
+	auto sizeNode = rootNode.child("anim_size");
 	
 	m_objectSize.x = std::stoi(sizeNode.attribute("x").value());
 	m_objectSize.y = std::stoi(sizeNode.attribute("y").value());

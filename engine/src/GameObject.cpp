@@ -14,6 +14,8 @@ GameObject::GameObject()
 	, m_position(0, 0)
 	, m_relativePos(0, 0)
 	, m_size(0, 0)
+	, m_pivot(0, 0)
+	, m_pivotOffset(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
 {
@@ -57,18 +59,24 @@ bool GameObject::CreateSettings(const string & src)
 				+ ResourceManager::instance()->GetType(m_resourceTexture->GetType())).c_str();
 
 			// Node 2. - size
-			auto objSizeChild = rootNode.append_child("objSize");
+			auto objSizeChild = rootNode.append_child("obj_size");
 			objSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
 			objSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
 			objSizeChild.append_attribute("annotation") = "This is size for saving";
 
 			// Node 3. - size
-			auto animSizeChild = rootNode.append_child("animSize");
+			auto animSizeChild = rootNode.append_child("anim_size");
 			animSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
 			animSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
 			animSizeChild.append_attribute("annotation") = "This is size of real frame in image";
 
-			// Node 4. - default animation
+			// Node 3. - size
+			auto pivotOffset = rootNode.append_child("pivot_offset");
+			pivotOffset.append_attribute("x") = "0";
+			pivotOffset.append_attribute("y") = "0";
+			animSizeChild.append_attribute("annotation") = "Point to connect with ground, relative center";
+			
+			// Node 5. - default animation
 			auto node = rootNode.append_child("animation");
 			node.append_attribute("name") = "default";
 			node.append_attribute("row") = "0";
@@ -103,9 +111,13 @@ bool GameObject::LoadSettings()
 	doc.load_file(m_resourceSettings->GetPath().c_str());
 	auto rootNode = doc.child("object");
 
-	auto sizeNode = rootNode.child("objSize");
+	auto sizeNode = rootNode.child("obj_size");
 	m_size.x = std::stoi(sizeNode.attribute("x").value());
 	m_size.y = std::stoi(sizeNode.attribute("y").value());
+
+	auto pivotNode = rootNode.child("pivot_offset");
+	m_pivot.x = std::stoi(pivotNode.attribute("x").value());
+	m_pivot.y = std::stoi(pivotNode.attribute("y").value());
 
 	auto sourceNode = rootNode.child("source");
 	m_resourceTexture = ResourceManager::instance()->GetResource(sourceNode.attribute("name").value());
@@ -217,6 +229,7 @@ void GameObject::UpdateSize(const Vector2 & size)
 		m_size = size;
 		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
 		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+		m_pivot = m_center + m_pivotOffset;
 	}
 }
 
@@ -227,6 +240,7 @@ void GameObject::UpdatePos(const Vector2 & pos)
 		m_position = pos;
 		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
 		m_center = Vector2(m_position.x + m_rect.w / 2, m_position.y + m_rect.h / 2);
+		m_pivot = m_center + m_pivotOffset;
 	}
 }
 
@@ -237,6 +251,7 @@ void GameObject::UpdateCenterPos(const Vector2& pos)
 		m_position = Vector2(pos.x - m_size.x / 2, pos.y - m_size.y / 2);
 		m_rect = { (int)m_position.x, (int)m_position.y, (int)m_size.x, (int)m_size.y };
 		m_center = pos;
+		m_pivot = m_center + m_pivotOffset;
 	}
 }
 

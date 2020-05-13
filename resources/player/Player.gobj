@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <object>
 	<source name="playerAnims.png" />
-	<objSize x="90" y="120" />
-	<animSize x="225" y="300" />
+	<obj_size x="90" y="120" />
+	<anim_size x="225" y="300" />
+	<pivot_offset x="0" y="0" annotation="Point to connect with ground, relative center" />
 	<animation name="going_right" row="0" count="7" loop="true" speed="100" next_state="" />
 	<animation name="going_left" row="1" count="7" loop="true" speed="100" next_state="" />
 	<animation name="going_top" row="2" count="7" loop="true" speed="100" next_state="" />

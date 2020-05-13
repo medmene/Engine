@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <object>
 	<source name="Alien1.png" />
-	<objSize x="527" y="500" />
-	<animSize x="527" y="500" />
+	<obj_size x="527" y="500" />
+	<anim_size x="527" y="500" />
+	<pivot_offset x="0" y="0" annotation="Point to connect with ground, relative center" />
 	<animation name="idle" row="0" count="3" loop="true" speed="100" next_state="" />
 </object>

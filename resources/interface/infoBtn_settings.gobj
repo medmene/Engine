@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <object>
 	<source name="infoBtn.png" />
-	<objSize x="32" y="32" />
-	<animSize x="384" y="384" />
+	<obj_size x="32" y="32" />
+	<anim_size x="384" y="384" />
+	<pivot_offset x="0" y="0" annotation="Point to connect with ground, relative center" />
 	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
 </object>
