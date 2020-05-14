@@ -5,6 +5,7 @@
 #include "include/PassabilityMap.h"
 #include "include/Camera.h"
 #include "include/TextBubble.h"
+#include "include/BehaviourController.h"
 
 
 Player::Player(const string & src)
@@ -13,6 +14,8 @@ Player::Player(const string & src)
 	, m_velocity(0, 0)
 	, m_velocityConst(0.16f, 0.12f)
 	, m_noclip(false)
+	, m_lastDirection(4)
+	, m_running(false)
 {
 	SetAnimationEnable(true);
 	GetAnimator()->GetActiveAnimation()->Play();
@@ -54,13 +57,16 @@ void Player::Update(float dt)
 	GameObject::Update(dt);
 	m_bubble->Update(dt);
 
-	m_velocity.x = 0;
-	m_velocity.y = 0;
+	m_velocity = Vector2::zero;
 	
 	if (KeyboardInput::instance()->GetKeyMap().empty()) 
 	{
-		m_velocity.x = 0;
-		m_velocity.y = 0;
+		m_velocity = Vector2::zero;
+		string animName3 = DirectionAnimations::GetDirectionAnimation(DirectionAnimations::IDLE, m_lastDirection);
+		if (!GetAnimator()->IsAnimationPlaying(animName3))
+		{
+			GetAnimator()->PlayAnimation(animName3);
+		}
 	}
 	else 
 	{
@@ -68,6 +74,7 @@ void Player::Update(float dt)
 		
 		if (m_velocity != Vector2::zero)
 		{
+			m_lastDirection = DirectionAnimations::VelocityToDirection(m_velocity);
 			if (m_noclip)
 			{
 				m_passabilityArea->UpdatePos(GetPivotPos());

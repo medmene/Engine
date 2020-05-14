@@ -26,7 +26,9 @@ private:
 	bool							m_drawPassability = false;
 	TextBubble					  * m_bubble = nullptr;
 	bool							m_noclip;
-
+	int								m_lastDirection;
+	bool							m_running;
+	
 	void UpdateVelocity();
 	void ManageDebugInfo();
 };

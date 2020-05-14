@@ -4,9 +4,60 @@
 #include "include/PassabilityMap.h"
 #include "include/KeyboardInput.h"
 #include "include/Camera.h"
-#include "include/Animator.h"
 #include "include/TextBubble.h"
 
+
+map<int, string> DirectionAnimations::m_directionsOfAnimations;
+int DirectionAnimations::m_dirs[3][3];
+
+void DirectionAnimations::CollectAnimations()
+{
+	m_directionsOfAnimations[0] = "_left";
+	m_directionsOfAnimations[1] = "_top_left";
+	m_directionsOfAnimations[2] = "_top";
+	m_directionsOfAnimations[3] = "_top_right";
+	m_directionsOfAnimations[4] = "_right";
+	m_directionsOfAnimations[5] = "_bottom_right";
+	m_directionsOfAnimations[6] = "_bottom";
+	m_directionsOfAnimations[7] = "_bottom_left";
+
+	m_dirs[0][0] = 1;
+	m_dirs[0][1] = 0;
+	m_dirs[0][2] = 7;
+	m_dirs[1][0] = 2;
+	m_dirs[1][2] = 6;
+	m_dirs[2][0] = 3;
+	m_dirs[2][1] = 4;
+	m_dirs[2][2] = 5;
+}
+
+string DirectionAnimations::GetDirectionAnimation(MovingState state, int direction)
+{
+	string anim;
+	switch (state)
+	{
+	case RUNNING:
+		anim += "running";
+		break;
+	case GOING:
+		anim += "going";
+		break;
+	case IDLE:
+		anim += "idle";
+		break;
+	}
+	return anim + m_directionsOfAnimations[direction];
+}
+
+int DirectionAnimations::VelocityToDirection(const Vector2& velocity)
+{
+	int signX = (velocity.x > 0) - (velocity.x < 0) + 1; // 0 1 2
+	int signY = (velocity.y > 0) - (velocity.y < 0) + 1; // 0 1 2
+
+	return m_dirs[signX][signY];
+}
+
+// ---------------------------------------------------------------------------------- //
 
 BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	: m_renderer(r)
@@ -19,10 +70,7 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 {
 	m_ownerObj = dynamic_cast<GameObject *>(owner);
 	
-	CollectAnimations();
-	
-	m_movingController = make_shared<MovingController>(r, owner, m_normalSpeed);
-	m_movingController->SetAnimationMap(m_directionsOfAnimations);
+	m_movingController = make_shared<MovingController>(this, r, owner, m_normalSpeed);
 	m_currentState = UNDEFINED;
 	m_anchorPoint = m_ownerObj->GetCenterPos();
 	
@@ -191,35 +239,5 @@ void BehaviourController::Render()
 		rct.y = rct.y + diff.y;
 		
 		SDL_RenderFillRect(m_renderer, &rct);
-	}
-}
-
-void BehaviourController::CollectAnimations()
-{
-	map<int, string> tmp;
-	tmp[0] = "_left";
-	tmp[1] = "_top_left";
-	tmp[2] = "_top";
-	tmp[3] = "_top_right";
-	tmp[4] = "_right";
-	tmp[5] = "_bottom_right";
-	tmp[6] = "_bottom";
-	tmp[7] = "_bottom_left";
-
-	if (m_owner && m_ownerObj)
-	{
-		auto allAnims = m_ownerObj->GetAnimator()->GetAllAnimations();
-		for (auto && item : tmp)
-		{
-			for (auto && anim : allAnims)
-			{
-				auto pos = anim->GetName().find(item.second);
-				if (pos != string::npos)
-				{
-					m_directionsOfAnimations[item.first] = anim->GetName();
-					break;
-				}
-			}
-		}
 	}
 }

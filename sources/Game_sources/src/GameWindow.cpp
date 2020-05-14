@@ -8,6 +8,7 @@
 #include "include/PassabilityMap.h"
 #include "include/SoundManager.h"
 #include "Game_sources/include/Level1.h"
+#include "include/BehaviourController.h"
 
 GameWindow * GameWindow::sm_instance = nullptr;
 
@@ -61,6 +62,7 @@ GameWindow* GameWindow::instance()
 
 void GameWindow::Initialize()
 {
+	DirectionAnimations::CollectAnimations();
 	LadderArea::SetupAreaSettings(0.8f, 0.8f);
 	BaseObject::SetupRendered(m_renderer);
 	BaseWindow::Setup(m_renderer, m_windowSize);

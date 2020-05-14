@@ -6,6 +6,7 @@
 #include "include/Camera.h"
 #include "include/Animator.h"
 #include "include/PassabilityMap.h"
+#include "include/BehaviourController.h"
 
 
 MovingController::MovingController()
@@ -20,7 +21,7 @@ MovingController::MovingController()
 {
 }
 
-MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float speedMod)
+MovingController::MovingController(BehaviourController *ctrl, SDL_Renderer *r, ICharacter * owner, float speedMod)
 	: m_speedModifier(speedMod)
 	, m_curSpeed(Vector2::zero)
 	, m_searching(false)
@@ -31,17 +32,9 @@ MovingController::MovingController(SDL_Renderer *r, ICharacter * owner, float sp
 	, m_visualisation(false)
 {
 	m_renderer = r;
-
-	m_ownerObj = dynamic_cast<GameObject *>(owner);
+	m_behaviour = ctrl;
 	
-	m_dirs[0][0] = 1;
-	m_dirs[0][1] = 0;
-	m_dirs[0][2] = 7;
-	m_dirs[1][0] = 2;
-	m_dirs[1][2] = 6;
-	m_dirs[2][0] = 3;
-	m_dirs[2][1] = 4;
-	m_dirs[2][2] = 5;
+	m_ownerObj = dynamic_cast<GameObject *>(owner);
 	
 	m_finder = new PathFinder();
 }
@@ -94,12 +87,13 @@ void MovingController::Update(float dt)
 			auto oldPos = m_ownerObj->GetCenterPos();
 			auto velocity = m_movingPath[m_pathIndex] - oldPos;
 			float velocityLen = velocity.length();
-
-			int signX = (velocity.x > 0) - (velocity.x < 0) + 1; // 0 1 2
-			int signY = (velocity.y > 0) - (velocity.y < 0) + 1; // 0 1 2
-
-			m_lastDir = m_dirs[signX][signY];
-			string animName = m_directionsOfAnimations[m_lastDir];
+			m_lastDir = DirectionAnimations::VelocityToDirection(velocity);
+			
+			DirectionAnimations::MovingState state = m_behaviour && m_behaviour->IsRunning()
+				? DirectionAnimations::RUNNING
+				: DirectionAnimations::GOING;
+			string animName = DirectionAnimations::GetDirectionAnimation(state, m_lastDir);
+			
 			if (!m_ownerObj->GetAnimator()->IsAnimationPlaying(animName))
 			{
 				m_ownerObj->GetAnimator()->PlayAnimation(animName);
