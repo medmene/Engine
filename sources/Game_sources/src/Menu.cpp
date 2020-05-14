@@ -12,6 +12,7 @@ Menu::Menu(shared_ptr<WindowManager> wm)
 	: LevelBase(wm)
 {
 	m_windowName = "game_menu";
+	m_useSort = false;
 }
 
 void Menu::Run()

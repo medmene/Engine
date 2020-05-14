@@ -17,5 +17,10 @@ public:
 	void Render() override;
 	
 protected:
+	vector<GameObject*>			m_groundObjects;
 	vector<GameObject*>			m_objects;
+
+	bool						m_useSort;
+	
+	static bool SortComparer(const GameObject* lhs, const GameObject* rhs);
 };

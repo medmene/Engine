@@ -18,16 +18,10 @@ Level1::Level1(shared_ptr<WindowManager> wm)
 void Level1::Run()
 {
 	PassabilityMap::instance()->SetMap("passability1.pmap");
-	if (auto player = GameWindow::instance()->GetPlayer())
-	{
-		p = GameWindow::instance()->GetPlayer();
-		p->UpdatePos({ 530,300 });
-		player->SetVisible(true);
-	}
 
-	m_objects.emplace_back(new GameObject("level1_back_settings.gobj"));
-	m_objects.back()->UpdateSize(Vector2(1600,1200));
-	m_objects.back()->UpdatePos(Vector2(0, 0));
+	m_groundObjects.emplace_back(new GameObject("level1_back_settings.gobj"));
+	m_groundObjects.back()->UpdateSize(Vector2(1600,1200));
+	m_groundObjects.back()->UpdatePos(Vector2(0, 0));
 	
 	// Initialize NPC
 	auto npc1 = new NPC("alien1.gobj");
@@ -48,6 +42,12 @@ void Level1::Run()
 	npc2->GetBehviourController()->SetAnchorArea(Vector2(8, 8));
 	m_objects.emplace_back(npc2);
 
-	m_objects.emplace_back(p);
+	if (auto player = GameWindow::instance()->GetPlayer())
+	{
+		player->UpdatePos({ 530,300 });
+		player->SetVisible(true);
+		pl = player;
+		m_objects.emplace_back(pl);
+	}
 	LevelBase::Run();
 }

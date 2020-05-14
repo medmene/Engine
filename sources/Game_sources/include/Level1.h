@@ -10,5 +10,5 @@ public:
 	
 	void Run() override;
 private:
-	Player * p = nullptr;
+	Player * pl = nullptr;
 };

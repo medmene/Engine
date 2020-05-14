@@ -142,7 +142,6 @@ void BehaviourController::OnStateTalkEntering()
 	if (m_owner->GetTextObject())
 	{
 		m_owner->GetTextObject()->SetVisible(true);
-		// m_owner->GetTextObject()->SetText("Xocesh eshe etix magkix fransuzkix bulochek");
 		m_owner->GetTextObject()->SetText(u"Хочешь ещё этих сладких булочек");
 	}
 }
