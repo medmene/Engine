@@ -7,6 +7,7 @@
 #include "include/Animator.h"
 #include "include/PassabilityMap.h"
 #include "include/BehaviourController.h"
+#include "include/DirectionSettings.h"
 
 
 MovingController::MovingController()
@@ -87,12 +88,12 @@ void MovingController::Update(float dt)
 			auto oldPos = m_ownerObj->GetCenterPos();
 			auto velocity = m_movingPath[m_pathIndex] - oldPos;
 			float velocityLen = velocity.length();
-			m_lastDir = DirectionAnimations::VelocityToDirection(velocity);
+			m_lastDir = DirectionSettings::VelocityToDirection(velocity);
 			
-			DirectionAnimations::MovingState state = m_behaviour && m_behaviour->IsRunning()
-				? DirectionAnimations::RUNNING
-				: DirectionAnimations::GOING;
-			string animName = DirectionAnimations::GetDirectionAnimation(state, m_lastDir);
+			DirectionSettings::MovingState state = m_behaviour && m_behaviour->IsRunning()
+				? DirectionSettings::RUNNING
+				: DirectionSettings::GOING;
+			string animName = DirectionSettings::GetDirectionAnimation(state, m_lastDir);
 			
 			if (!m_ownerObj->GetAnimator()->IsAnimationPlaying(animName))
 			{
@@ -114,6 +115,13 @@ void MovingController::Update(float dt)
 				m_pathIndex++;
 				if (m_pathIndex == m_movingPath.size())
 				{
+					// TODO add play idle animation here
+					animName = DirectionSettings::GetDirectionAnimation(DirectionSettings::IDLE, m_lastDir);
+					if (!m_ownerObj->GetAnimator()->IsAnimationPlaying(animName))
+					{
+						m_ownerObj->GetAnimator()->PlayAnimation(animName);
+					}
+					
 					m_movingPath.clear();
 					m_moving = false;
 				}

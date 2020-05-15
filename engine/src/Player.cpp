@@ -62,7 +62,7 @@ void Player::Update(float dt)
 	if (KeyboardInput::instance()->GetKeyMap().empty()) 
 	{
 		m_velocity = Vector2::zero;
-		string animName3 = DirectionAnimations::GetDirectionAnimation(DirectionAnimations::IDLE, m_lastDirection);
+		string animName3 = DirectionSettings::GetDirectionAnimation(DirectionSettings::IDLE, m_lastDirection);
 		if (!GetAnimator()->IsAnimationPlaying(animName3))
 		{
 			GetAnimator()->PlayAnimation(animName3);
@@ -74,7 +74,7 @@ void Player::Update(float dt)
 		
 		if (m_velocity != Vector2::zero)
 		{
-			m_lastDirection = DirectionAnimations::VelocityToDirection(m_velocity);
+			m_lastDirection = DirectionSettings::VelocityToDirection(m_velocity);
 			if (m_noclip)
 			{
 				m_passabilityArea->UpdatePos(GetPivotPos());

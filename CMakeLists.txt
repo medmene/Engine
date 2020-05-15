@@ -127,6 +127,7 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/BaseObject.h
 	engine/include/BaseWindow.h
 	engine/include/Areas.h
+	engine/include/DirectionSettings.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC
@@ -155,6 +156,7 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/BaseObject.cpp
 	engine/src/BaseWindow.cpp
 	engine/src/Areas.cpp
+	engine/src/DirectionSettings.cpp
 )
 
 # Include Engine

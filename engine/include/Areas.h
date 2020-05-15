@@ -20,6 +20,14 @@ private:
 	vector<Vector2>		m_worldPos;
 };
 
+class TriggerArea
+{
+public:
+	TriggerArea();
+private:
+	vector<Vector2>			m_corners;
+};
+
 class LadderArea
 {
 public:
