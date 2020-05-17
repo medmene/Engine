@@ -128,6 +128,7 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/BaseWindow.h
 	engine/include/Areas.h
 	engine/include/DirectionSettings.h
+	engine/include/TextManager.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC
@@ -157,6 +158,7 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/BaseWindow.cpp
 	engine/src/Areas.cpp
 	engine/src/DirectionSettings.cpp
+	engine/src/TextManager.cpp
 )
 
 # Include Engine
