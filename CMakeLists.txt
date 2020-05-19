@@ -129,6 +129,7 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/Areas.h
 	engine/include/DirectionSettings.h
 	engine/include/TextManager.h
+	engine/include/ActionMap.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC

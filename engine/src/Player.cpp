@@ -5,7 +5,7 @@
 #include "include/PassabilityMap.h"
 #include "include/Camera.h"
 #include "include/TextBubble.h"
-#include "include/BehaviourController.h"
+#include "include/DirectionSettings.h"
 
 
 Player::Player(const string & src)
