@@ -18,6 +18,8 @@ GameObject::GameObject()
 	, m_pivotOffset(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
+	, m_followVisibility(false)
+	, m_followStatic(false)
 {
 }
 
@@ -148,6 +150,8 @@ GameObject::GameObject(const string & src)
 	, m_relativePos(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
+	, m_followVisibility(false)
+	, m_followStatic(false)
 {
 	auto res = ResourceManager::instance()->GetResource(src);
 	

@@ -10,8 +10,8 @@ public:
 	PassabilityArea(const Vector2 & pos, float rad);
 	void UpdatePos(const Vector2 & pos);
 
-	vector<Vector2> GetWorldPoses() { return m_worldPos; }
-	Vector2 GetPos() { return m_pos; }
+	vector<Vector2> GetWorldPoses() const { return m_worldPos; }
+	Vector2 GetPos() const { return m_pos; }
 	float GetRadius() { return m_radius; }
 
 private:

@@ -34,7 +34,7 @@ public:
 	void SetRunSpeed(float speed) { m_runSpeed = speed; }
 	void SetFreeBehaviour(bool free) { m_freeBehaviour = free; }
 	
-	Vector2 GetAnchorPoint() { return m_anchorPoint; }
+	Vector2 GetAnchorPoint() const { return m_anchorPoint; }
 	float GetNormalSpeed() { return m_normalSpeed; }
 	float GetRunSpeed() { return m_runSpeed; }
 	

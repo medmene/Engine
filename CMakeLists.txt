@@ -121,7 +121,6 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/KeyboardBinds.h
 	engine/include/BehaviourController.h
 	engine/include/TextBubble.h
-	engine/include/GameModeChangeController.h
 	engine/include/Window.h
 	engine/include/WindowManager.h
 	engine/include/BaseObject.h
@@ -152,7 +151,6 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/SoundManager.cpp
 	engine/src/BehaviourController.cpp
 	engine/src/TextBubble.cpp
-	engine/src/GameModeChangeController.cpp
 	engine/src/Window.cpp
 	engine/src/WindowManager.cpp
 	engine/src/BaseObject.cpp

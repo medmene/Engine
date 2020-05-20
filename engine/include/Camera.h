@@ -13,10 +13,10 @@ public:
 	bool IsZoomEnabled() { return m_zoomEnabled; }
 	void SetFollowingObject(GameObject * obj) { m_followingObject = obj; }
 	
-	Vector2 GetDiff() { return m_posInWindow - m_position * GetZoom(); }
-	Vector2 GetPosInWnd() { return m_posInWindow; }
-	Vector2 GetPos() { return m_position; }
-	float GetZoom() { return m_zoom; }
+	Vector2 GetDiff() const { return m_posInWindow - m_position * GetZoom(); }
+	Vector2 GetPosInWnd() const { return m_posInWindow; }
+	Vector2 GetPos() const { return m_position; }
+	float GetZoom() const { return m_zoom; }
 
 	void UpdateZoom(int zoomDir);
 	void Update(float dt);

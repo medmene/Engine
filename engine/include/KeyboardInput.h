@@ -14,8 +14,8 @@ public:
 	State GetState() { return m_state; }
 	Key GetKey() { return m_key; }
 	
-	const vector<int> & GetKeyModMap() { return m_keyModMap; }
-	const vector<int> & GetKeyMap() { return m_keyMap; }
+	vector<int> GetKeyModMap() const { return m_keyModMap; }
+	vector<int> GetKeyMap() const { return m_keyMap; }
 	bool IsKeyPressed(int key);
 	bool IsModActive(int mod);
 

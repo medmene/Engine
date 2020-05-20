@@ -67,8 +67,8 @@ protected:
 	Vector2						m_pivotOffset;	// offset relative center
 	bool						m_visible;
 	bool						m_staticObject;
-	bool						m_followVisibility = false;
-	bool						m_followStatic = false;
+	bool						m_followVisibility;
+	bool						m_followStatic;
 
 	Animator				  * m_animator = nullptr;
 };

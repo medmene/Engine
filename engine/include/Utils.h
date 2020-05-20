@@ -6,37 +6,69 @@ using std::ostringstream;
 
 namespace Utils 
 {
-	inline vector<string> split(const string & _src, char _delilm)
+	inline vector<string> split(const string& str, const string& delim)
 	{
-		vector<string> elems;
-		stringstream ss(_src + ' ');
-		string item;
-		while (getline(ss, item, _delilm))
+		vector<string> out;
+		std::size_t current, previous = 0;
+		current = str.find(delim);
+		while (current != std::string::npos) 
 		{
-			elems.emplace_back(item);
+			out.push_back(str.substr(previous, current - previous));
+			previous = current + 1;
+			current = str.find(delim, previous);
 		}
-		return elems;
+		out.push_back(str.substr(previous, current - previous));
+		return out;
 	}
-	inline vector<wstring> split(const wstring & _src, wchar_t _delilm)
+	inline vector<string> split(const string& str, char delim)
 	{
-		vector<wstring> elems;
-		std::wstringstream ss(_src + L' ');
-		wstring item;
-		while (getline(ss, item, _delilm))
-		{
-			elems.emplace_back(item);
-		}
-		return elems;
+		return split(str, std::to_string(delim));
 	}
-	inline vector<u16string> split(const u16string & _src, char16_t _delilm)
+	
+	inline vector<wstring> split(const wstring & str, const wstring & delim)
 	{
-		vector<u16string> elems;
-		std::basic_stringstream<char16_t> ss(_src + u' ');
-		u16string item;
-		while (getline(ss, item, _delilm))
+		vector<wstring> out;
+		std::size_t current, previous = 0;
+		current = str.find(delim);
+		while (current != std::string::npos)
 		{
-			elems.emplace_back(item);
+			out.push_back(str.substr(previous, current - previous));
+			previous = current + 1;
+			current = str.find(delim, previous);
 		}
-		return elems;
+		out.push_back(str.substr(previous, current - previous));
+		return out;
+	}
+	inline vector<wstring> split(const wstring & str, wchar_t delim)
+	{
+		return split(str, std::to_wstring(delim));
+	}
+	inline vector<u16string> split(const u16string & str, char16_t delim)
+	{
+		vector<u16string> out;
+		std::size_t current, previous = 0;
+		current = str.find(delim);
+		while (current != std::string::npos)
+		{
+			out.push_back(str.substr(previous, current - previous));
+			previous = current + 1;
+			current = str.find(delim, previous);
+		}
+		out.push_back(str.substr(previous, current - previous));
+		return out;
+	}
+	inline vector<u16string> split(const u16string & str, const u16string & delim)
+	{
+		vector<u16string> out;
+		std::size_t current, previous = 0;
+		current = str.find(delim);
+		while (current != std::string::npos)
+		{
+			out.push_back(str.substr(previous, current - previous));
+			previous = current + 1;
+			current = str.find(delim, previous);
+		}
+		out.push_back(str.substr(previous, current - previous));
+		return out;
 	}
 }
