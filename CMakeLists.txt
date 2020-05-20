@@ -129,6 +129,8 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/DirectionSettings.h
 	engine/include/TextManager.h
 	engine/include/ActionMap.h
+	engine/include/ScriptManager.h
+	engine/include/FunctionParam.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC
@@ -158,6 +160,7 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/Areas.cpp
 	engine/src/DirectionSettings.cpp
 	engine/src/TextManager.cpp
+	engine/src/ScriptManager.cpp
 )
 
 # Include Engine

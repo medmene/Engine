@@ -1,7 +1,5 @@
 #pragma once
-#include "base_defs.h"
-
-
+#include "FunctionParam.h"
 
 template <class Key>
 class ActionMap
@@ -10,13 +8,13 @@ class ActionMap
 public:
 	void Call(const Key & key);
 
-	void AddAction(const Key & key, const std::function<void()>& action);
+	void AddAction(const Key & key, const std::function<void(vector<FunctionParamWrapper>)>& action);
 	
 	void Clear(const Key & key);
 	void Clear();
 private:
 	
-	multimap<Key, std::function<void()>> m_actions;
+	multimap<Key, std::function<void(vector<FunctionParamWrapper>)>> m_actions;
 };
 
 template <class Key>
@@ -33,7 +31,7 @@ void ActionMap<Key>::Call(const Key& key)
 }
 
 template <class Key>
-void ActionMap<Key>::AddAction(const Key& key, const std::function<void()>& action)
+void ActionMap<Key>::AddAction(const Key& key, const std::function<void(vector<FunctionParamWrapper>)>& action)
 {
 	if (action)
 	{
