@@ -23,7 +23,7 @@ private:
 class TriggerArea
 {
 public:
-	TriggerArea();
+	TriggerArea() = default;
 private:
 	vector<Vector2>			m_corners;
 };

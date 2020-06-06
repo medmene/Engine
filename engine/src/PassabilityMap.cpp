@@ -136,15 +136,147 @@ bool PassabilityMap::LoadMap()
 				
 				m_nodes[tx][ty]->UpdateRect();
 			}
-
 			m_nodeSize = m_nodes[0][0]->GetSize();
-
 			in.close();
+
+			UpdateMapTexture();
 
 			return true;
 		}
 	}
 	return false;
+}
+
+void PassabilityMap::UpdateMapTexture()
+{
+	if (m_mapSurface) 
+	{
+		SDL_FreeSurface(m_mapSurface);
+		m_mapSurface = nullptr;
+	}
+
+	if (m_mapTexture) 
+	{
+		SDL_DestroyTexture(m_mapTexture);
+		m_mapTexture = nullptr;
+	}
+
+	Vector2 sfSize = Vector2(m_mapSize.x * m_nodeSize.x, m_mapSize.y * m_nodeSize.y);
+	m_mapSurface = SDL_CreateRGBSurface(0, static_cast<int>(sfSize.x), static_cast<int>(sfSize.y), 32, 0, 0, 0, 0);
+	SDL_SetSurfaceBlendMode(m_mapSurface, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+
+	if (m_mapSurface)
+	{
+		auto emptyNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
+		auto ladderNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
+		auto triggerNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
+		auto notPassibleNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
+		SDL_SetSurfaceBlendMode(emptyNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+		SDL_SetSurfaceBlendMode(ladderNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+		SDL_SetSurfaceBlendMode(triggerNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+		SDL_SetSurfaceBlendMode(notPassibleNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+
+		if (emptyNode && ladderNode && notPassibleNode && triggerNode)
+		{
+			auto set_pixel = [](SDL_Surface *surface, int x, int y, Uint32 pixel)
+			{
+				int bpp = surface->format->BytesPerPixel;
+				/* Here p is the address to the pixel we want to set */
+				Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+				switch (bpp) {
+				case 1:
+					*p = pixel;
+					break;
+
+				case 2:
+					*(Uint16 *)p = pixel;
+					break;
+
+				case 3:
+					if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+						p[0] = (pixel >> 16) & 0xff;
+						p[1] = (pixel >> 8) & 0xff;
+						p[2] = pixel & 0xff;
+					}
+					else {
+						p[0] = pixel & 0xff;
+						p[1] = (pixel >> 8) & 0xff;
+						p[2] = (pixel >> 16) & 0xff;
+					}
+					break;
+
+				case 4:
+					*(Uint32 *)p = pixel;
+					break;
+				}
+			};
+
+			// Fill node with pixels
+			for (int x = 0; x < m_nodeSize.x; ++x)
+			{
+				for (int y = 0; y < m_nodeSize.y; ++y)
+				{
+					// background
+					set_pixel(notPassibleNode, x, y, 0x00FA0064);
+					set_pixel(ladderNode, x, y, 0x1879D3E6);
+					set_pixel(triggerNode, x, y, 0xCD18FF64);
+
+					// borders
+					if (y == 0 || y == m_nodeSize.y - 1) 
+					{
+						set_pixel(emptyNode, x, y, 0x00FA0064);
+						set_pixel(notPassibleNode, x, y, 0x00FA0064);
+						set_pixel(ladderNode, x, y, 0x00FA0064);
+						set_pixel(triggerNode, x, y, 0x00FA0064);
+					}
+					if (x == 0 || x == m_nodeSize.x - 1)
+					{
+						set_pixel(emptyNode, x, y, 0x00FA0064);
+						set_pixel(notPassibleNode, x, y, 0x00FA0064);
+						set_pixel(ladderNode, x, y, 0x00FA0064);
+						set_pixel(triggerNode, x, y, 0x00FA0064);
+					}
+				}
+			}
+
+			// Fill map with nodes
+			for (int x = 0; x < m_mapSize.x; ++x)
+			{
+				for (int y = 0; y < m_mapSize.y; ++y)
+				{
+					SDL_Rect destRect;
+					destRect.w = m_nodeSize.x;
+					destRect.h = m_nodeSize.y;
+					destRect.x = m_nodes[x][y]->GetPos().x + m_indexOffset.x * m_nodeSize.x;
+					destRect.y = m_nodes[x][y]->GetPos().y + m_indexOffset.y * m_nodeSize.y;
+					switch (m_nodes[x][y]->GetType())
+					{
+					case PASSIBLE_AREA:
+						SDL_BlitSurface(m_mapSurface, nullptr, emptyNode, &destRect);
+						break;
+					case IMPASSIBLE_AREA:
+						SDL_BlitSurface(m_mapSurface, nullptr, notPassibleNode, &destRect);
+						break;
+					case TRIGGER_AREA:
+						SDL_BlitSurface(m_mapSurface, nullptr, triggerNode, &destRect);
+						break;
+					case LADDER_AREA:
+						SDL_BlitSurface(m_mapSurface, nullptr, ladderNode, &destRect);
+						break;
+					}
+				}
+			}
+
+			m_mapTexture = SDL_CreateTextureFromSurface(m_renderer, m_mapSurface);
+			SDL_SetTextureBlendMode(m_mapTexture, SDL_BLENDMODE_BLEND);
+
+			SDL_FreeSurface(emptyNode);
+			SDL_FreeSurface(ladderNode);
+			SDL_FreeSurface(triggerNode);
+			SDL_FreeSurface(notPassibleNode);
+		}
+	}
 }
 
 void PassabilityMap::SetMap(const string& src)
@@ -241,42 +373,42 @@ void PassabilityMap::Update()
 	
 	if (m_editMode && MouseInput::instance()->GetState() == MouseInput::MOUSE_BUTTON_DOWN)
 	{
-		auto pos = MouseInput::instance()->GetPosInMap();
+		ProcessMouse();
+	}
+}
 
-		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
-		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
+void PassabilityMap::ProcessMouse()
+{
+	auto pos = WorldToNodeIndex(MouseInput::instance()->GetPosInMap());
 
-		for (int x = stPosX; x < endPosX; ++x)
+	if (m_nodes[pos.x][pos.y]->IsInside(MouseInput::instance()->GetPosInMap()))
+	{
+		if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_LEFT)
 		{
-			for (int y = stPosY; y < endPosY; ++y)
+			auto keys = KeyboardInput::instance()->GetKeyMap();
+			if (keys.empty())
 			{
-				if (m_nodes[x + endPosX][y + endPosY]->IsInside(pos))
+				m_nodes[pos.x][pos.y]->SetType(IMPASSIBLE_AREA);
+				UpdateMapTexture();
+			}
+			else
+			{
+				if (KeyboardInput::instance()->IsKeyPressed(Key1))
 				{
-					if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_LEFT)
-					{
-						auto keys = KeyboardInput::instance()->GetKeyMap();
-						if (keys.empty())
-						{
-							m_nodes[x + endPosX][y + endPosY]->SetType(IMPASSIBLE_AREA);
-						}
-						else
-						{
-							if (KeyboardInput::instance()->IsKeyPressed(Key1))
-							{
-								m_nodes[x + endPosX][y + endPosY]->SetType(TRIGGER_AREA);
-							}
-							else if (KeyboardInput::instance()->IsKeyPressed(Key2))
-							{
-								m_nodes[x + endPosX][y + endPosY]->SetType(LADDER_AREA);
-							}
-						}
-					}
-					else if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
-					{
-						m_nodes[x + endPosX][y + endPosY]->SetType(PASSIBLE_AREA);
-					}
+					m_nodes[pos.x][pos.y]->SetType(TRIGGER_AREA);
+					UpdateMapTexture();
+				}
+				else if (KeyboardInput::instance()->IsKeyPressed(Key2))
+				{
+					m_nodes[pos.x][pos.y]->SetType(LADDER_AREA);
+					UpdateMapTexture();
 				}
 			}
+		}
+		else if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
+		{
+			m_nodes[pos.x][pos.y]->SetType(PASSIBLE_AREA);
+			UpdateMapTexture();
 		}
 	}
 }
@@ -285,47 +417,21 @@ void PassabilityMap::Render()
 {
 	if (m_editMode)
 	{
-		int stPosX = -m_indexOffset.x, endPosX = m_indexOffset.x;
-		int stPosY = -m_indexOffset.y, endPosY = m_indexOffset.y;
+		SDL_Rect localRect = m_mapSurface->clip_rect;
+		localRect.x -= localRect.w / 2;
+		localRect.y -= localRect.h / 2;
 
 		auto diff = Camera::instance()->GetDiff();
-		for (int x = stPosX; x < endPosX; ++x)
-		{
-			for (int y = stPosY; y < endPosY; ++y)
-			{
-				SDL_SetRenderDrawColor(m_renderer, 0, 250, 0, 100);
-				PassabilityNode * nd = m_nodes[x + endPosX][y + endPosY];
-				SDL_Rect localRect = nd->GetRenderRect();
-				
-				// Apply zoom
-				localRect.x *= Camera::instance()->GetZoom();
-				localRect.y *= Camera::instance()->GetZoom();
-				localRect.w *= Camera::instance()->GetZoom();
-				localRect.h *= Camera::instance()->GetZoom();
+		// Apply zoom
+		localRect.x *= Camera::instance()->GetZoom();
+		localRect.y *= Camera::instance()->GetZoom();
+		localRect.w *= Camera::instance()->GetZoom();
+		localRect.h *= Camera::instance()->GetZoom();
 
-				localRect.x = localRect.x + diff.x;
-				localRect.y = localRect.y + diff.y;
-				
-				SDL_RenderDrawRect(m_renderer, &localRect);
+		localRect.x = localRect.x + diff.x;
+		localRect.y = localRect.y + diff.y;
 
-				if (nd->GetType() != PASSIBLE_AREA)
-				{
-					switch (nd->GetType())
-					{
-					case IMPASSIBLE_AREA: break;
-					case TRIGGER_AREA:
-						SDL_SetRenderDrawColor(m_renderer, 205, 24, 255, 100);
-						break;
-					case LADDER_AREA:
-						SDL_SetRenderDrawColor(m_renderer, 24, 121, 221, 230);
-						break;
-					}
-					SDL_RenderFillRect(m_renderer, &localRect);
-				}
-			}
-		}
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 0);
+		SDL_RenderCopy(m_renderer, m_mapTexture, nullptr, &localRect);
 	}
 }
 

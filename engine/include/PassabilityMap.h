@@ -46,9 +46,13 @@ private:
 	bool inline IsInMap(const Vector2 & pos);
 	bool SaveMap();
 	bool LoadMap();
+	void UpdateMapTexture();
+	void ProcessMouse();
 	
 	Resource						  * m_resource = nullptr;
 	SDL_Renderer					  * m_renderer = nullptr;
+	SDL_Surface						  * m_mapSurface = nullptr;
+	SDL_Texture						  * m_mapTexture = nullptr;
 	bool								m_editMode = false;
 	Vector2								m_mapSize;
 	Vector2								m_nodeSize;
