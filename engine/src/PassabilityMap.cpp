@@ -223,7 +223,7 @@ void PassabilityMap::UpdateMapTexture()
 				for (int y = 0; y < m_nodeSize.y; ++y)
 				{
 					// background
-					set_pixel(notPassibleNode, x, y, 0x5000FA00);
+					set_pixel(notPassibleNode, x, y, 0x8800FA00);
 					set_pixel(ladderNode, x, y, 0xE6D37918);
 					set_pixel(triggerNode, x, y, 0x64FF18CD);
 
