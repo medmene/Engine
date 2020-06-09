@@ -161,16 +161,21 @@ void PassabilityMap::UpdateMapTexture()
 		m_mapTexture = nullptr;
 	}
 
+	auto rM = 0x000000ff;
+	auto gM = 0x0000ff00;
+	auto bM = 0x00ff0000;
+	auto aM = 0xff000000;
+
 	Vector2 sfSize = Vector2(m_mapSize.x * m_nodeSize.x, m_mapSize.y * m_nodeSize.y);
-	m_mapSurface = SDL_CreateRGBSurface(0, static_cast<int>(sfSize.x), static_cast<int>(sfSize.y), 32, 0, 0, 0, 0);
-	SDL_SetSurfaceBlendMode(m_mapSurface, SDL_BlendMode::SDL_BLENDMODE_BLEND);
+	m_mapSurface = SDL_CreateRGBSurface(0, static_cast<int>(sfSize.x), static_cast<int>(sfSize.y), 
+		32, rM, gM, bM, aM);
 
 	if (m_mapSurface)
 	{
-		auto emptyNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
-		auto ladderNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
-		auto triggerNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
-		auto notPassibleNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, 0, 0, 0, 0);
+		auto emptyNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, rM, gM, bM, aM);
+		auto ladderNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, rM, gM, bM, aM);
+		auto triggerNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, rM, gM, bM, aM);
+		auto notPassibleNode = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, rM, gM, bM, aM);
 		SDL_SetSurfaceBlendMode(emptyNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
 		SDL_SetSurfaceBlendMode(ladderNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
 		SDL_SetSurfaceBlendMode(triggerNode, SDL_BlendMode::SDL_BLENDMODE_BLEND);
@@ -181,7 +186,7 @@ void PassabilityMap::UpdateMapTexture()
 			auto set_pixel = [](SDL_Surface *surface, int x, int y, Uint32 pixel)
 			{
 				int bpp = surface->format->BytesPerPixel;
-				/* Here p is the address to the pixel we want to set */
+				// Here p is the address to the pixel we want to set 
 				Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
 				switch (bpp) {
@@ -218,24 +223,24 @@ void PassabilityMap::UpdateMapTexture()
 				for (int y = 0; y < m_nodeSize.y; ++y)
 				{
 					// background
-					set_pixel(notPassibleNode, x, y, 0x00FA0064);
-					set_pixel(ladderNode, x, y, 0x1879D3E6);
-					set_pixel(triggerNode, x, y, 0xCD18FF64);
+					set_pixel(notPassibleNode, x, y, 0x5000FA00);
+					set_pixel(ladderNode, x, y, 0xE6D37918);
+					set_pixel(triggerNode, x, y, 0x64FF18CD);
 
 					// borders
 					if (y == 0 || y == m_nodeSize.y - 1) 
 					{
-						set_pixel(emptyNode, x, y, 0x00FA0064);
-						set_pixel(notPassibleNode, x, y, 0x00FA0064);
-						set_pixel(ladderNode, x, y, 0x00FA0064);
-						set_pixel(triggerNode, x, y, 0x00FA0064);
+						set_pixel(emptyNode, x, y, 0xA600FA00);
+						set_pixel(notPassibleNode, x, y, 0xA600FA00);
+						set_pixel(ladderNode, x, y, 0xA600FA00);
+						set_pixel(triggerNode, x, y, 0xA600FA00);
 					}
 					if (x == 0 || x == m_nodeSize.x - 1)
 					{
-						set_pixel(emptyNode, x, y, 0x00FA0064);
-						set_pixel(notPassibleNode, x, y, 0x00FA0064);
-						set_pixel(ladderNode, x, y, 0x00FA0064);
-						set_pixel(triggerNode, x, y, 0x00FA0064);
+						set_pixel(emptyNode, x, y, 0xA600FA00);
+						set_pixel(notPassibleNode, x, y, 0xA600FA00);
+						set_pixel(ladderNode, x, y, 0xA600FA00);
+						set_pixel(triggerNode, x, y, 0xA600FA00);
 					}
 				}
 			}
@@ -253,16 +258,16 @@ void PassabilityMap::UpdateMapTexture()
 					switch (m_nodes[x][y]->GetType())
 					{
 					case PASSIBLE_AREA:
-						SDL_BlitSurface(m_mapSurface, nullptr, emptyNode, &destRect);
+						SDL_BlitSurface(emptyNode, nullptr, m_mapSurface, &destRect);
 						break;
 					case IMPASSIBLE_AREA:
-						SDL_BlitSurface(m_mapSurface, nullptr, notPassibleNode, &destRect);
+						SDL_BlitSurface(notPassibleNode, nullptr, m_mapSurface, &destRect);
 						break;
 					case TRIGGER_AREA:
-						SDL_BlitSurface(m_mapSurface, nullptr, triggerNode, &destRect);
+						SDL_BlitSurface(triggerNode, nullptr, m_mapSurface, &destRect);
 						break;
 					case LADDER_AREA:
-						SDL_BlitSurface(m_mapSurface, nullptr, ladderNode, &destRect);
+						SDL_BlitSurface(ladderNode, nullptr, m_mapSurface, &destRect);
 						break;
 					}
 				}
