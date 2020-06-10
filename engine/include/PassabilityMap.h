@@ -46,7 +46,8 @@ private:
 	bool inline IsInMap(const Vector2 & pos);
 	bool SaveMap();
 	bool LoadMap();
-	void UpdateMapTexture();
+	void GenerateMapTexture();
+	void UpdateMapTexture(PassabilityNode * node);
 	void ProcessMouse();
 	
 	Resource						  * m_resource = nullptr;

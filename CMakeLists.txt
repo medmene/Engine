@@ -161,6 +161,7 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/DirectionSettings.cpp
 	engine/src/TextManager.cpp
 	engine/src/ScriptManager.cpp
+	engine/src/ActionMap.cpp
 )
 
 # Include Engine

@@ -51,6 +51,12 @@ PassabilityMap::~PassabilityMap()
 	}
 
 	m_nodes.clear();
+
+	if (m_mapSurface)
+	{
+		SDL_FreeSurface(m_mapSurface);
+		m_mapSurface = nullptr;
+	}
 }
 
 PassabilityMap* PassabilityMap::instance()
@@ -139,7 +145,7 @@ bool PassabilityMap::LoadMap()
 			m_nodeSize = m_nodes[0][0]->GetSize();
 			in.close();
 
-			UpdateMapTexture();
+			GenerateMapTexture();
 
 			return true;
 		}
@@ -147,7 +153,7 @@ bool PassabilityMap::LoadMap()
 	return false;
 }
 
-void PassabilityMap::UpdateMapTexture()
+void PassabilityMap::GenerateMapTexture()
 {
 	if (m_mapSurface) 
 	{
@@ -284,6 +290,93 @@ void PassabilityMap::UpdateMapTexture()
 	}
 }
 
+void PassabilityMap::UpdateMapTexture(PassabilityNode * node)
+{
+	auto rM = 0x000000ff;
+	auto gM = 0x0000ff00;
+	auto bM = 0x00ff0000;
+	auto aM = 0xff000000;
+	auto nodeSf = SDL_CreateRGBSurface(0, static_cast<int>(m_nodeSize.x), static_cast<int>(m_nodeSize.y), 32, rM, gM, bM, aM);
+	SDL_SetSurfaceBlendMode(nodeSf, node->GetType() == PASSIBLE_AREA 
+		? SDL_BlendMode::SDL_BLENDMODE_NONE : SDL_BlendMode::SDL_BLENDMODE_BLEND);
+
+	if (nodeSf) 
+	{
+		auto set_pixel = [](SDL_Surface *surface, int x, int y, Uint32 pixel)
+		{
+			int bpp = surface->format->BytesPerPixel;
+			// Here p is the address to the pixel we want to set 
+			Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+			switch (bpp) {
+			case 1:
+				*p = pixel;
+				break;
+
+			case 2:
+				*(Uint16 *)p = pixel;
+				break;
+
+			case 3:
+				if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+					p[0] = (pixel >> 16) & 0xff;
+					p[1] = (pixel >> 8) & 0xff;
+					p[2] = pixel & 0xff;
+				}
+				else {
+					p[0] = pixel & 0xff;
+					p[1] = (pixel >> 8) & 0xff;
+					p[2] = (pixel >> 16) & 0xff;
+				}
+				break;
+
+			case 4:
+				*(Uint32 *)p = pixel;
+				break;
+			}
+		};
+
+		for (int x = 0; x < m_nodeSize.x; ++x)
+		{
+			for (int y = 0; y < m_nodeSize.y; ++y)
+			{
+				switch (node->GetType())
+				{
+				case IMPASSIBLE_AREA:
+					set_pixel(nodeSf, x, y, 0x8800FA00);
+					break;
+				case TRIGGER_AREA:
+					set_pixel(nodeSf, x, y, 0xE6D37918);
+					break;
+				case LADDER_AREA:
+					set_pixel(nodeSf, x, y, 0x64FF18CD);
+					break;
+				}
+
+				if (y == 0 || y == m_nodeSize.y - 1)
+				{
+					set_pixel(nodeSf, x, y, 0xA600FA00);
+				}
+				if (x == 0 || x == m_nodeSize.x - 1)
+				{
+					set_pixel(nodeSf, x, y, 0xA600FA00);
+				}
+			}
+		}
+
+		SDL_Rect destRect;
+		destRect.w = m_nodeSize.x;
+		destRect.h = m_nodeSize.y;
+		destRect.x = node->GetPos().x + m_indexOffset.x * m_nodeSize.x;
+		destRect.y = node->GetPos().y + m_indexOffset.y * m_nodeSize.y;
+		SDL_BlitSurface(nodeSf, nullptr, m_mapSurface, &destRect);
+
+		SDL_UpdateTexture(m_mapTexture, nullptr, m_mapSurface->pixels, m_mapSurface->pitch);
+
+		SDL_FreeSurface(nodeSf);
+	}
+}
+
 void PassabilityMap::SetMap(const string& src)
 {
 	m_resource = ResourceManager::instance()->GetResource(src);
@@ -385,36 +478,37 @@ void PassabilityMap::Update()
 void PassabilityMap::ProcessMouse()
 {
 	auto pos = WorldToNodeIndex(MouseInput::instance()->GetPosInMap());
-
-	if (m_nodes[pos.x][pos.y]->IsInside(MouseInput::instance()->GetPosInMap()))
+	auto updateNode = [this](PassabilityNode * node, PassabilityMap::AreaTypes type) 
 	{
-		if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_LEFT)
+		if (node->GetType() != type)
 		{
-			auto keys = KeyboardInput::instance()->GetKeyMap();
-			if (keys.empty())
+			node->SetType(type);
+			UpdateMapTexture(node);
+		}
+	};
+
+	if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_LEFT)
+	{
+		auto keys = KeyboardInput::instance()->GetKeyMap();
+		if (keys.empty())
+		{
+			updateNode(m_nodes[pos.x][pos.y], IMPASSIBLE_AREA);
+		}
+		else
+		{
+			if (KeyboardInput::instance()->IsKeyPressed(Key1))
 			{
-				m_nodes[pos.x][pos.y]->SetType(IMPASSIBLE_AREA);
-				UpdateMapTexture();
+				updateNode(m_nodes[pos.x][pos.y], TRIGGER_AREA);
 			}
-			else
+			else if (KeyboardInput::instance()->IsKeyPressed(Key2))
 			{
-				if (KeyboardInput::instance()->IsKeyPressed(Key1))
-				{
-					m_nodes[pos.x][pos.y]->SetType(TRIGGER_AREA);
-					UpdateMapTexture();
-				}
-				else if (KeyboardInput::instance()->IsKeyPressed(Key2))
-				{
-					m_nodes[pos.x][pos.y]->SetType(LADDER_AREA);
-					UpdateMapTexture();
-				}
+				updateNode(m_nodes[pos.x][pos.y], LADDER_AREA);
 			}
 		}
-		else if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
-		{
-			m_nodes[pos.x][pos.y]->SetType(PASSIBLE_AREA);
-			UpdateMapTexture();
-		}
+	}
+	else if (MouseInput::instance()->GetButton() == MouseInput::MOUSE_RIGHT)
+	{
+		updateNode(m_nodes[pos.x][pos.y], PASSIBLE_AREA);
 	}
 }
 
