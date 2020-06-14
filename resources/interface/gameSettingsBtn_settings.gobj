@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<object>
-	<source name="gameSettingsBtn.png" />
-	<obj_size x="40" y="40" />
-	<anim_size x="512" y="512" />
-	<pivot_offset x="0" y="0" annotation="Point to connect with ground, relative center" />
-	<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
-</object>

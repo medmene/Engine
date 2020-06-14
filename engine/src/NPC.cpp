@@ -6,20 +6,32 @@
 #include "include/KeyboardInput.h"
 #include "include/BehaviourController.h"
 #include "include/TextBubble.h"
+#include "pugixml/pugixml.hpp"
 
 
-NPC::NPC(const string & src)
-	: GameObject(src)
+
+
+NPC::NPC(const string & name)
+	: GameObject(name)
 	, m_npcName("npc")
 {
-	m_bubble = new TextBubble("textBubble_settings.gobj");
+}
+
+void NPC::LoadGraphics(pugi::xml_node * node)
+{
+	GameObject::LoadGraphics(node);
+
+	SetAnimationEnable(true);
+	GetAnimator()->GetActiveAnimation()->Play();
+
+	m_bubble = new TextBubble("npc_textBubble");
+	m_bubble->LoadGraphics(&node->child("text_bubble"));
 	m_bubble->SetParent(this);
 	m_bubble->SetVisible(false);
 	m_bubble->SetSide(TextBubble::LEFT);
+
 	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.1f);
-
 	m_behaviourController = make_shared<BehaviourController>(m_renderer, this);
-
 }
 
 NPC::~NPC()

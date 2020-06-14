@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<game_scene>
+	<object name="infoScroll" source="infoScroll.png" object_size="150 200" position="45 10" anim_size="731 934" pivot_offset="0 0" static="true" visible="false">
+		<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
+	</object>
+	<button name="infoBtn" source="infoBtn.png" object_size="32 32" position="10 10" anim_size="384 384" pivot_offset="0 0" static="true">
+		<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+	</button>
+	<text_label name="label_1" source="times.ttf" position="0 0" relative_position="0 -60" text="P-character area" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<text_label name="label_2" source="times.ttf" position="0 0" relative_position="0 -40" text="L-not passible map" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<text_label name="label_3" source="times.ttf" position="0 0" relative_position="0 -20" text="O-save map (with L)" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<text_label name="label_4" source="times.ttf" position="0 0" relative_position="0 0" text="J-music" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<text_label name="label_5" source="times.ttf" position="0 0" relative_position="0 20" text="I-NPC way" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<text_label name="label_6" source="times.ttf" position="0 0" relative_position="0 40" text="U - noclip" font_size="16" parent="infoScroll" color="0 0 0 255" follow_visible="true" static="true" />
+	<button name="gameSettingsBtn" source="gameSettingsBtn.png" object_size="40 40" position="-50 10" anim_size="512 512" pivot_offset="0 0" static="true">
+		<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+	</button>
+</game_scene>

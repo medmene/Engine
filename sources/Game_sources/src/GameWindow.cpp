@@ -9,6 +9,9 @@
 #include "include/SoundManager.h"
 #include "Game_sources/include/Level1.h"
 #include "include/DirectionSettings.h"
+#include "pugixml/pugixml.hpp"
+
+
 
 GameWindow * GameWindow::sm_instance = nullptr;
 
@@ -69,8 +72,7 @@ void GameWindow::Initialize()
 	Camera::instance()->Initialize(Vector2(m_windowSize.x / 2, m_windowSize.y * 0.75f));
 	PassabilityMap::instance()->Init(m_renderer);
 
-	m_player = new Player("Player.gobj");
-	m_player->SetVisible(false);
+	LoadPlayer();
 	
 	m_windowManager = make_shared<WindowManager>(m_renderer, m_windowSize);
 	m_windowManager->CreateAndRunWindow<Level1>();
@@ -133,4 +135,20 @@ void GameWindow::Render()
 	PassabilityMap::instance()->Render();
 
 	SDL_RenderPresent(m_renderer);
+}
+
+void GameWindow::LoadPlayer()
+{
+	auto resource = ResourceManager::instance()->GetResource("Player.gobj");
+
+	if (resource)
+	{
+		pugi::xml_document doc;
+		doc.load_file(resource->GetPath().c_str());
+		auto node = doc.child("player");
+
+		m_player = new Player("empty");
+		m_player->LoadGraphics(&node);
+		m_player->SetVisible(false);
+	}
 }

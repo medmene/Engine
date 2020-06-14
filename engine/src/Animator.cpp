@@ -2,6 +2,7 @@
 #include "pugixml/pugixml.hpp"
 #include "include/GameObject.h"
 #include "include/Button.h"
+#include "include//Utils.h"
 
 
 
@@ -84,15 +85,17 @@ void Animation::Update(float dt)
 
 // ------------------------------------------------------------------------------------------ //
 
-Animator::Animator(pugi::xml_document * doc)
+Animator::Animator(pugi::xml_node * node)
 {
-	auto rootNode = doc->child("object");
-	auto sizeNode = rootNode.child("anim_size");
-	
-	m_objectSize.x = std::stoi(sizeNode.attribute("x").value());
-	m_objectSize.y = std::stoi(sizeNode.attribute("y").value());
+	// Size
+	if (!node->attribute("anim_size").empty())
+	{
+		auto tokens = Utils::split(node->attribute("anim_size").value(), " ");
+		m_objectSize.x = std::stoi(tokens[0]);
+		m_objectSize.y = std::stoi(tokens[1]);
+	}
 
-	for (pugi::xml_node anim : rootNode.children("animation"))
+	for (auto & anim : node->children("animation"))
 	{
 		m_animations.emplace_back(new Animation(this, anim.attribute("name").value(), m_objectSize));
 
@@ -104,8 +107,8 @@ Animator::Animator(pugi::xml_document * doc)
 		m_animations.back()->SetLooped(loop == "true" ? true : false);
 		m_animations.back()->SetFrameTime(std::stoi(anim.attribute("speed").value()));
 	}
-	
-	for (pugi::xml_node anim : rootNode.children("animation"))
+
+	for (auto & anim : node->children("animation"))
 	{
 		auto nextState = anim.attribute("next_state").value();
 		auto curName = anim.attribute("name").value();

@@ -6,34 +6,46 @@
 #include "include/Utils.h"
 
 
-TextBubble::TextBubble(const string& src)
-	: GameObject(src)
-	, m_defaultRelPos(Vector2::zero)
+
+TextBubble::TextBubble(const string & name)
+	: GameObject(name)
+	, m_defaultOffset(Vector2::zero)
+	, m_textCenterPos(Vector2::zero)
 	, m_fontSize(16)
 {
-	m_currentSide = RIGHT;
-
-	if (m_resourceSettings)
-	{
-		pugi::xml_document doc;
-		doc.load_file(m_resourceSettings->GetPath().c_str());
-		auto rootNode = doc.child("object");
-
-		auto relNode = rootNode.child("relativePos");
-		int x = std::stoi(relNode.attribute("x").value());
-		int y =  std::stoi(relNode.attribute("y").value());
-		m_defaultRelPos = Vector2(x, y);
-
-		auto defTextNode = rootNode.child("textCenterRelPos");
-		x = std::stoi(defTextNode.attribute("x").value());
-		y = std::stoi(defTextNode.attribute("y").value());
-		m_textCenterPos = Vector2(x, y);
-	}
 }
 
 TextBubble::~TextBubble()
 {
 	DestroyLabels();
+}
+
+void TextBubble::LoadGraphics(pugi::xml_node * node)
+{
+	GameObject::LoadGraphics(node);
+
+	// Setup relative parent position
+	if (!node->attribute("bubble_offset").empty())
+	{
+		auto tokens = Utils::split(node->attribute("bubble_offset").value(), " ");
+		m_defaultOffset.x = std::stoi(tokens[0]);
+		m_defaultOffset.y = std::stoi(tokens[1]);
+	}
+
+	// Setup relative center of text position
+	if (!node->attribute("text_offset").empty())
+	{
+		auto tokens = Utils::split(node->attribute("text_offset").value(), " ");
+		m_textCenterPos.x = std::stoi(tokens[0]);
+		m_textCenterPos.y = std::stoi(tokens[1]);
+	}
+
+	// Setup relative center of text position
+	if (!node->attribute("text").empty())
+	{
+		string value = node->attribute("text").value();
+		m_text = u16string(value.begin(), value.end());
+	}
 }
 
 void TextBubble::SetSide(BubbleSide s)
@@ -45,12 +57,12 @@ void TextBubble::SetSide(BubbleSide s)
 		switch (m_currentSide)
 		{
 		case LEFT:
-			pos.x = -m_defaultRelPos.x;
-			pos.y = -m_defaultRelPos.y;
+			pos.x = -m_defaultOffset.x;
+			pos.y = -m_defaultOffset.y;
 			break;
 		case RIGHT:
-			pos.x = m_defaultRelPos.x;
-			pos.y = -m_defaultRelPos.y;
+			pos.x = m_defaultOffset.x;
+			pos.y = -m_defaultOffset.y;
 			break;
 		}
 		UpdateRelativePos(pos);
@@ -70,7 +82,7 @@ void TextBubble::SetText(const u16string& text)
 		if (m_text.size() > maxSymbolsInRow)
 		{
 			// Split
-			vector<u16string> elems = Utils::split(m_text, u' ');
+			vector<u16string> elems = Utils::split(m_text, u" ");
 			
 			int index = 0;
 			vector<u16string> labels;
@@ -94,7 +106,8 @@ void TextBubble::SetText(const u16string& text)
 			// Add to labels
 			for (int i = 0, j = 0; i < maxRows && j < labels.size(); ++i, ++j)
 			{
-				m_labels.emplace_back(new Label("times.ttf"));
+				m_labels.emplace_back(new Label("label_" + std::to_string(i)));
+				m_labels.back()->LoadSettings("times.ttf");
 				m_labels.back()->SetParent(this);
 				m_labels.back()->Init(labels[j], m_fontSize);
 				m_labels.back()->SetVisible(true);
@@ -114,7 +127,8 @@ void TextBubble::SetText(const u16string& text)
 		}
 		else
 		{
-			m_labels.emplace_back(new Label("times.ttf"));
+			m_labels.emplace_back(new Label("label_default"));
+			m_labels.back()->LoadSettings("times.ttf");
 			m_labels.back()->Init(m_text, m_fontSize);
 			m_labels.back()->SetParent(this);
 			m_labels.back()->SetVisible(true);

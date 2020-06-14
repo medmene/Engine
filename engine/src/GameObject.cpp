@@ -3,11 +3,12 @@
 #include "pugixml/pugixml.hpp"
 #include "include/Animator.h"
 #include "include/ResourceManager.h"
-
+#include "include//Utils.h"
 
 
 GameObject::GameObject()
 	: BaseObject()
+	, m_name("empty")
 	, m_rect({ 0, 0, 0, 0 })
 	, m_center(0, 0)
 	, m_color({ 255, 255, 255, 255 })
@@ -23,162 +24,130 @@ GameObject::GameObject()
 {
 }
 
-bool GameObject::CreateSettings(const string & src)
-{
-	m_resourceTexture = ResourceManager::instance()->GetResource(src);
-	if (m_resourceTexture)
-	{
-		if (m_resourceTexture)
-		{
-			auto surface = IMG_Load(m_resourceTexture->GetPath().c_str());
-
-			if (surface)
-			{
-				m_rect = surface->clip_rect;
-				m_size = { m_rect.w, m_rect.h };
-
-				m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
-				m_texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-				SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
-				SDL_FreeSurface(surface);
-			}
-		}
-
-		string newResName = m_resourceTexture->GetName() + "_settings";
-		m_resourceSettings = ResourceManager::instance()->CreateResourceFile(
-			m_resourceTexture->GetDir(), newResName, ResourceManager::GOBJECT);
-
-		if (m_resourceSettings)
-		{
-			pugi::xml_document doc;
-			doc.load_file(m_resourceSettings->GetPath().c_str());
-
-			pugi::xml_node rootNode = doc.child("object");
-
-			// Node 1. - texture
-			auto sourceNode = rootNode.append_child("source");
-			sourceNode.append_attribute("name") = (m_resourceTexture->GetName()
-				+ ResourceManager::instance()->GetType(m_resourceTexture->GetType())).c_str();
-
-			// Node 2. - size
-			auto objSizeChild = rootNode.append_child("obj_size");
-			objSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
-			objSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
-			objSizeChild.append_attribute("annotation") = "This is size for saving";
-
-			// Node 3. - size
-			auto animSizeChild = rootNode.append_child("anim_size");
-			animSizeChild.append_attribute("x") = std::to_string((int)m_size.x).c_str();
-			animSizeChild.append_attribute("y") = std::to_string((int)m_size.y).c_str();
-			animSizeChild.append_attribute("annotation") = "This is size of real frame in image";
-
-			// Node 3. - size
-			auto pivotOffset = rootNode.append_child("pivot_offset");
-			pivotOffset.append_attribute("x") = "0";
-			pivotOffset.append_attribute("y") = "0";
-			animSizeChild.append_attribute("annotation") = "Point to connect with ground, relative center";
-			
-			// Node 5. - default animation
-			auto node = rootNode.append_child("animation");
-			node.append_attribute("name") = "default";
-			node.append_attribute("row") = "0";
-			node.append_attribute("count") = 1;
-			node.append_attribute("loop") = "true";
-			node.append_attribute("speed") = 100;
-			node.append_attribute("next_state") = "";
-
-			doc.save_file(m_resourceSettings->GetPath().c_str());
-
-			m_animator = new Animator(&doc);
-			return true;
-		}
-	}
-	return false;
-}
-
-bool GameObject::LoadSettings(const string & src)
-{
-	m_resourceSettings = ResourceManager::instance()->GetResource(src);
-
-	if (m_resourceSettings)
-	{
-		return LoadSettings();
-	}
-	return false;
-}
-
-bool GameObject::LoadSettings()
-{
-	pugi::xml_document doc;
-	doc.load_file(m_resourceSettings->GetPath().c_str());
-	auto rootNode = doc.child("object");
-
-	auto sizeNode = rootNode.child("obj_size");
-	m_size.x = std::stoi(sizeNode.attribute("x").value());
-	m_size.y = std::stoi(sizeNode.attribute("y").value());
-
-	auto pivotNode = rootNode.child("pivot_offset");
-	m_pivotOffset.x = std::stoi(pivotNode.attribute("x").value());
-	m_pivotOffset.y = std::stoi(pivotNode.attribute("y").value());
-
-	auto sourceNode = rootNode.child("source");
-	m_resourceTexture = ResourceManager::instance()->GetResource(sourceNode.attribute("name").value());
-
-	if (m_resourceTexture)
-	{
-		m_animator = new Animator(&doc);
-
-		auto surface = IMG_Load(m_resourceTexture->GetPath().c_str());
-
-		if (surface)
-		{
-			m_rect = { 0,0, (int)m_size.x, (int)m_size.y };
-
-			m_center = Vector2(m_position.x + m_size.x / 2, m_position.y + m_size.y / 2);
-			m_texture = SDL_CreateTextureFromSurface(m_renderer, surface);
-			SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
-			SDL_FreeSurface(surface);
-			return true;
-		}
-	}
-	return false;
-}
-
-GameObject::GameObject(const string & src)
+GameObject::GameObject(const string & name)
 	: BaseObject()
+	, m_name(name)
+	, m_rect({ 0, 0, 0, 0 })
+	, m_center(0, 0)
+	, m_color({ 255, 255, 255, 255 })
 	, m_position(0, 0)
 	, m_relativePos(0, 0)
+	, m_size(0, 0)
+	, m_pivot(0, 0)
+	, m_pivotOffset(0, 0)
 	, m_visible(true)
 	, m_staticObject(false)
 	, m_followVisibility(false)
 	, m_followStatic(false)
 {
-	auto res = ResourceManager::instance()->GetResource(src);
-	
-	if (res->GetType() != ResourceManager::GOBJECT)
+}
+
+void GameObject::LoadSettings(pugi::xml_node * node)
+{
+	// Name
+	if (!node->attribute("name").empty())
 	{
-		// Try to find resource with settings
-		m_resourceSettings = ResourceManager::instance()->GetResource(src + "_settings.gobj");
-		if (!m_resourceSettings)
-		{
-			// If trying loading gameObject without .gobj res
-			// Create it
-			if (CreateSettings(src))
-			{
-				return;
-			}
-		}
-		else
-		{
-			if (LoadSettings())
-			{
-				return;
-			}
-		}
+		m_name = node->attribute("name").value();
 	}
-	else if (LoadSettings(src))
+
+	// Static
+	if (!node->attribute("static").empty())
 	{
-		return;
+		string val = node->attribute("static").value();
+		m_staticObject = val == "true";
+	}
+
+	// Visible
+	if (!node->attribute("visible").empty())
+	{
+		string val = node->attribute("visible").value();
+		m_visible = val == "true";
+	}
+
+	// Follow visability
+	if (!node->attribute("follow_visible").empty())
+	{
+		string val = node->attribute("follow_visible").value();
+		m_followVisibility = val == "true";
+	}
+
+	// Follow static
+	if (!node->attribute("follow_static").empty())
+	{
+		string val = node->attribute("follow_static").value();
+		m_followStatic = val == "true";
+	}
+
+	// Source
+	if (!node->attribute("source").empty())
+	{
+		m_resourceTexture = ResourceManager::instance()->GetResource(node->attribute("source").value());
+	}
+
+	// Pivot offset
+	if (!node->attribute("pivot_offset").empty())
+	{
+		auto tokens = Utils::split(node->attribute("pivot_offset").value(), " ");
+		m_pivotOffset.x = std::stoi(tokens[0]);
+		m_pivotOffset.y = std::stoi(tokens[1]);
+	}
+
+	// Relative position
+	if (!node->attribute("relative_position").empty())
+	{
+		auto tokens = Utils::split(node->attribute("relative_position").value(), " ");
+		m_relativePos.x = std::stof(tokens[0]);
+		m_relativePos.y = std::stof(tokens[1]);
+	}
+
+	// Color
+	if (!node->attribute("color").empty())
+	{
+		auto tokens = Utils::split(node->attribute("color").value(), " ");
+		m_color.SetR(std::stoi(tokens[0]));
+		m_color.SetG(std::stoi(tokens[1]));
+		m_color.SetB(std::stoi(tokens[2]));
+		m_color.SetA(std::stoi(tokens[3]));
+	}
+
+	// Size
+	if (!node->attribute("object_size").empty())
+	{
+		auto tokens = Utils::split(node->attribute("object_size").value(), " ");
+		Vector2 sz;
+		sz.x = std::stoi(tokens[0]);
+		sz.y = std::stoi(tokens[1]);
+		UpdateSize(sz);
+	}
+
+	// Position
+	if (!node->attribute("position").empty())
+	{
+		auto tokens = Utils::split(node->attribute("position").value(), " ");
+		Vector2 pos;
+		pos.x = std::stof(tokens[0]);
+		pos.y = std::stof(tokens[1]);
+		UpdatePos(pos);
+	}
+}
+
+void GameObject::LoadGraphics(pugi::xml_node * node)
+{
+	LoadSettings(node);
+
+	if (m_resourceTexture)
+	{
+		m_animator = new Animator(node);
+		auto surface = IMG_Load(m_resourceTexture->GetPath().c_str());
+
+		if (surface)
+		{
+			UpdatePos(GetPosition());
+			m_texture = SDL_CreateTextureFromSurface(m_renderer, surface);
+			SDL_SetTextureBlendMode(m_texture, SDL_BLENDMODE_BLEND);
+			SDL_FreeSurface(surface);
+			return;
+		}
 	}
 	throw std::exception("Can't load resource!");
 }
@@ -206,11 +175,7 @@ void GameObject::SetAnimationEnable(bool anim)
 
 string GameObject::GetName()
 {
-	if (m_resourceSettings)
-	{
-		return m_resourceSettings->GetName();
-	}
-	return "";
+	return m_name;
 }
 
 void GameObject::UpdateColor(const Color & clr)

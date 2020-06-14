@@ -10,8 +10,9 @@ class Button : public GameObject
 {
 	explicit Button();
 public:
-	Button(const string & src);
+	Button(const string & name);
 	~Button();
+	void LoadGraphics(pugi::xml_node * node) override;
 
 	void SetOnclick(function<bool()> onClick) { m_onClick = onClick; }
 	void SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type);

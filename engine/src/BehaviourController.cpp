@@ -30,8 +30,10 @@ BehaviourController::BehaviourController(SDL_Renderer* r, ICharacter* owner)
 	ChangeState(WAIT);
 }
 
-BehaviourController::~BehaviourController()
+void BehaviourController::SetupDefaultSettings()
 {
+	SetAnchorPoint(m_ownerObj->GetCenterPos());
+	SetAnchorArea(Vector2(8, 8));
 }
 
 void BehaviourController::Update(float dt)

@@ -9,8 +9,10 @@ class Label : public GameObject
 public:
 	explicit Label();
 	
-	Label(const string & src);
+	Label(const string & name);
 	~Label();
+	void LoadGraphics(pugi::xml_node * node) override;
+	void LoadSettings(const string & src);
 
 	void Init(const u16string & text, int fontSize = 24);
 

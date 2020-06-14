@@ -14,6 +14,7 @@ public:
 	virtual void Run();
 	virtual void Stop();
 	virtual void Disappear() {}
+	virtual void LoadScene() {}
 	
 	virtual void Render(){}
 	virtual void Update(float dt){}

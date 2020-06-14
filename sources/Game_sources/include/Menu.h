@@ -1,8 +1,8 @@
 #pragma once
-#include "LevelBase.h"
+#include "GameSceneBase.h"
 
 
-class Menu : public LevelBase
+class Menu : public GameSceneBase
 {
 public:
 	explicit Menu(shared_ptr<WindowManager> wm);

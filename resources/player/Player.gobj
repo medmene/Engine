@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
-<object>
-	<source name="playerAnims.png" />
-	<obj_size x="90" y="120" />
-	<anim_size x="225" y="300" />
-	<pivot_offset x="0" y="40" annotation="Point to connect with ground, relative center" />
+<player name="playerAnims" source="playerAnims.png" object_size="70 100" position="530 300" anim_size="225 300" pivot_offset="0 40">
 	<animation name="going_right" row="0" count="7" loop="true" speed="100" next_state="" />
 	<animation name="going_left" row="1" count="7" loop="true" speed="100" next_state="" />
 	<animation name="going_top" row="2" count="7" loop="true" speed="100" next_state="" />
 	<animation name="going_bottom" row="3" count="6" loop="true" speed="100" next_state="" />
 	<animation name="attack_right" row="4" count="8" loop="true" speed="100" next_state="" />
 	<animation name="attack_left" row="5" count="8" loop="true" speed="100" next_state="" />
-</object>
+	<text_bubble name="player_textBubble" source="textBubble.png" object_size="150 103" anim_size="512 353" pivot_offset="0 0" bubble_offset="60 85" text_offset="5 -15">
+		<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+	</text_bubble>
+</player>

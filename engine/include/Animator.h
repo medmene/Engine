@@ -10,12 +10,13 @@ class Button;
 namespace pugi
 {
 	class xml_document;
+	class xml_node;
 }
 
 class Animator
 {
 public:
-	explicit Animator(pugi::xml_document * doc);
+	explicit Animator(pugi::xml_node * node);
 	~Animator();
 
 	void SetAnimationsEnabled(bool enabled) { m_animationsEnabled = enabled; }

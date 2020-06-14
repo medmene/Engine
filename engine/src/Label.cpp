@@ -1,5 +1,7 @@
 #include "include/Label.h"
 #include "include/Camera.h"
+#include "pugixml/pugixml.hpp"
+#include "include/Utils.h"
 
 
 
@@ -11,20 +13,42 @@ Label::Label()
 {
 }
 
-Label::Label(const string& src)
-	: GameObject()
+Label::Label(const string & name)
+	: GameObject(name)
 	, m_fontSize(24)
 	, m_text(u"_")
 {
-	m_resourceSettings = ResourceManager::instance()->GetResource(src);
+}
 
-	if (m_resourceSettings)
+Label::~Label()
+{
+	if (m_font) { TTF_CloseFont(m_font); }
+}
+
+void Label::LoadGraphics(pugi::xml_node * node)
+{
+	GameObject::LoadSettings(node);
+
+	// Text
+	if (!node->attribute("text").empty())
+	{
+		string value = node->attribute("text").value();
+		m_text = u16string(value.begin(), value.end());
+	}
+
+	// Font size
+	if (!node->attribute("font_size").empty())
+	{
+		m_fontSize = std::stoi(node->attribute("font_size").value());
+	}
+
+	if (m_resourceTexture)
 	{
 		if (m_font)
 		{
 			TTF_CloseFont(m_font);
 		}
-		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
+		m_font = TTF_OpenFont(m_resourceTexture->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
 			CreateTexture();
@@ -34,9 +58,23 @@ Label::Label(const string& src)
 	throw std::exception();
 }
 
-Label::~Label()
+void Label::LoadSettings(const string & src)
 {
-	if (m_font) { TTF_CloseFont(m_font); }
+	m_resourceTexture = ResourceManager::instance()->GetResource(src);
+	if (m_resourceTexture)
+	{
+		if (m_font)
+		{
+			TTF_CloseFont(m_font);
+		}
+		m_font = TTF_OpenFont(m_resourceTexture->GetPath().c_str(), m_fontSize);
+		if (m_font)
+		{
+			CreateTexture();
+		}
+		return;
+	}
+	throw std::exception();
 }
 
 void Label::Init(const u16string & text, int fontSize)
@@ -44,13 +82,13 @@ void Label::Init(const u16string & text, int fontSize)
 	if (fontSize != m_fontSize)
 	{
 		m_fontSize = fontSize;
-		if (m_resourceSettings)
+		if (m_resourceTexture)
 		{
 			if (m_font)
 			{
 				TTF_CloseFont(m_font);
 			}
-			m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
+			m_font = TTF_OpenFont(m_resourceTexture->GetPath().c_str(), m_fontSize);
 			if (m_font)
 			{
 				CreateTexture();
@@ -70,22 +108,22 @@ void Label::SetText(const u16string & text)
 
 void Label::SetFont(const string & src, ResourceManager::Type type)
 {
-	m_resourceSettings = ResourceManager::instance()->GetResource(src, type);
+	m_resourceTexture = ResourceManager::instance()->GetResource(src, type);
 
-	if (m_resourceSettings)
+	if (m_resourceTexture)
 	{
 		if (m_font)
 		{
 			TTF_CloseFont(m_font);
 		}
-		m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
+		m_font = TTF_OpenFont(m_resourceTexture->GetPath().c_str(), m_fontSize);
 		if (m_font)
 		{
 			CreateTexture();
 		}
 		return;
 	}
-	throw std::exception();
+	throw std::exception("Can't setup font");
 }
 
 void Label::SetFontSize(int fontSize)
@@ -95,7 +133,7 @@ void Label::SetFontSize(int fontSize)
 	{
 		TTF_CloseFont(m_font);
 	}
-	m_font = TTF_OpenFont(m_resourceSettings->GetPath().c_str(), m_fontSize);
+	m_font = TTF_OpenFont(m_resourceTexture->GetPath().c_str(), m_fontSize);
 	CreateTexture();
 }
 

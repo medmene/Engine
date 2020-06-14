@@ -21,7 +21,8 @@ public:
 	};
 	
 	BehaviourController(SDL_Renderer *r , ICharacter * owner);
-	~BehaviourController();
+
+	void SetupDefaultSettings();
 
 	auto GetMovingController() { return m_movingController; }
 

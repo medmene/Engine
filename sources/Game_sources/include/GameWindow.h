@@ -25,6 +25,7 @@ public:
 private:
 	void Update();
 	void Render();
+	void LoadPlayer();
 	
 	SDL_Window					  * m_window = nullptr;
 	SDL_DisplayMode					m_displayMode;

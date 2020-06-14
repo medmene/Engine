@@ -7,16 +7,20 @@
 class Animator;
 class Resource;
 
+namespace pugi
+{
+	class xml_node;
+}
+
 class GameObject : public BaseObject
 {
 protected:
 	explicit GameObject();
-	bool CreateSettings(const string & src);
-	bool LoadSettings(const string & src);
-	bool LoadSettings();
+	void LoadSettings(pugi::xml_node * node);
 public:
 	virtual ~GameObject();
-	GameObject(const string & src);
+	GameObject(const string & name);
+	virtual void LoadGraphics(pugi::xml_node * node);
 
 	bool IsVisible() { return m_visible; }
 	bool IsFollowVisibility() { return m_followVisibility; }
@@ -25,11 +29,12 @@ public:
 	bool IsAnimationEnabled();
 
 	void SetParent(GameObject * parent) { m_parent = parent; }
+	void SetAnimationEnable(bool anim);
+
 	void SetVisible(bool visible) { m_visible = visible; }
+	void SetStaticObject(bool stObj) { m_staticObject = stObj; }
 	void SetFollowVisibility(bool follow) { m_followVisibility = follow; }
 	void SetFollowStatic(bool follow) { m_followStatic = follow; }
-	void SetStaticObject(bool stObj) { m_staticObject = stObj; }
-	void SetAnimationEnable(bool anim);
 
 	GameObject * GetParent() const { return m_parent; }
 	Vector2 GetCenterPos() const { return m_center; }
@@ -51,7 +56,6 @@ public:
 	virtual void Render();
 	
 protected:
-	Resource				  * m_resourceSettings = nullptr;
 	Resource				  * m_resourceTexture = nullptr;
 	SDL_Texture 			  * m_texture = nullptr;
 	GameObject				  * m_parent = nullptr;

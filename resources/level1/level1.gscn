@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<game_scene>
+	<object name="level1_back" source="level1_back.png" object_size="1600 1200" position="0 0" anim_size="1202 895" pivot_offset="0 0" ground="true">
+		<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
+	</object>
+	<npc name="Alien1" source="Alien1.png" object_size="100 100" position="1200 300" anim_size="527 500" pivot_offset="0 0">
+		<animation name="idle" row="0" count="3" loop="true" speed="100" next_state="" />
+		<text_bubble name="npc_textBubble" source="textBubble.png" object_size="150 103" anim_size="512 353" pivot_offset="0 0" bubble_offset="75 95" text_offset="5 -15">
+			<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+		</text_bubble>
+	</npc>
+	<npc name="Alien2" source="Alien2.png" object_size="100 100" position="600 1000" anim_size="391 508" pivot_offset="0 0">
+		<animation name="idle" row="0" count="3" loop="true" speed="100" next_state="" />
+		<text_bubble name="npc_textBubble" source="textBubble.png" object_size="150 103" anim_size="512 353" pivot_offset="0 0" bubble_offset="75 95" text_offset="5 -15">
+			<animation name="default" row="0" count="2" loop="true" speed="100" next_state="" />
+		</text_bubble>
+	</npc>
+</game_scene>

@@ -11,8 +11,9 @@ class TextBubble;
 class NPC: public GameObject, public ICharacter
 {
 public:
-	NPC(const string & src);
+	NPC(const string & name);
 	virtual ~NPC();
+	void LoadGraphics(pugi::xml_node * node) override;
 
 	void UpdatePos(const Vector2 & pos) override;
 	TextBubble * GetTextObject() override { return m_bubble; }

@@ -69,7 +69,7 @@ set(GAME_SOURCES_INK "")
 list(APPEND GAME_SOURCES_INK
 	sources/Game_sources/include/GameWindow.h
 	sources/Game_sources/include/GameInterface.h
-	sources/Game_sources/include/LevelBase.h
+	sources/Game_sources/include/GameSceneBase.h
 	sources/Game_sources/include/Menu.h
 	sources/Game_sources/include/Level1.h
 )
@@ -77,7 +77,7 @@ set(GAME_SOURCES_SRC "")
 list(APPEND GAME_SOURCES_SRC
 	sources/Game_sources/src/GameWindow.cpp
 	sources/Game_sources/src/GameInterface.cpp
-	sources/Game_sources/src/LevelBase.cpp
+	sources/Game_sources/src/GameSceneBase.cpp
 	sources/Game_sources/src/Menu.cpp
 	sources/Game_sources/src/Level1.cpp
 )

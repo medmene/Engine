@@ -6,14 +6,15 @@
 #include "include\MouseInput.h"
 
 
+
 Button::Button()
 	: GameObject()
 {
 	m_onClick = [] {return false; };
 }
 
-Button::Button(const string& src)
-	: GameObject(src)
+Button::Button(const string & name)
+	: GameObject(name)
 {
 	m_onClick = [] {return false; };
 }
@@ -23,9 +24,15 @@ Button::~Button()
 	delete m_label;
 }
 
+void Button::LoadGraphics(pugi::xml_node * node)
+{
+	GameObject::LoadGraphics(node);
+}
+
 void Button::SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type)
 {
-	m_label = new Label("times.ttf");
+	// TODO
+	/*m_label = new Label("times.ttf");
 	if (m_label)
 	{
 		m_label->SetVisible(true);
@@ -33,7 +40,7 @@ void Button::SetLabel(const u16string& text, int textFontSize, const string& src
 		m_label->SetStaticObject(IsStaticObject());
 		m_label->SetText(text);
 		m_label->SetParent(this);
-	}
+	}*/
 }
 
 void Button::Update(float dt)

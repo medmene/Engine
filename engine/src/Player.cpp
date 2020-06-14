@@ -6,10 +6,13 @@
 #include "include/Camera.h"
 #include "include/TextBubble.h"
 #include "include/DirectionSettings.h"
+#include "pugixml/pugixml.hpp"
 
 
-Player::Player(const string & src)
-	: GameObject(src)
+
+
+Player::Player(const string & name)
+	: GameObject(name)
 	, m_playerName("player")
 	, m_velocity(0, 0)
 	, m_velocityConst(0.16f, 0.12f)
@@ -17,23 +20,30 @@ Player::Player(const string & src)
 	, m_lastDirection(4)
 	, m_running(false)
 {
-	SetAnimationEnable(true);
-	GetAnimator()->GetActiveAnimation()->Play();
-	UpdateSize(Vector2(70, 100));
-	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.25f);
-	
-	m_bubble = new TextBubble("playerTextBubble_settings.gobj");
-	m_bubble->SetParent(this);
-	m_bubble->SetVisible(false);
-	m_bubble->SetSide(TextBubble::LEFT);
-
-	Player::UpdatePos(Vector2(500, 500));
 }
 
 Player::~Player()
 {
 	delete m_passabilityArea;
 	delete m_bubble;
+}
+
+void Player::LoadGraphics(pugi::xml_node * node)
+{
+	GameObject::LoadGraphics(node);
+
+	SetAnimationEnable(true);
+	GetAnimator()->GetActiveAnimation()->Play();
+
+	m_passabilityArea = new PassabilityArea(GetCenterPos(), GetSize().x * 0.25f);
+
+	m_bubble = new TextBubble("player_textBubble");
+	m_bubble->LoadGraphics(&node->child("text_bubble"));
+	m_bubble->SetParent(this);
+	m_bubble->SetVisible(false);
+	m_bubble->SetSide(TextBubble::LEFT);
+
+	Player::UpdatePos(GetPosition());
 }
 
 void Player::UpdatePos(const Vector2& pos)

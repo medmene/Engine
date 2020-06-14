@@ -15,6 +15,7 @@ public:
 		PMAP,
 		MP3,
 		TTF,
+		GSCN,
 		UNDEFINED = 1337
 	};
 

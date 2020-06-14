@@ -8,8 +8,9 @@ class TextBubble;
 class Player : public GameObject, public ICharacter
 {
 public:
-	Player(const string & src);
+	Player(const string & name);
 	virtual ~Player();
+	void LoadGraphics(pugi::xml_node * node) override;
 
 	void UpdatePos(const Vector2 & pos) override;
 	TextBubble * GetTextObject() override { return m_bubble; }

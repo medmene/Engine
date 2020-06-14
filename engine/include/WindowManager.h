@@ -44,6 +44,7 @@ shared_ptr<TWindowType> WindowManager::CreateWindow()
 {
 	shared_ptr<TWindowType> window = make_shared<TWindowType>(shared_from_this());
 	window->m_layer = GetUniqLayer();
+	window->LoadScene();
 	m_windows.emplace_back(window);
 	
 	m_breakUpdate = true;

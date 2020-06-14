@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<object>
-	<source name="level1_back.png" />
-	<obj_size x="1202" y="895" annotation="This is size for saving" />
-	<anim_size x="1202" y="895" annotation="This is size of real frame in image" />
-	<pivot_offset x="0" y="0" annotation="Point to connect with ground, relative center" />
-	<animation name="default" row="0" count="1" loop="true" speed="100" next_state="" />
-</object>
