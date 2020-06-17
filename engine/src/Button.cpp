@@ -27,20 +27,14 @@ Button::~Button()
 void Button::LoadGraphics(pugi::xml_node * node)
 {
 	GameObject::LoadGraphics(node);
-}
 
-void Button::SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type)
-{
-	// TODO
-	/*m_label = new Label("times.ttf");
-	if (m_label)
+	auto labelNode = node->child("text_label");
+	if (!labelNode.empty())
 	{
-		m_label->SetVisible(true);
-		m_label->SetFontSize(textFontSize);
-		m_label->SetStaticObject(IsStaticObject());
-		m_label->SetText(text);
+		m_label = new Label("button_label");
+		m_label->LoadGraphics(&labelNode);
 		m_label->SetParent(this);
-	}*/
+	}
 }
 
 void Button::Update(float dt)
