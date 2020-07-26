@@ -16,6 +16,7 @@
 #include <future>
 
 #define endl "\n"
+#define DEBUG
 
 using std::string;
 using std::map;

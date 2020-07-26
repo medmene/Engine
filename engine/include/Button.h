@@ -15,7 +15,6 @@ public:
 	void LoadGraphics(pugi::xml_node * node) override;
 
 	void SetOnclick(function<bool()> onClick) { m_onClick = onClick; }
-	void SetLabel(const u16string& text, int textFontSize, const string& src, ResourceManager::Type type);
 
 	void Update(float dt) override;
 	void Render() override;

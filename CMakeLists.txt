@@ -131,6 +131,7 @@ list(APPEND ENGINE_SOURCES_INK
 	engine/include/ActionMap.h
 	engine/include/ScriptManager.h
 	engine/include/FunctionParam.h
+  	engine/include/CheckBox.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC
@@ -162,6 +163,7 @@ list(APPEND ENGINE_SOURCES_SRC
 	engine/src/TextManager.cpp
 	engine/src/ScriptManager.cpp
 	engine/src/ActionMap.cpp
+	engine/src/CheckBox.cpp
 )
 
 # Include Engine
