@@ -10,7 +10,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE
-               PROPERTY STRINGS Debug Release MinSizeRel RelWithDebInfo)
+               PROPERTY STRINGS Debug RelWithDebInfo) #Release
 endif()
 
 add_executable(GameEngine "")
@@ -25,7 +25,6 @@ set_target_properties(GameEngine
 if(MSVC)
 	add_definitions(/D "_CRT_SECURE_NO_WARNINGS")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-    #set_target_properties(GameEngine PROPERTIES LINK_FLAGS "/INCREMENTAL /LTCG")
 endif()
 
 set_property(TARGET GameEngine PROPERTY CXX_STANDARD 17)
@@ -35,6 +34,9 @@ set_property(TARGET GameEngine PROPERTY CXX_EXTENSIONS OFF)
 target_include_directories(GameEngine PRIVATE sources)
 target_include_directories(GameEngine PRIVATE engine)
 
+
+# SDL library
+############################################
 add_library(SDL2 STATIC IMPORTED)
 add_library(SDL2main STATIC IMPORTED)
 add_library(SDL2_image STATIC IMPORTED)
@@ -60,6 +62,7 @@ target_link_libraries(GameEngine PRIVATE SDL2main)
 target_link_libraries(GameEngine PRIVATE SDL2_image)
 target_link_libraries(GameEngine PRIVATE SDL2_ttf)
 target_link_libraries(GameEngine PRIVATE SDL2_mixer)
+############################################
 
 install(TARGETS GameEngine RUNTIME DESTINATION bin)
 
@@ -93,77 +96,99 @@ target_sources(GameEngine PRIVATE ${GAME_SOURCES_SRC})
 
 
 #########################################
+#set(ENGINE_SOURCES_INK "")
+#list(APPEND ENGINE_SOURCES_INK
+	#engine/include/Core.h
+#)
+
 # make MSVC folders for engine
 set(ENGINE_SOURCES_INK "")
 list(APPEND ENGINE_SOURCES_INK
+	#Core
 	engine/include/Core.h
   	engine/include/base_defs.h
+	engine/include/Utils.h
   	engine/include/Fps.h
+	#Input
   	engine/include/MouseInput.h
+	engine/include/KeyboardBinds.h
   	engine/include/KeyboardInput.h
+	engine/include/SoundManager.h
   	engine/include/Camera.h
-  	engine/include/Label.h
-  	engine/include/Button.h
+	#Managers
+	engine/include/ResourceManager.h
+	engine/include/ScriptManager.h
+	engine/include/TextManager.h
+	engine/include/PassabilityMap.h
+	engine/include/PathFinder.h
+	#Units
 	engine/include/Vector2.h
 	engine/include/Vector3.h
 	engine/include/Color.h
-	engine/include/Player.h
-	engine/include/Utils.h
-	engine/include/GameObject.h
-	engine/include/ResourceManager.h
-	engine/include/Animator.h
-	engine/include/PassabilityMap.h
-	engine/include/Character.h
-	engine/include/NPC.h
-	engine/include/PathFinder.h
+	#Hard object manipulators
 	engine/include/MovingController.h
-	engine/include/SoundManager.h
-	engine/include/KeyboardBinds.h
 	engine/include/BehaviourController.h
-	engine/include/TextBubble.h
-	engine/include/Window.h
-	engine/include/WindowManager.h
+	#NPCs
+	engine/include/Player.h
+	engine/include/NPC.h
+	engine/include/Character.h
+	#Game objects
 	engine/include/BaseObject.h
-	engine/include/BaseWindow.h
-	engine/include/Areas.h
-	engine/include/DirectionSettings.h
-	engine/include/TextManager.h
-	engine/include/ActionMap.h
-	engine/include/ScriptManager.h
-	engine/include/FunctionParam.h
+	engine/include/GameObject.h
+  	engine/include/Label.h
+  	engine/include/Button.h
+	engine/include/TextBubble.h
   	engine/include/CheckBox.h
+	#Windows
+	engine/include/WindowManager.h
+	engine/include/BaseWindow.h
+	engine/include/Window.h
+	#Other
+	engine/include/Areas.h
+	engine/include/ActionMap.h
+	engine/include/FunctionParam.h
+	engine/include/DirectionSettings.h
+	engine/include/Animator.h
 )
 set(ENGINE_SOURCES_SRC "")
 list(APPEND ENGINE_SOURCES_SRC
+	#Input
 	engine/src/MouseInput.cpp
   	engine/src/KeyboardInput.cpp
   	engine/src/Camera.cpp
-  	engine/src/Label.cpp
-  	engine/src/Button.cpp
+	engine/src/SoundManager.cpp
+	#Managers
+	engine/src/ResourceManager.cpp
+	engine/src/ScriptManager.cpp
+	engine/src/TextManager.cpp
+	engine/src/PassabilityMap.cpp
+	engine/src/PathFinder.cpp
+	#Units
   	engine/src/Vector2.cpp
   	engine/src/Vector3.cpp
   	engine/src/Color.cpp
-  	engine/src/Player.cpp
-	engine/src/GameObject.cpp
-	engine/src/ResourceManager.cpp
-	engine/src/Animator.cpp
-	engine/src/PassabilityMap.cpp
-	engine/src/NPC.cpp
-	engine/src/PathFinder.cpp
-	engine/src/MovingController.cpp
-	engine/src/SoundManager.cpp
-	engine/src/BehaviourController.cpp
-	engine/src/TextBubble.cpp
-	engine/src/Window.cpp
-	engine/src/WindowManager.cpp
+	#Game objects
 	engine/src/BaseObject.cpp
+	engine/src/GameObject.cpp
+  	engine/src/Label.cpp
+  	engine/src/Button.cpp
+	engine/src/CheckBox.cpp
+	engine/src/TextBubble.cpp
+	#NPCs
+  	engine/src/Player.cpp
+	engine/src/NPC.cpp
+	#Hard object manipulators
+	engine/src/MovingController.cpp
+	engine/src/BehaviourController.cpp
+	#Windows
+	engine/src/WindowManager.cpp
 	engine/src/BaseWindow.cpp
+	engine/src/Window.cpp
+	#Other
+	engine/src/Animator.cpp
 	engine/src/Areas.cpp
 	engine/src/DirectionSettings.cpp
-	engine/src/TextManager.cpp
-	engine/src/ScriptManager.cpp
 	engine/src/ActionMap.cpp
-	engine/src/CheckBox.cpp
 )
 
 # Include Engine
