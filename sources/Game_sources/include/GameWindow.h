@@ -1,8 +1,8 @@
 #pragma once
 #include "include/Core.h"
-#include "include/Vector2.h"
-#include "include/Fps.h"
-#include "include/WindowManager.h"
+#include "include/types/Vector2.h"
+#include "include/tools/Fps.h"
+#include "include/window/WindowManager.h"
 
 
 class GameObject;

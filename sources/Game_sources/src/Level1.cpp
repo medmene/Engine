@@ -1,12 +1,12 @@
 #include "Game_sources/include/Level1.h"
-#include "include/Label.h"
-#include "include/GameObject.h"
-#include "include/Animator.h"
-#include "include/PassabilityMap.h"
+#include "include/game_object/Label.h"
+#include "include/game_object/GameObject.h"
+#include "include/controller/Animator.h"
+#include "include/controller/PassabilityMap.h"
 #include "Game_sources/include/GameWindow.h"
-#include "include/Player.h"
-#include "include/NPC.h"
-#include "include/BehaviourController.h"
+#include "include/game_object/npc/Player.h"
+#include "include/game_object/npc/NPC.h"
+#include "include/controller/BehaviourController.h"
 
 
 Level1::Level1(shared_ptr<WindowManager> wm)

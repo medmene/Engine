@@ -96,106 +96,163 @@ target_sources(GameEngine PRIVATE ${GAME_SOURCES_SRC})
 
 
 #########################################
-#set(ENGINE_SOURCES_INK "")
-#list(APPEND ENGINE_SOURCES_INK
-	#engine/include/Core.h
-#)
+#Includes
+set(ENGINE_TOOLS_INK "")
+list(APPEND ENGINE_TOOLS_INK
+	engine/include/tools/Utils.h
+  	engine/include/tools/Fps.h
+	engine/include/tools/ActionMap.h
+)
 
-# make MSVC folders for engine
+set(ENGINE_INPUT_INK "")
+list(APPEND ENGINE_INPUT_INK
+  	engine/include/input/MouseInput.h
+	engine/include/input/KeyboardBinds.h
+  	engine/include/input/KeyboardInput.h
+	engine/include/input/SoundManager.h
+  	engine/include/input/Camera.h
+)
+
+set(ENGINE_TYPES_INK "")
+list(APPEND ENGINE_TYPES_INK
+	engine/include/types/Vector2.h
+	engine/include/types/Vector3.h
+	engine/include/types/Color.h
+)
+
+set(ENGINE_GAME_OBJECTS_INK "")
+list(APPEND ENGINE_GAME_OBJECTS_INK
+	engine/include/game_object/BaseObject.h
+	engine/include/game_object/GameObject.h
+  	engine/include/game_object/Label.h
+  	engine/include/game_object/Button.h
+	engine/include/game_object/TextBubble.h
+  	engine/include/game_object/CheckBox.h
+	#NPCs
+	engine/include/game_object/npc/Player.h
+	engine/include/game_object/npc/NPC.h
+	engine/include/game_object/npc/Character.h
+)
+
+set(ENGINE_WINDOW_INK "")
+list(APPEND ENGINE_WINDOW_INK
+	engine/include/window/WindowManager.h
+	engine/include/window/BaseWindow.h
+	engine/include/window/Window.h
+)
+
+set(ENGINE_CONTROLLER_INK "")
+list(APPEND ENGINE_CONTROLLER_INK
+	engine/include/controller/ResourceManager.h
+	engine/include/controller/ScriptManager.h
+	engine/include/controller/TextManager.h
+	engine/include/controller/PassabilityMap.h
+	engine/include/controller/PathFinder.h
+	engine/include/controller/MovingController.h
+	engine/include/controller/BehaviourController.h
+	engine/include/controller/Animator.h
+	#Other
+	
+	engine/include/controller/other/Areas.h
+	engine/include/controller/other/FunctionParam.h
+	engine/include/controller/other/DirectionSettings.h
+)
+
 set(ENGINE_SOURCES_INK "")
 list(APPEND ENGINE_SOURCES_INK
 	#Core
 	engine/include/Core.h
   	engine/include/base_defs.h
-	engine/include/Utils.h
-  	engine/include/Fps.h
-	#Input
-  	engine/include/MouseInput.h
-	engine/include/KeyboardBinds.h
-  	engine/include/KeyboardInput.h
-	engine/include/SoundManager.h
-  	engine/include/Camera.h
-	#Managers
-	engine/include/ResourceManager.h
-	engine/include/ScriptManager.h
-	engine/include/TextManager.h
-	engine/include/PassabilityMap.h
-	engine/include/PathFinder.h
-	#Units
-	engine/include/Vector2.h
-	engine/include/Vector3.h
-	engine/include/Color.h
-	#Hard object manipulators
-	engine/include/MovingController.h
-	engine/include/BehaviourController.h
-	#NPCs
-	engine/include/Player.h
-	engine/include/NPC.h
-	engine/include/Character.h
-	#Game objects
-	engine/include/BaseObject.h
-	engine/include/GameObject.h
-  	engine/include/Label.h
-  	engine/include/Button.h
-	engine/include/TextBubble.h
-  	engine/include/CheckBox.h
-	#Windows
-	engine/include/WindowManager.h
-	engine/include/BaseWindow.h
-	engine/include/Window.h
-	#Other
-	engine/include/Areas.h
-	engine/include/ActionMap.h
-	engine/include/FunctionParam.h
-	engine/include/DirectionSettings.h
-	engine/include/Animator.h
 )
-set(ENGINE_SOURCES_SRC "")
-list(APPEND ENGINE_SOURCES_SRC
-	#Input
-	engine/src/MouseInput.cpp
-  	engine/src/KeyboardInput.cpp
-  	engine/src/Camera.cpp
-	engine/src/SoundManager.cpp
-	#Managers
-	engine/src/ResourceManager.cpp
-	engine/src/ScriptManager.cpp
-	engine/src/TextManager.cpp
-	engine/src/PassabilityMap.cpp
-	engine/src/PathFinder.cpp
-	#Units
-  	engine/src/Vector2.cpp
-  	engine/src/Vector3.cpp
-  	engine/src/Color.cpp
-	#Game objects
-	engine/src/BaseObject.cpp
-	engine/src/GameObject.cpp
-  	engine/src/Label.cpp
-  	engine/src/Button.cpp
-	engine/src/CheckBox.cpp
-	engine/src/TextBubble.cpp
+
+#Sources
+set(ENGINE_TOOLS_SRC "")
+list(APPEND ENGINE_TOOLS_SRC
+	engine/src/tools/ActionMap.cpp
+)
+
+set(ENGINE_INPUT_SRC "")
+list(APPEND ENGINE_INPUT_SRC
+	engine/src/input/MouseInput.cpp
+  	engine/src/input/KeyboardInput.cpp
+  	engine/src/input/Camera.cpp
+	engine/src/input/SoundManager.cpp
+)
+
+set(ENGINE_TYPES_SRC "")
+list(APPEND ENGINE_TYPES_SRC
+  	engine/src/types/Vector2.cpp
+  	engine/src/types/Vector3.cpp
+  	engine/src/types/Color.cpp
+)
+
+set(ENGINE_GAME_OBJECTS_SRC "")
+list(APPEND ENGINE_GAME_OBJECTS_SRC
+	engine/src/game_object/BaseObject.cpp
+	engine/src/game_object/GameObject.cpp
+  	engine/src/game_object/Label.cpp
+  	engine/src/game_object/Button.cpp
+	engine/src/game_object/CheckBox.cpp
+	engine/src/game_object/TextBubble.cpp
 	#NPCs
-  	engine/src/Player.cpp
-	engine/src/NPC.cpp
-	#Hard object manipulators
-	engine/src/MovingController.cpp
-	engine/src/BehaviourController.cpp
-	#Windows
-	engine/src/WindowManager.cpp
-	engine/src/BaseWindow.cpp
-	engine/src/Window.cpp
+	engine/src/game_object/npc/Player.cpp
+	engine/src/game_object/npc/NPC.cpp
+)
+
+set(ENGINE_WINDOW_SRC "")
+list(APPEND ENGINE_WINDOW_SRC
+	engine/src/window/WindowManager.cpp
+	engine/src/window/BaseWindow.cpp
+	engine/src/window/Window.cpp
+)
+
+set(ENGINE_CONTROLLER_SRC "")
+list(APPEND ENGINE_CONTROLLER_SRC
+
+	engine/src/controller/ResourceManager.cpp
+	engine/src/controller/ScriptManager.cpp
+	engine/src/controller/TextManager.cpp
+	engine/src/controller/PassabilityMap.cpp
+	engine/src/controller/PathFinder.cpp
+	engine/src/controller/MovingController.cpp
+	engine/src/controller/BehaviourController.cpp
+	engine/src/controller/Animator.cpp
 	#Other
-	engine/src/Animator.cpp
-	engine/src/Areas.cpp
-	engine/src/DirectionSettings.cpp
-	engine/src/ActionMap.cpp
+	engine/src/controller/other/Areas.cpp
+	engine/src/controller/other/DirectionSettings.cpp
 )
 
 # Include Engine
 source_group(Engine_sources\\include FILES ${ENGINE_SOURCES_INK} *.h)
-source_group(Engine_sources\\src FILES ${ENGINE_SOURCES_SRC} *.cpp)
+source_group(Engine_sources\\include\\tools FILES ${ENGINE_TOOLS_INK} *.h)
+source_group(Engine_sources\\include\\input FILES ${ENGINE_INPUT_INK} *.h)
+source_group(Engine_sources\\include\\types FILES ${ENGINE_TYPES_INK} *.h)
+source_group(Engine_sources\\include\\game_object FILES ${ENGINE_GAME_OBJECTS_INK} *.h)
+source_group(Engine_sources\\include\\window FILES ${ENGINE_WINDOW_INK} *.h)
+source_group(Engine_sources\\include\\controller FILES ${ENGINE_CONTROLLER_INK} *.h)
+
+source_group(Engine_sources\\src\\tools FILES ${ENGINE_TOOLS_SRC} *.cpp)
+source_group(Engine_sources\\src\\input FILES ${ENGINE_INPUT_SRC} *.cpp)
+source_group(Engine_sources\\src\\types FILES ${ENGINE_TYPES_SRC} *.cpp)
+source_group(Engine_sources\\src\\game_object FILES ${ENGINE_GAME_OBJECTS_SRC} *.cpp)
+source_group(Engine_sources\\src\\window FILES ${ENGINE_WINDOW_SRC} *.cpp)
+source_group(Engine_sources\\src\\controller FILES ${ENGINE_CONTROLLER_SRC} *.cpp)
+
+
 target_sources(GameEngine PRIVATE ${ENGINE_SOURCES_INK})
-target_sources(GameEngine PRIVATE ${ENGINE_SOURCES_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_TOOLS_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_INPUT_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_TYPES_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_GAME_OBJECTS_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_WINDOW_INK})
+target_sources(GameEngine PRIVATE ${ENGINE_CONTROLLER_INK})
+
+target_sources(GameEngine PRIVATE ${ENGINE_TOOLS_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_INPUT_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_TYPES_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_GAME_OBJECTS_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_WINDOW_SRC})
+target_sources(GameEngine PRIVATE ${ENGINE_CONTROLLER_SRC})
 #########################################
 
 #########################################

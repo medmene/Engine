@@ -1,10 +1,10 @@
 #include "Game_sources/include/GameSceneBase.h"
-#include "include/GameObject.h"
-#include "include/NPC.h"
-#include "include/ResourceManager.h"
+#include "include/game_object/GameObject.h"
+#include "include/game_object/npc/NPC.h"
+#include "include/controller/ResourceManager.h"
 #include "pugixml/pugixml.hpp"
-#include "include/Label.h"
-#include "include/Button.h"
+#include "include/game_object/Label.h"
+#include "include/game_object/Button.h"
 
 
 

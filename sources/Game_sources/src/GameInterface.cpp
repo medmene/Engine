@@ -1,7 +1,7 @@
 #include "Game_sources/include/GameInterface.h"
-#include "include/GameObject.h"
-#include "include/Button.h"
-#include "include/Label.h"
+#include "include/game_object/GameObject.h"
+#include "include/game_object/Button.h"
+#include "include/game_object/Label.h"
 
 
 

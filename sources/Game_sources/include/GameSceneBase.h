@@ -1,6 +1,6 @@
 #pragma once
 #include "include/Core.h"
-#include "include/Window.h"
+#include "include/window/Window.h"
 
 
 class GameObject;
