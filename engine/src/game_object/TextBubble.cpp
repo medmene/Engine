@@ -27,7 +27,7 @@ void TextBubble::LoadGraphics(pugi::xml_node * node)
 	// Setup relative parent position
 	if (!node->attribute("bubble_offset").empty())
 	{
-		auto tokens = Utils::split(node->attribute("bubble_offset").value(), " ");
+		auto tokens = utils::split(node->attribute("bubble_offset").value(), " ");
 		m_defaultOffset.x = std::stoi(tokens[0]);
 		m_defaultOffset.y = std::stoi(tokens[1]);
 	}
@@ -35,7 +35,7 @@ void TextBubble::LoadGraphics(pugi::xml_node * node)
 	// Setup relative center of text position
 	if (!node->attribute("text_offset").empty())
 	{
-		auto tokens = Utils::split(node->attribute("text_offset").value(), " ");
+		auto tokens = utils::split(node->attribute("text_offset").value(), " ");
 		m_textCenterPos.x = std::stoi(tokens[0]);
 		m_textCenterPos.y = std::stoi(tokens[1]);
 	}
@@ -82,7 +82,7 @@ void TextBubble::SetText(const u16string& text)
 		if (m_text.size() > maxSymbolsInRow)
 		{
 			// Split
-			vector<u16string> elems = Utils::split(m_text, u" ");
+			vector<u16string> elems = utils::split(m_text, u" ");
 			
 			int index = 0;
 			vector<u16string> labels;

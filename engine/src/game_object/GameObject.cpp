@@ -87,7 +87,7 @@ void GameObject::LoadSettings(pugi::xml_node * node)
 	// Pivot offset
 	if (!node->attribute("pivot_offset").empty())
 	{
-		auto tokens = Utils::split(node->attribute("pivot_offset").value(), " ");
+		auto tokens = utils::split(node->attribute("pivot_offset").value(), " ");
 		m_pivotOffset.x = std::stoi(tokens[0]);
 		m_pivotOffset.y = std::stoi(tokens[1]);
 	}
@@ -95,7 +95,7 @@ void GameObject::LoadSettings(pugi::xml_node * node)
 	// Relative position
 	if (!node->attribute("relative_position").empty())
 	{
-		auto tokens = Utils::split(node->attribute("relative_position").value(), " ");
+		auto tokens = utils::split(node->attribute("relative_position").value(), " ");
 		m_relativePos.x = std::stof(tokens[0]);
 		m_relativePos.y = std::stof(tokens[1]);
 	}
@@ -103,7 +103,7 @@ void GameObject::LoadSettings(pugi::xml_node * node)
 	// Color
 	if (!node->attribute("color").empty())
 	{
-		auto tokens = Utils::split(node->attribute("color").value(), " ");
+		auto tokens = utils::split(node->attribute("color").value(), " ");
 		m_color.SetR(std::stoi(tokens[0]));
 		m_color.SetG(std::stoi(tokens[1]));
 		m_color.SetB(std::stoi(tokens[2]));
@@ -113,7 +113,7 @@ void GameObject::LoadSettings(pugi::xml_node * node)
 	// Size
 	if (!node->attribute("object_size").empty())
 	{
-		auto tokens = Utils::split(node->attribute("object_size").value(), " ");
+		auto tokens = utils::split(node->attribute("object_size").value(), " ");
 		Vector2 sz;
 		sz.x = std::stoi(tokens[0]);
 		sz.y = std::stoi(tokens[1]);
@@ -123,7 +123,7 @@ void GameObject::LoadSettings(pugi::xml_node * node)
 	// Position
 	if (!node->attribute("position").empty())
 	{
-		auto tokens = Utils::split(node->attribute("position").value(), " ");
+		auto tokens = utils::split(node->attribute("position").value(), " ");
 		Vector2 pos;
 		pos.x = std::stof(tokens[0]);
 		pos.y = std::stof(tokens[1]);

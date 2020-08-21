@@ -169,6 +169,7 @@ list(APPEND ENGINE_SOURCES_INK
 set(ENGINE_TOOLS_SRC "")
 list(APPEND ENGINE_TOOLS_SRC
 	engine/src/tools/ActionMap.cpp
+	engine/src/tools/Utils.cpp
 )
 
 set(ENGINE_INPUT_SRC "")

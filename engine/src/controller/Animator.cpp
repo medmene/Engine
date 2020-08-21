@@ -90,7 +90,7 @@ Animator::Animator(pugi::xml_node * node)
 	// Size
 	if (!node->attribute("anim_size").empty())
 	{
-		auto tokens = Utils::split(node->attribute("anim_size").value(), " ");
+		auto tokens = utils::split(node->attribute("anim_size").value(), " ");
 		m_objectSize.x = std::stoi(tokens[0]);
 		m_objectSize.y = std::stoi(tokens[1]);
 	}
