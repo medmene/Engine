@@ -6,7 +6,7 @@
 class GameObject;
 class NPC;
 
-class GameSceneBase : public Window
+class GameSceneBase : public std::enable_shared_from_this<GameSceneBase>, public Window
 {
 public:
 	GameSceneBase(shared_ptr<WindowManager> wm);

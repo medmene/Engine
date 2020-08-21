@@ -24,6 +24,7 @@ using std::vector;
 using std::cout;
 using std::shared_ptr;
 using std::make_shared;
+using std::dynamic_pointer_cast;
 using std::unordered_map;
 using std::pair;
 using std::weak_ptr;

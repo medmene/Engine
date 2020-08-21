@@ -3,6 +3,7 @@
 
 
 
+#ifdef false
 Callback::Callback()
 	: m_useObject(false)
 	, m_function(nullptr)
@@ -29,3 +30,4 @@ Callback::operator bool() const
 { 
 	return (bool)m_function; 
 }
+#endif

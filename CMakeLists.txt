@@ -102,6 +102,7 @@ list(APPEND ENGINE_TOOLS_INK
 	engine/include/tools/Utils.h
   	engine/include/tools/Fps.h
 	engine/include/tools/ActionMap.h
+	engine/include/tools/FunctionParam.h
 )
 
 set(ENGINE_INPUT_INK "")
@@ -154,7 +155,6 @@ list(APPEND ENGINE_CONTROLLER_INK
 	#Other
 	
 	engine/include/controller/other/Areas.h
-	engine/include/controller/other/FunctionParam.h
 	engine/include/controller/other/DirectionSettings.h
 )
 

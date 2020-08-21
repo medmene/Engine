@@ -2,6 +2,7 @@
 #include "include/game_object/GameObject.h"
 #include "include/game_object/Button.h"
 #include "include/game_object/Label.h"
+#include "include/tools/ActionMap.h"
 
 
 
@@ -20,6 +21,9 @@ void GameInterface::LoadScene()
 
 void GameInterface::Run()
 {
+	auto p = dynamic_pointer_cast<GameInterface>(shared_from_this());
+	auto c = ActionCallback<GameInterface,bool>(p, &GameInterface::SetVisible);
+	c.Handle(false);
 	if (auto tmp = GetGameObject("infoBtn"))
 	{
 		Button* btn = dynamic_cast<Button*>(tmp);
